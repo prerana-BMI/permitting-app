@@ -1,0 +1,11 @@
+
+<nb-card-header>
+  <i class="ion-social-usd"></i>
+  <span class="title">{{front ? 'Profit' : 'Sales'}}</span>
+</nb-card-header>
+<nb-card-body [ngStyle]="{ 'background-color': !front ? 'rgba(102, 187, 106, 0.3)' : 'rgba(15, 36, 230, 0.3)' }">
+  <div>
+    <p>Add some thing here which is relate to {{front ? 'Profit' : 'Sales'}} </p>
+  </div>
+  
+</nb-card-body>

@@ -1,0 +1,34 @@
+
+<div class="row">
+    <div class="col-xxxl-3 col-md-6" *ngFor="let statusCard of statusCards">
+        <nb-card>
+            <div class="icon-container">
+                <div class="icon status-{{ statusCard.type }}">
+                    <i [ngClass]="statusCard.iconClass"></i>
+                </div>
+            </div>
+
+            <div class="details">
+                <div class="title h5">{{ statusCard.title }}</div>
+                <div class="status paragraph-2">{{ on ? 'ON' : 'OFF' }}</div>
+            </div>
+        </nb-card>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xxxl-3 col-xxl-4 col-lg-5 col-md-6">
+        <app-front-card [front]="true"></app-front-card>
+        <app-ui-kitten></app-ui-kitten>
+
+
+    </div>
+    <div class="col-xxxl-3 col-xxl-4 col-md-5">
+        <app-front-card [front]="false"></app-front-card>
+        <app-wheather-data></app-wheather-data>
+    </div>
+     <div class="col-xxxl-6 col-xxl-12 col-md-7">
+    <app-security-cameras></app-security-cameras>
+  </div>
+</div>
+
+

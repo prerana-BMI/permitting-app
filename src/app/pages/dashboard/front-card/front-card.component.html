@@ -1,0 +1,31 @@
+<nb-flip-card [showToggleButton]="false" [flipped]="flipped">
+  <nb-card-front>
+    <nb-card size="tiny">
+      <nb-card-header>
+        <i class="ion-social-usd"></i>
+        <span class="title">{{front ? 'Profit' : 'Sales'}}</span>
+      </nb-card-header>
+      <nb-card-body *ngIf="!front">
+         <div style="height:160px; width: 100%;">
+          <canvas baseChart [data]="lineChartData" [options]="linChartOptions" [type]="lineChartType">
+          </canvas>
+        </div> 
+
+      </nb-card-body>
+      <nb-card-body *ngIf="front;">
+        <div style="height:160px; width: 100%;">
+          <canvas baseChart [data]="lineChartData2" [options]="linChartOptions" [type]="lineChartType">
+          </canvas>
+        </div>
+      </nb-card-body>
+      <nb-icon icon="chevron-right-outline" pack="eva" class="flip-icon" (click)="toggleView()"></nb-icon>
+    </nb-card>
+  </nb-card-front>
+<nb-card-back>
+  <nb-card size="tiny">
+    <app-back-card [front]="front"></app-back-card>
+    <nb-icon icon="chevron-right-outline" pack="eva" class="flip-icon" (click)="toggleView()"></nb-icon>
+  </nb-card>
+</nb-card-back>
+
+</nb-flip-card>
