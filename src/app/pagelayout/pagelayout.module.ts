@@ -16,11 +16,7 @@ import {
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { LayoutComponent } from './layout/layout.component';
-import { CapitalizePipe } from '../@theme/pipes/capitalize.pipe';
-import { PluralPipe } from '../@theme/pipes/plural.pipe';
-import { RoundPipe } from '../@theme/pipes/round.pipe';
-import { TimingPipe } from '../@theme/pipes/timing.pipe';
-import { NumberWithCommasPipe } from '../@theme/pipes/number-with-commas.pipe';
+;
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SearchInputComponent } from './search-input/search-input.component';
@@ -44,13 +40,13 @@ const COMPONENTS = [
   LayoutComponent
  
 ];
-const PIPES = [
-  CapitalizePipe,
-  PluralPipe,
-  RoundPipe,
-  TimingPipe,
-  NumberWithCommasPipe,
-];
+// const PIPES = [
+//   CapitalizePipe,
+//   PluralPipe,
+//   RoundPipe,
+//   TimingPipe,
+//   NumberWithCommasPipe,
+// ];
 @NgModule({
   imports: [CommonModule, ...NB_MODULES],
   exports: [CommonModule, ...COMPONENTS],

@@ -14,12 +14,6 @@ import {
   NbThemeModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-
-import {CapitalizePipe} from '../@theme/pipes/capitalize.pipe';
-import {PluralPipe} from '../@theme/pipes/plural.pipe';
-import {RoundPipe} from '../@theme/pipes/round.pipe';
-import {TimingPipe} from '../@theme/pipes/timing.pipe';
-import {NumberWithCommasPipe} from '../@theme/pipes/number-with-commas.pipe';
 import {DEFAULT_THEME } from './styles/theme.default';
 
 // import { COSMIC_THEME } from './styles/theme.cosmic';
@@ -40,18 +34,18 @@ const NB_MODULES = [
   NbEvaIconsModule,
 ];
 
-const PIPES = [
-  CapitalizePipe,
-  PluralPipe,
-  RoundPipe,
-  TimingPipe,
-  NumberWithCommasPipe,
-];
+// const PIPES = [
+//   CapitalizePipe,
+//   PluralPipe,
+//   RoundPipe,
+//   TimingPipe,
+//   NumberWithCommasPipe,
+// ];
 
 @NgModule({
   imports: [CommonModule, ...NB_MODULES],
-  exports: [CommonModule, ...PIPES, ],
-  declarations: [ ...PIPES],
+  exports: [CommonModule ],
+  declarations: [ ],
 })
 export class ThemeModule {
   static forRoot(): ModuleWithProviders<ThemeModule> {
