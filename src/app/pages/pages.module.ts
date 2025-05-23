@@ -13,18 +13,20 @@ import { UiKittenComponent } from './dashboard/ui-kitten/ui-kitten.component';
 import { SecurityCamerasComponent } from './dashboard/security-cameras/security-cameras.component';
 import { WheatherDataComponent } from './dashboard/wheather-data/wheather-data.component';
 import { BackCardComponent } from './dashboard/back-card/back-card.component';
+import { PagelayoutModule } from '../pagelayout/pagelayout.module';
 
 
 @NgModule({
   imports: [
     PagesRoutingModule,
-    ThemeModule,
+    PagelayoutModule,
     NbMenuModule,
     NbCardModule,
     NgChartsModule,
     NbIconModule,
     NbActionsModule,
-    NbButtonModule
+    NbButtonModule,
+    ThemeModule
     
   ],
   declarations: [

@@ -14,16 +14,14 @@ import {
   NbThemeModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-import {FooterComponent} from '../@theme/components/footer/footer.component';
-import {HeaderComponent} from '../@theme/components/header/header.component';
-import {SearchInputComponent} from '../@theme/components/search-input/search-input.component';
+
 import {CapitalizePipe} from '../@theme/pipes/capitalize.pipe';
 import {PluralPipe} from '../@theme/pipes/plural.pipe';
 import {RoundPipe} from '../@theme/pipes/round.pipe';
 import {TimingPipe} from '../@theme/pipes/timing.pipe';
 import {NumberWithCommasPipe} from '../@theme/pipes/number-with-commas.pipe';
 import {DEFAULT_THEME } from './styles/theme.default';
-import { LayoutComponent } from './components/layout/layout.component';
+
 // import { COSMIC_THEME } from './styles/theme.cosmic';
 // import { CORPORATE_THEME } from './styles/theme.corporate';
 // import { DARK_THEME } from './styles/theme.dark';
@@ -41,13 +39,7 @@ const NB_MODULES = [
   NbIconModule,
   NbEvaIconsModule,
 ];
-const COMPONENTS = [
-  HeaderComponent,
-  FooterComponent,
-  SearchInputComponent,
-  LayoutComponent
- 
-];
+
 const PIPES = [
   CapitalizePipe,
   PluralPipe,
@@ -58,8 +50,8 @@ const PIPES = [
 
 @NgModule({
   imports: [CommonModule, ...NB_MODULES],
-  exports: [CommonModule, ...PIPES, ...COMPONENTS],
-  declarations: [...COMPONENTS, ...PIPES],
+  exports: [CommonModule, ...PIPES, ],
+  declarations: [ ...PIPES],
 })
 export class ThemeModule {
   static forRoot(): ModuleWithProviders<ThemeModule> {
