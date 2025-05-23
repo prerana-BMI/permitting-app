@@ -31,11 +31,11 @@ export class DashboardComponent {
     type: 'warning',
   };
 
-constructor(){
-this.statusCards = [{...this.lightCard},{...this.rollerShadesCard},{...this.wirelessAudioCard},{...this.coffeeMakerCard}]
+  constructor() {
+    this.statusCards = [{ ...this.lightCard }, { ...this.rollerShadesCard }, { ...this.wirelessAudioCard }, { ...this.coffeeMakerCard }]
   }
- 
-ngOnInit(){
 
-}
+  ngOnInit() {
+
+  }
 }

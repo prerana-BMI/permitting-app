@@ -32,12 +32,6 @@ export class SecurityCamerasComponent {
         this.selectedCamera = this.cameras[0];
       });
 
-    const breakpoints = this.breakpointService.getBreakpointsMap();
-    this.themeService.onMediaQueryChange()
-      .pipe(map(([, breakpoint]) => breakpoint.width))
-      .subscribe((width: number) => {
-        this.actionSize = width > breakpoints['md'] ? 'medium' : 'small';
-      });
   }
 
   ngOnDestroy() {

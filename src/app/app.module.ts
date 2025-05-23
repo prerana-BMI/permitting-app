@@ -16,11 +16,11 @@ import {
   NbDialogModule,
   NbMenuModule,
   NbSidebarModule,
-  NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
 import { PagelayoutModule } from './pagelayout/pagelayout.module';
 import { PermitsModule } from './permits/permits.module';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [AppComponent],
@@ -34,10 +34,14 @@ import { PermitsModule } from './permits/permits.module';
     NbDatepickerModule.forRoot(),
     NbDialogModule.forRoot(),
     NbWindowModule.forRoot(),
-    NbToastrModule.forRoot(),
     ThemeModule.forRoot(),
     PagelayoutModule,
     PermitsModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: false,
+    }),
     
     
   ],
