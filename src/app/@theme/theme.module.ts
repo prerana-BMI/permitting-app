@@ -14,27 +14,16 @@ import {
   NbThemeModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-import { NbSecurityModule } from '@nebular/security';
-
-import {
-  FooterComponent,
-  HeaderComponent,
-  SearchInputComponent,
-  TinyMCEComponent,
-} from './components';
-import {
-  CapitalizePipe,
-  PluralPipe,
-  RoundPipe,
-  TimingPipe,
-  NumberWithCommasPipe,
-} from './pipes';
-import {
-  OneColumnLayoutComponent,
-  ThreeColumnsLayoutComponent,
-  TwoColumnsLayoutComponent,
-} from './layouts';
-import { DEFAULT_THEME } from './styles/theme.default';
+import {FooterComponent} from '../@theme/components/footer/footer.component';
+import {HeaderComponent} from '../@theme/components/header/header.component';
+import {SearchInputComponent} from '../@theme/components/search-input/search-input.component';
+import {CapitalizePipe} from '../@theme/pipes/capitalize.pipe';
+import {PluralPipe} from '../@theme/pipes/plural.pipe';
+import {RoundPipe} from '../@theme/pipes/round.pipe';
+import {TimingPipe} from '../@theme/pipes/timing.pipe';
+import {NumberWithCommasPipe} from '../@theme/pipes/number-with-commas.pipe';
+import {DEFAULT_THEME } from './styles/theme.default';
+import { LayoutComponent } from './components/layout/layout.component';
 // import { COSMIC_THEME } from './styles/theme.cosmic';
 // import { CORPORATE_THEME } from './styles/theme.corporate';
 // import { DARK_THEME } from './styles/theme.dark';
@@ -47,7 +36,6 @@ const NB_MODULES = [
   NbSearchModule,
   NbSidebarModule,
   NbContextMenuModule,
-  NbSecurityModule,
   NbButtonModule,
   NbSelectModule,
   NbIconModule,
@@ -57,10 +45,8 @@ const COMPONENTS = [
   HeaderComponent,
   FooterComponent,
   SearchInputComponent,
-  TinyMCEComponent,
-  OneColumnLayoutComponent,
-  ThreeColumnsLayoutComponent,
-  TwoColumnsLayoutComponent,
+  LayoutComponent
+ 
 ];
 const PIPES = [
   CapitalizePipe,
