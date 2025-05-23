@@ -3,7 +3,7 @@
     <nb-card-header>
         Security Cameras
 
-        <button nbButton class="single-view-button" nbButton size="small"
+        <button nbButton class="single-view-button" size="small"
             [appearance]="isSingleView ? 'filled' : 'outline'" (click)="isSingleView = true">
             <i class="nb-square"></i>
         </button>
@@ -11,6 +11,7 @@
             (click)="isSingleView = false">
             <nb-icon icon="grid" pack="eva"></nb-icon>
         </button>
+        
     </nb-card-header>
 
     <div class="grid-container">

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { NbComponentSize, NbMediaBreakpointsService, NbThemeService } from '@nebular/theme';
 import { map, Subject, takeUntil } from 'rxjs';
-import { Camera, SecurityCamerasData } from 'src/app/@core/data/security-cameras';
+import {Camera, SetpicturegridService } from 'src/app/services/setpicturegrid.service';
+
 
 @Component({
   selector: 'app-security-cameras',
@@ -19,7 +20,8 @@ export class SecurityCamerasComponent {
   constructor(
     private themeService: NbThemeService,
     private breakpointService: NbMediaBreakpointsService,
-    private securityCamerasService: SecurityCamerasData,
+    private securityCamerasService: SetpicturegridService,
+    
   ) {}
 
   ngOnInit() {

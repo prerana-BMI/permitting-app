@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { of as observableOf, Observable } from 'rxjs';
-import { Camera, SecurityCamerasData } from '../data/security-cameras';
+import { Observable, of } from 'rxjs';
 
-@Injectable()
-export class SecurityCamerasService extends SecurityCamerasData {
+@Injectable({
+  providedIn: 'root'
+})
+export class SetpicturegridService {
 
-  private cameras: Camera[] = [
+private cameras: Camera[] = [
     {
       title: 'Camera #1',
       source: 'assets/images/camera1.jpg',
@@ -25,6 +26,10 @@ export class SecurityCamerasService extends SecurityCamerasData {
   ];
 
   getCamerasData(): Observable<Camera[]> {
-    return observableOf(this.cameras);
+    return of(this.cameras);
   }
+}
+export interface Camera {
+  title: string;
+  source: string;
 }
