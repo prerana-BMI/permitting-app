@@ -5,12 +5,18 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Dashboard',
     icon: 'home-outline',
     link: '/pages/dashboard',
-    home: true,
+ 
   },
   {
-    title: 'Permit List',
+    title: 'Permits',
     icon: 'grid-outline',
-    link : '/pages/dashboard'
+  
+    children: [
+      {
+        title: 'Permit List',
+        link: '/permits/permitlist',
+      }
+    ]
   },
   
 ];

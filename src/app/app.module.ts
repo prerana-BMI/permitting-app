@@ -20,6 +20,7 @@ import {
   NbWindowModule,
 } from '@nebular/theme';
 import { PagelayoutModule } from './pagelayout/pagelayout.module';
+import { PermitsModule } from './permits/permits.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -36,6 +37,8 @@ import { PagelayoutModule } from './pagelayout/pagelayout.module';
     NbToastrModule.forRoot(),
     ThemeModule.forRoot(),
     PagelayoutModule,
+    PermitsModule,
+    
     
   ],
   bootstrap: [AppComponent],

@@ -20,6 +20,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SearchInputComponent } from './search-input/search-input.component';
+import { RouterModule } from '@angular/router';
 const NB_MODULES = [
   NbLayoutModule,
   NbMenuModule,
@@ -48,7 +49,7 @@ const COMPONENTS = [
 //   NumberWithCommasPipe,
 // ];
 @NgModule({
-  imports: [CommonModule, ...NB_MODULES],
+  imports: [CommonModule, ...NB_MODULES , RouterModule],
   exports: [CommonModule, ...COMPONENTS],
   declarations: [...COMPONENTS],
 })
