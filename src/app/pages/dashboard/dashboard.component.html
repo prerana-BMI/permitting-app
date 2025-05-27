@@ -10,7 +10,7 @@
 
             <div class="details">
                 <div class="title h5">{{ statusCard.title }}</div>
-                <div class="status paragraph-2">{{ on ? 'ON' : 'OFF' }}</div>
+                <div class="status paragraph-3">{{statusCard.count}}</div>
             </div>
         </nb-card>
     </div>
@@ -24,7 +24,7 @@
     </div>
     <div class="col-xxxl-3 col-xxl-4 col-md-5">
         <app-front-card [front]="false"></app-front-card>
-        <app-wheather-data></app-wheather-data>
+        <app-user-activity></app-user-activity>
     </div>
      <div class="col-xxxl-6 col-xxl-12 col-md-7">
     <app-security-cameras></app-security-cameras>

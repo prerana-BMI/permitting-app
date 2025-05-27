@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbActionsModule, NbButtonModule, NbCardModule, NbIconModule, NbMenuModule } from '@nebular/theme';
+import { NbActionsModule, NbButtonModule, NbCardModule, NbIconModule, NbListItemComponent, NbListModule, NbMenuModule } from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
@@ -14,6 +14,7 @@ import { SecurityCamerasComponent } from './dashboard/security-cameras/security-
 import { WheatherDataComponent } from './dashboard/wheather-data/wheather-data.component';
 import { BackCardComponent } from './dashboard/back-card/back-card.component';
 import { PagelayoutModule } from '../pagelayout/pagelayout.module';
+import { UserActivityComponent } from './dashboard/user-activity/user-activity.component';
 
 @NgModule({
   imports: [
@@ -25,11 +26,12 @@ import { PagelayoutModule } from '../pagelayout/pagelayout.module';
     NbIconModule,
     NbActionsModule,
     NbButtonModule,
-    ThemeModule
+    ThemeModule,
+    NbListModule,
     
   ],
   declarations: [
-    PagesComponent,DashboardComponent, FrontCardComponent, UiKittenComponent, SecurityCamerasComponent, WheatherDataComponent, BackCardComponent
+    PagesComponent,DashboardComponent, FrontCardComponent, UiKittenComponent, SecurityCamerasComponent, WheatherDataComponent, BackCardComponent, UserActivityComponent
   ],
 })
 export class PagesModule {

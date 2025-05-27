@@ -11,24 +11,28 @@ export class DashboardComponent {
   statusCards :Array<any>= []; 
    on : boolean = true;
   lightCard: CardSettings = {
-    title: 'Light',
+    title: 'Open',
     iconClass: 'nb-lightbulb',
     type: 'primary',
+    count: 20
   };
   rollerShadesCard: CardSettings = {
-    title: 'Roller Shades',
+    title: 'Closed',
     iconClass: 'nb-roller-shades',
     type: 'success',
+    count: 80,
   };
   wirelessAudioCard: CardSettings = {
-    title: 'Wireless Audio',
+    title: 'InProcess',
     iconClass: 'nb-audio',
     type: 'info',
+    count: 10,
   };
   coffeeMakerCard: CardSettings = {
-    title: 'Coffee Maker',
+    title: 'Rejected',
     iconClass: 'nb-coffee-maker',
     type: 'warning',
+    count: 5,
   };
 
   constructor() {
