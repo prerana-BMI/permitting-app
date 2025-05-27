@@ -15,7 +15,6 @@ import { WheatherDataComponent } from './dashboard/wheather-data/wheather-data.c
 import { BackCardComponent } from './dashboard/back-card/back-card.component';
 import { PagelayoutModule } from '../pagelayout/pagelayout.module';
 
-
 @NgModule({
   imports: [
     PagesRoutingModule,

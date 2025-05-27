@@ -11,9 +11,6 @@ import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {
-  NbChatModule,
-  NbDatepickerModule,
-  NbDialogModule,
   NbMenuModule,
   NbSidebarModule,
   NbWindowModule,
@@ -21,6 +18,8 @@ import {
 import { PagelayoutModule } from './pagelayout/pagelayout.module';
 import { PermitsModule } from './permits/permits.module';
 import { ToastrModule } from 'ngx-toastr';
+import { AccountModule } from './account/account.module';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,12 +30,11 @@ import { ToastrModule } from 'ngx-toastr';
     AppRoutingModule,
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
-    NbDatepickerModule.forRoot(),
-    NbDialogModule.forRoot(),
     NbWindowModule.forRoot(),
     ThemeModule.forRoot(),
     PagelayoutModule,
     PermitsModule,
+    AccountModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-right',

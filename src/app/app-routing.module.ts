@@ -3,19 +3,22 @@ import { NgModule } from '@angular/core';
 
 
 export const routes: Routes = [ 
-  {
+ {
     path: 'pages',
     loadChildren: () => import('./pages/pages.module')
-      .then(m => m.PagesModule),
+    .then(m => m.PagesModule),
   },
   {
     path: 'permits',
     loadChildren: () => import('./permits/permits.module')
-      .then(m => m.PermitsModule),
+    .then(m => m.PermitsModule),
   },
-  
-  
-  
+  {
+    path: 'account',
+    loadChildren: () => import('./account/account.module')
+    .then(m => m.AccountModule),
+  },
+
 ];
 
 const config: ExtraOptions = {
