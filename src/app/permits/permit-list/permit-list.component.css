@@ -1,0 +1,54 @@
+
+.card-title {
+    border-bottom: 0px solid #f2f3f8 !important;
+  }
+  .ellipsis-cell {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+  }
+  
+  table td, table th {
+    font-size: 11px;
+    vertical-align: middle;
+  }
+  
+  th, td {
+    text-align: left; /* Or center/right based on your preference */
+  }
+  .table-outline-border {
+    border-left: 3px solid #f5f7fa; /* or any color like #000 */
+    border-right: 3px solid #f5f7fa;
+    border-bottom: 3px solid #f5f7fa;
+    border-radius: 3px;
+    overflow: hidden; /* ensures border wraps around contents properly */
+  }
+  .icon-bg {
+    background-color: green;
+    color: white;
+    padding: 0px;
+    /* border-radius: 50%; */
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+  }
+  .inline-label-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .inline-label-group label {
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+  
+  .margin-right-20 {
+    margin-right: 15px;
+  }
+  .border-dotted {
+    border-style: dotted !important;
+  }
+  

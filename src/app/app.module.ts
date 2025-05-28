@@ -19,6 +19,7 @@ import { PagelayoutModule } from './pagelayout/pagelayout.module';
 import { PermitsModule } from './permits/permits.module';
 import { ToastrModule } from 'ngx-toastr';
 import { AccountModule } from './account/account.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { AccountModule } from './account/account.module';
       positionClass: 'toast-top-right',
       preventDuplicates: false,
     }),
-    
+    ReactiveFormsModule,
+    FormsModule
     
   ],
   bootstrap: [AppComponent],

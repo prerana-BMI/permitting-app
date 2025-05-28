@@ -1,1 +1,233 @@
-<p>permit-list works!</p>
+
+
+
+  <div class="pages container-fluid pt-4 pb-4 pl-4 pr-4">
+    <div class="row mb-3">
+      <div class="col-12 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+          <nav class="breadcrumb mr-3">
+            <ng-container *ngFor="let crumb of breadcrumbs; let last = last">
+              <span class="crumb">{{ crumb }}</span>
+              <ng-container *ngIf="!last">
+                <span class="separator">
+                 <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
+                    <path d="M0 0 L6 4 L0 8 Z" />
+                  </svg>
+                </span>
+              </ng-container>
+            </ng-container>
+          </nav>
+        </div>
+    
+        <div class="d-flex gap-2">
+          <div class="btn btn-outline-secondary mr-2" style="padding: 0.2rem !important;">
+            <div class="row align-items-center" style="margin-right: -25px;">
+              <div class="col-12 col-sm-4">
+                <label for="RfiNumber" class="form-label mb-0 text-nowrap">Select Program :</label>
+              </div>
+              <div class="col-12 col-sm-8">
+                <select class="form-control" [(ngModel)]="ProgramId" style="width: 200px; height: 35px;"  aria-placeholder="Select Program" (change)="GetAllRfi()">
+                  <option value="" disabled>Select Program</option>
+                  <option *ngFor="let i of ProgramList" [value]="i.Id">{{ i.ProgramName }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-outline-secondary d-flex align-items-center justify-content-between px-3 py-2 mr-2"
+          (click)="AddNewRfi()"
+          style="font-size: 16px; gap: 0.5rem; min-width: 120px;">
+          <span class="flex-grow-1 text-start">Add Item</span>
+          <i class="fa fa-plus"></i>
+          </button>
+
+          <button class="btn btn-outline-secondary d-flex align-items-center mr-2" (click)="ChangeFilter()" style="font-size: 20px;">
+            <i class="fa fa-filter"></i>
+          </button>
+          <button class="btn btn-outline-secondary d-flex align-items-center" (click)="ChangeFilter()" style="font-size: 20px;">
+            <i class="fa fa-download"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="d-flex gap-3">
+       <div [ngClass]="isFilterOpened ? 'card col-md-9 margin-right-20' : 'card col-md-12'" style="transition: width 0.3s ease;">
+          <div class="card-body">
+            <div class="table-responsive-md">
+              <table class="table table-hover">
+                <thead style="background: #273360;color: white">
+                  <tr>
+                    <th style="width: 40px;">
+                        <i (click)="AddNewRfi()"  class="fa fa-plus fa-2x icon-bg" aria-hidden="true"></i> 
+                    </th>
+                    <th style="width: 80px;">RFI No</th>
+                    <th style="width: 150px;">RFI Title</th>
+                    <th style="width: 50px;">Revision</th>
+                    <th style="width: 80px;">FP Number</th>
+                    <th style="width: 100px;">RFI Query Type</th>
+                    <th style="width: 80px;">Status</th>
+                    <th style="width: 100px;">Work Order</th>
+                    <th style="width: 80px;">Originator</th>
+                    <th style="width: 100px;">Recipient</th>
+                    <th style="width: 100px;">Assigned To</th>
+                    <th style="width: 80px;">Contractor</th>
+                    <th style="width: 100px;">Requested Date</th>
+                    <th style="width: 120px;">Response Due Date</th>
+                    <th style="width: 60px;">Action</th>
+                  </tr>
+                </thead>
+                </table>
+                <div style="max-height: 400px; overflow-y: auto;">
+              <table class="table table-hover">
+                <tbody class="table-outline-border">
+                  
+                 
+                  <tr *ngFor="let i of RfiList;let idx= index;">
+                    <td>{{idx+1}}</td>
+                    <td>RFI - 0000{{i.RfiNo}}</td>
+                    <td class="ellipsis-cell">{{i.Title}}</td>
+                    <td style="padding-left: -10px;">{{i.Revision}}</td>
+                    <td>{{i.FpNumber}}</td>
+                    <td class="ellipsis-cell">{{i.RfiQueryType}}</td>
+                    <td [ngClass]="i.Status == 'Open' ? 'text-success' : i.Status == 'Close' ? 'text-danger' : 'text-primary'">{{i.Status}}</td>
+                    <td class="ellipsis-cell">{{i.WoDescription}}</td>
+                    <td>--</td>
+                    <td>{{i.Receipient}}</td>
+                    <td>--</td>
+                    <td>{{i.ContractNo}}</td>
+                    <td>{{i.CreatedOn | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{i.ResponseDueDate  | date: 'dd/MM/yyyy'}}</td>
+                   
+                    <td>
+                      <a class="btn btn-sm btn-outline-success rounded-0 mr-2"  (click)="EditRfi(i.RfiNo)">
+                        <i class="far fa-edit"></i>
+                      </a>
+                     </td>
+                    
+                  </tr>
+                  
+                </tbody>
+              </table>
+                </div>
+                
+            </div>
+  
+          </div>
+       </div>
+       <div class="card" *ngIf="isFilterOpened">
+        <div class="card-header text-light overflow-auto custom-header" style="background-color: #273360 !important;">
+            <strong>RFI Filters</strong>
+            <span class="close-icon" (click)="ChangeFilter()">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </span>
+        </div>
+        <div class="card-body" [formGroup]="SearchForm">
+          <div>
+            <div class="col-12 mb-3">
+              <div class="border border-secondary border-dotted p-3 rounded">
+                <div class="row align-items-center">
+                  <div class="col-12 col-sm-4">
+                    <label for="RfiNumber" class="form-label mb-0 text-nowrap">RFI Number :</label>
+                  </div>
+                  <div class="col-12 col-sm-8 mt-2 mt-sm-0">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm rounded-2"
+                      id="RfiNumber"
+                      formControlName="RfiNumber"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 mb-3">
+              <div class="border border-secondary border-dotted p-3 rounded">
+                <div class="row align-items-center">
+                  <div class="col-12 col-sm-4">
+                    <label for="RfiTitle" class="form-label mb-0 text-nowrap">RFI Title :</label>
+                  </div>
+                  <div class="col-12 col-sm-8 mt-2 mt-sm-0">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm rounded-2"
+                      id="RfiTitle"
+                      formControlName="RfiTitle"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 mb-3">
+              <div class="border border-secondary border-dotted p-3 rounded">
+                <div class="row align-items-center">
+                  <div class="col-12 col-sm-4">
+                    <label for="FpNumber" class="form-label mb-0 text-nowrap">FP Number :</label>
+                  </div>
+                  <div class="col-12 col-sm-8 mt-2 mt-sm-0">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm rounded-2"
+                      id="FpNumber"
+                      formControlName="FpNumber"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 mb-3">
+              <div class="border border-secondary border-dotted p-3 rounded">
+                <div class="row align-items-center">
+                  <div class="col-12 col-sm-4">
+                    <label for="FpNumber" class="form-label mb-0 text-nowrap"> Query Type :</label>
+                  </div>
+                  <div class="col-12 col-sm-8 mt-2 mt-sm-0">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm rounded-2"
+                      id="RfiQueryType"
+                      formControlName="RfiQueryType"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 mb-3">
+              <div class="border border-secondary border-dotted p-3 rounded">
+                <div class="row align-items-center">
+                  <div class="col-12 col-sm-4">
+                    <label for="Status" class="form-label mb-0 text-nowrap">RFI Status :</label>
+                  </div>
+                  <div class="col-12 col-sm-8 mt-2 mt-sm-0">
+                    <select  class="form-control form-control-sm rounded-2" formControlName="Status">
+                      <option value="">Select</option>
+                      <option value="0">Open</option>
+                      <option value="1">Draft</option>
+                      <option value="2">Close</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+            <div class="col-sm-10" style="margin-top: 30px;">
+              <button class="btn btn-primary active" style="margin-right:10px" (click)="Search()" >Search</button>
+              <button class="btn btn-warning" style="margin-right:10px" (click)="clear()">Clear</button>
+            </div> 
+         </div>
+       </div>
+       </div>
+      </div>
+
+  
+    <div class="footer-sticked">
+      <div class="back-button d-flex">
+               <a href="javascript:void(0)">
+                   <div class="button-up"></div>
+                   <p>back</p>
+              </a>
+      </div>
+      
+     </div>
+  </div>
+  
