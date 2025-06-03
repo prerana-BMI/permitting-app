@@ -9,6 +9,12 @@ background: -webkit-linear-gradient(to right, #2453ee, #07208f, #160468, #040229
 
 /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 background: linear-gradient(to right, #2453ee, #07208f, #160468, #040229);
+
+}
+.gradient-custom-3 {
+/* Chrome 10-25, Safari 5.1-6 */
+background: -webkit-linear-gradient(to right, #07208f, #07208f, #07208f, #07208f);
+
 }
 
 @media (min-width: 768px) {
@@ -22,3 +28,30 @@ border-top-right-radius: .3rem;
 border-bottom-right-radius: .3rem;
 }
 }
+.ms-login-btn {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.ms-login-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.ms-login-btn img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+ .logo-img {
+    width: 60px;
+    height: 60px;
+    margin-right: 8px;
+  }

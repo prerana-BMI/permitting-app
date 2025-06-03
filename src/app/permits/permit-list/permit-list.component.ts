@@ -5,10 +5,11 @@ import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-permit-list',
   templateUrl: './permit-list.component.html',
-  styleUrls: ['./permit-list.component.css']
+  styleUrls: ['./permit-list.component.scss']
 })
 export class PermitListComponent {
   RfiList: Array<any> = [];
@@ -25,7 +26,8 @@ export class PermitListComponent {
   constructor(private httpService: HttpService,
     private toastr: ToastrService,
     public router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private auth : AuthService
   ) {
 
   }
@@ -38,9 +40,9 @@ export class PermitListComponent {
       Status: ''
     });
     ;
-    this.GetAllProgramList();
+   // this.GetAllProgramList();
 
-    this.GetAllRfi();
+   // this.GetAllRfi();
 
   }
   GetAllRfi() {
@@ -75,9 +77,9 @@ export class PermitListComponent {
     this.router.navigate(['/rfi/RfiDetails', RfiId]);
 
   }
-  Search() {
-    this.GetAllRfi();
-  }
+  // Search() {
+  //   this.GetAllRfi();
+  // }
   clear() {
     this.ProgramId = 0;
     this.SearchForm.reset();
@@ -97,6 +99,10 @@ export class PermitListComponent {
   }
   ChangeFilter() {
     this.isFilterOpened = !this.isFilterOpened;
+  }
+  Search()
+  {
+   this.auth.getAccessToken('');
   }
 }
 

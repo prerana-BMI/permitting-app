@@ -1,3 +1,23 @@
+@use '@angular/material' as mat;
+  @include mat.core();
+
+// Define gray-based theme
+$honeycomb-primary: mat.define-palette(mat.$grey-palette, 600);
+$honeycomb-accent: mat.define-palette(mat.$blue-grey-palette, 300);
+$honeycomb-warn: mat.define-palette(mat.$red-palette);
+
+$honeycomb-theme: mat.define-light-theme((
+  color: (
+    primary: $honeycomb-primary,
+    accent: $honeycomb-accent,
+    warn: $honeycomb-warn,
+  ),
+));
+
+// Apply to components
+@include mat.all-component-typographies();
+@include mat.all-component-themes($honeycomb-theme);
+
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap');
 
 // themes - our custom or/and out of the box themes
@@ -30,4 +50,5 @@
   @include ngx-pace-theme();
 
   @include nb-overrides();
+ 
 };

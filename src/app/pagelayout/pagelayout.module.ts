@@ -21,6 +21,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SearchInputComponent } from './search-input/search-input.component';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 const NB_MODULES = [
   NbLayoutModule,
   NbMenuModule,
@@ -49,7 +50,9 @@ const COMPONENTS = [
 //   NumberWithCommasPipe,
 // ];
 @NgModule({
-  imports: [CommonModule, ...NB_MODULES , RouterModule],
+  imports: [CommonModule, ...NB_MODULES , RouterModule,
+    FormsModule
+  ],
   exports: [CommonModule, ...COMPONENTS],
   declarations: [...COMPONENTS],
 })

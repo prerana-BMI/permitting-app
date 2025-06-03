@@ -1,0 +1,39 @@
+@import 'bootstrap/scss/bootstrap';
+
+.search-sec {
+  padding: 8rem;
+  background: transparent; // Add background for visibility
+  border-radius: 5px;
+}
+
+.search-slt {
+  display: block;
+  width: 100%;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #55595c;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  height: calc(3rem + 2px) !important;
+  border-radius: 0;
+}
+
+.wrn-btn {
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: capitalize;
+  height: calc(3rem + 2px) !important;
+  border-radius: 0;
+}
+
+@media (min-width: 992px) {
+  .search-sec {
+    background: rgba(26, 70, 104, 0.6);
+  }
+}
+
+@media (max-width: 992px) {
+  .search-sec {
+    background: transparent;
+  }
+}

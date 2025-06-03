@@ -5,9 +5,9 @@
     </a>
     <a class="logo" href="#">ENS-<span>Permits</span></a>
   </div>
-  <nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
-    <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
-  </nb-select>
+  <select class="btn btn-outline-primary" [ngModel]="currentTheme" (change)="changeTheme(currentTheme)" >
+    <option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</option>
+  </select>
 </div>
 
 <div class="header-container">

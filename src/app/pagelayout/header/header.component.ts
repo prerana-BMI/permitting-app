@@ -50,7 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  changeTheme(themeName: string) {
+  changeTheme(themeName: any) {
     this.themeService.changeTheme(themeName);
   }
 

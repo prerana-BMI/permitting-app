@@ -1,4 +1,5 @@
 @import 'bootstrap/scss/mixins/breakpoints';
+@import 'bootstrap/scss/bootstrap';
 @import '@nebular/theme/styles/global/breakpoints';
 @import '/src/app/@theme/styles/themes.scss';
 
@@ -6,12 +7,6 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-
-  .logo-container {
-    display: flex;
-    align-items: center;
-    width: calc(#{nb-theme(sidebar-width)} - #{nb-theme(header-padding)});
-  }
 
   nb-action {
     height: auto;
@@ -62,9 +57,5 @@
     }
   }
 
-  @include media-breakpoint-down(is) {
-    nb-select {
-      display: none;
-    }
-  }
+ 
 }
