@@ -1,8 +1,4 @@
-<div class="col-md-12 rounded" style="height:120px; 
-            border: 1px solid #8d0f0f; 
-            border-radius: 12px;
-            background: rgb(229 224 224);
-            color: #1c4876;">
+<div class="col-md-12 rounded" style="height:120px; border: 1px solid #8d0f0f; border-radius: 12px;background: rgb(229 224 224);">
   <div class="d-flex mt-2">
     <div class="col-lg-3 col-md-3 col-sm-12 p-1">
       <div class="form-group">
@@ -12,14 +8,7 @@
         <input type="text" id="city" class="form-control border border-secondary-2 search-slt">
       </div>
     </div>
-    <div class="col-lg-3 col-md-3 col-sm-12 p-1">
-      <div class="form-group">
-        <label for="city" class="form-label labelClass">
-          Client
-        </label>
-        <input type="text" id="city" class="form-control border border-secondary-2 search-slt">
-      </div>
-    </div>
+   
     <div class="col-lg-3 col-md-3 col-sm-12 p-1">
       <div class="form-group">
         <label for="city" class="form-label labelClass">
@@ -29,22 +18,16 @@
       </div>
     </div>
     
-    <div class="col-lg-1 col-md-1 col-sm-12 ">
+    <div class="col-lg-1 col-md-1 col-sm-12 p-1 mr-3">
       <div class="form-group">
       <button type="button" class="form-control border border-secondary-2 search-slt FlterButton" 
       (click)="Search()">Search</button>
       </div>
     </div>
-     <div class="col-lg-1 col-md-1 col-sm-12">
+     <div class="col-lg-1 col-md-1 p-1 col-sm-12">
       <div class="form-group">
       <button type="button" class="form-control border border-secondary-2 search-slt FlterButton" 
       (click)="Search()">Clear</button>
-      </div>
-    </div>
-    <div class="col-lg-1 col-md-1 col-sm-12">
-      <div class="form-group">
-      <button type="button" class="form-control border border-secondary-2 search-slt FlterButton" 
-      (click)="Search()">Export</button>
       </div>
     </div>
 
@@ -52,7 +35,7 @@
   </div>
 </div>
 <div class="col-md-12 mt-3 d-flex">
-  <h5 style="color :#1c4876"> Available Permit Count : </h5>
+  <h5 style="color :#1c4876"> My List : </h5>
   <h5 style="color :#8d0f0f">{{dataCount}}</h5>
 </div>
 <div class="col-md-12 rounded mt-4" style="height:500px; border: 1px solid  #1c4876; border-radius: 12px;">
@@ -64,8 +47,7 @@
           <table class="table table-hover orange-bordered-table">
             <thead>
               <tr style="background: rgb(229 224 224);">
-                <th  class="checkbox-cell"><input type="checkbox" class="big-checkbox"
-                    [(ngModel)]="SelecAll" (click)="SelectAll($event)"></th>
+               
                 <th style="width: 80px;">Permit</th>
                 <th style="width: 150px;">Regulatory Agency</th>
                 <th style="width: 60px;">Time Frame</th>
@@ -77,8 +59,7 @@
             </thead>
             <tbody class="">
               <tr *ngFor="let item of PermitList; let i = index">
-                <td class="checkbox-cell"><input type="checkbox" class="big-checkbox"
-                    (change)="OnSingleChange($event, item.Id)" [(ngModel)]="item.Ischecked"></td>
+              
                 <td>{{item.Permit}}</td>
                 <td>{{item.RegulatoryAgency}}</td>
                 <td>{{item.TimeFrame}}</td>
@@ -100,14 +81,4 @@
   <!-- <mat-paginator *ngIf="PermitList != null" [length]="dataCount" [pageSize]="pageSize" style="margin-top: 10px;"
                 [pageSizeOptions]='pageOption' (page)="paginatorevt($event)" #paginator></mat-paginator> -->
 </div>
-<div class="col-md-12 d-flex justify-content-end">
-  <div class="col-lg-1 col-md-2 col-sm-4 p-1">
-    <div class="form-group">
-      <button type="button"
-              class="form-control border border-secondary-2 search-slt FlterButton"
-              (click)="Search()">
-        Next
-      </button>
-    </div>
-  </div>
-</div>
+

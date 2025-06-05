@@ -5,8 +5,7 @@ import { PermitsRoutingModule } from './permits-routing.module';
 
 
 @NgModule({
-  declarations: [
-  ],
+  declarations: [],
   imports: [
     
     CommonModule,

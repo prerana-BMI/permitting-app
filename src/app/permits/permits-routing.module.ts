@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PermitHomeComponent } from './permit-home/permit-home.component';
 import { MaterialModule } from '../material/material.module';
+import { MyPermitsComponent } from './my-permits/my-permits.component';
 
 
 const routes: Routes = [{
@@ -14,12 +15,13 @@ const routes: Routes = [{
   component: PagesComponent,
   children: [
     { path: 'permitlist', component: PermitListComponent },
-     { path: 'permithome', component: PermitHomeComponent }
+     { path: 'permithome', component: PermitHomeComponent },
+     {path : 'MyPermits' , component : MyPermitsComponent}
   ]
 }];
 
 @NgModule({
-  declarations :[PermitListComponent , PermitHomeComponent],
+  declarations :[PermitListComponent , PermitHomeComponent, MyPermitsComponent],
   imports: [RouterModule.forChild(routes),
     ToastrModule,
     CommonModule,

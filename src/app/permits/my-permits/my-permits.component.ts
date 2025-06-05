@@ -1,19 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { Constants } from 'src/app/Models/Constants';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/services/auth.service'
 @Component({
-  selector: 'app-permit-list',
-  templateUrl: './permit-list.component.html',
-  styleUrls: ['./permit-list.component.scss']
+  selector: 'app-my-permits',
+  templateUrl: './my-permits.component.html',
+  styleUrls: ['./my-permits.component.scss']
 })
-export class PermitListComponent {
- 
-  PermitList : Array<any> = [{
+export class MyPermitsComponent {
+ PermitList : Array<any> = [{
     Permit : 'National Historic Preservation Act',
     RegulatoryAgency : 'efferson City, MO 65102',
     TimeFrame : '30-60 Days',
@@ -75,19 +74,6 @@ export class PermitListComponent {
   {
    this.auth.getAccessToken('');
   }
-  SelectAll(event: any) {
-     const isChecked = (event.target as HTMLInputElement).checked;
-    this.PermitList.forEach(a => {
-      a.Ischecked =isChecked ?  true : false
-    });
-  }
-  OnSingleChange(event: any, Id: number) : void  {
-     const isChecked = (event.target as HTMLInputElement).checked;
-    if (isChecked) {
-      this.PermitList.filter(a => a.Id == Id)
-
-    }
-  }
-
+ 
+ 
 }
-

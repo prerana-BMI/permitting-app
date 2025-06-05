@@ -56,8 +56,8 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
 }
   
 
-  CityTypeAheadDisplay(val: string) {
-  let res = this.CityList.find(a => a.name == val && a.country == "US");
+  CityTypeAheadDisplay(val: any) {
+  let res = this.CityList.find(a => a.name == val.name && a.state == val.state );
   if (res != null) {
     const state = res.state ?? '';
     const country = res.country ?? '';
