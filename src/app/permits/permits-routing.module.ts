@@ -6,6 +6,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PermitHomeComponent } from './permit-home/permit-home.component';
+import { MaterialModule } from '../material/material.module';
 
 
 const routes: Routes = [{
@@ -23,7 +24,8 @@ const routes: Routes = [{
     ToastrModule,
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MaterialModule
   ],
   exports: [RouterModule]
 })

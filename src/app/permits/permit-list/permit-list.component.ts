@@ -13,7 +13,26 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class PermitListComponent {
   RfiList: Array<any> = [];
+  PermitList : Array<any> = [{
+    Permit : 'National Historic Preservation Act',
+    RegulatoryAgency : 'efferson City, MO 65102',
+    TimeFrame : '30-60 Days',
+    ReviewTime : '90-180 Days',
+    Fees : '$4210',
+    Ischecked : true ,
+    Id : 1
+  },
+{
+    Permit : 'National Historic Preservation Act',
+    RegulatoryAgency : 'efferson City, MO 65102',
+    TimeFrame : '30-60 Days',
+    ReviewTime : '90-180 Days',
+    Fees : '$4210',
+    Ischecked : true ,
+    Id : 2
+  }];
   pageSize: number = 10;
+  SelecAll : boolean= true;
   pageOption: any;
   pageIndex: number = 1;
   SearchForm!: FormGroup;
@@ -104,5 +123,19 @@ export class PermitListComponent {
   {
    this.auth.getAccessToken('');
   }
+  SelectAll(event: any) {
+     const isChecked = (event.target as HTMLInputElement).checked;
+    this.PermitList.forEach(a => {
+      a.Ischecked =isChecked ?  true : false
+    });
+  }
+  OnSingleChange(event: any, Id: number) : void  {
+     const isChecked = (event.target as HTMLInputElement).checked;
+    if (isChecked) {
+      this.PermitList.filter(a => a.Id == Id)
+
+    }
+  }
+
 }
 

@@ -1,4 +1,9 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { debounceTime } from 'rxjs';
+import { Constants } from 'src/app/Models/Constants';
+import { HttpService } from 'src/app/services/http.service';
 
 @Component({
   selector: 'app-permit-home',
@@ -6,12 +11,69 @@ import { Component } from '@angular/core';
   styleUrls: ['./permit-home.component.scss']
 })
 export class PermitHomeComponent {
+  CityList : Array<any> = [];
+  isCityLoading : boolean= false;
+  SearchForm! : FormGroup;
+  typeaheadDebounce : number = 500;
+  StateList : Array<any> = [];
+  CountryList : Array<any> = [];
+  constructor(private Formbuilder : FormBuilder,
+    private HttpService : HttpService,
+    private router : Router
+  )
+  {
+
+  }
 ngOnInit()
 {
-  
+  this.InitForm();
+  this.initializeTyopeAhead();
 }
-Search()
+
+
+  InitForm()
   {
-   
+    this.SearchForm = this.Formbuilder.group({
+      city : [''],
+      state : [''],
+      country : ['']
+    })
   }
+initializeTyopeAhead()
+{
+this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
+      if (typeof val === 'string' && val.length >= 1) {
+         this.isCityLoading = true;
+        this.HttpService.httpGetThirdPartyCall('',  val.toLocaleLowerCase(),false).subscribe((res :any) => {
+          if (res.length > 0) {
+            debugger
+            this.CityList = res.filter((a : any)=>a.country == "US");
+          }
+          this.isCityLoading = false;
+        });
+      }
+    });
+}
+  
+
+  CityTypeAheadDisplay(val: string) {
+  let res = this.CityList.find(a => a.name == val && a.country == "US");
+  if (res != null) {
+    const state = res.state ?? '';
+    const country = res.country ?? '';
+
+    this.StateList = [{ state }];
+    this.CountryList = [{ country }];
+    this.SearchForm.patchValue({
+      state,
+      country
+    });
+
+    return `${res.name} - ${state}`;
+  }
+  return '';
+}
+Search(){
+  this.router.navigate(["permits/permitlist"])
+}
 }

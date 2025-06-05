@@ -1,59 +1,102 @@
-<div class="position-relative" style="height: 300px; background-image: url('assets/images/dataimg1-default.jpg'); background-size: cover; background-position: center;">
-  <div class="row">
-    <div class="col-md-12 h-100 align-items-center d-flex">
-      
-     
-      <div class="col-md-8 text-white">
-        <h2 style="font-size: 32px; font-weight: bold; text-shadow: 1px 1px 4px #faf3f3;">
-          Looking For Something? 
-        </h2>
-        <h2 style="font-size: 32px; font-weight: bold; text-shadow: 1px 1px 4px #f7f4f4;">
-          Let Us Help You...
-        </h2>
-        <p style="font-size: 20px; font-weight: bold; text-shadow: 1px 1px 4px #f7f4f4;">
-          We make it easy to find exactly what you need.
-        </p>
+<div class="col-md-12 rounded" style="height:120px; border: 1px solid #8d0f0f; border-radius: 12px;">
+  <div class="d-flex mt-2">
+    <div class="col-lg-3 col-md-3 col-sm-12 p-1">
+      <div class="form-group">
+        <label for="city" class="form-label labelClass">
+          Category
+        </label>
+        <input type="text" id="city" class="form-control border border-secondary-2 search-slt">
       </div>
-
-      <!-- Right: Search Box (1/4 width) -->
-<div class="col-md-4 p-4">
-  <div class="p-3 bg-white shadow-sm rounded border">
-    <div class="row align-items-center mb-2">
-      <div class="col-4">
-        <label for="city" class="form-label mb-0">City/County:</label>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-12 p-1">
+      <div class="form-group">
+        <label for="city" class="form-label labelClass">
+          Client
+        </label>
+        <input type="text" id="city" class="form-control border border-secondary-2 search-slt">
       </div>
-      <div class="col-8">
-        <input type="text" class="form-control" id="city" placeholder="Enter City or County" />
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-12 p-1">
+      <div class="form-group">
+        <label for="city" class="form-label labelClass">
+          Regulatory Agency
+        </label>
+        <input type="text" id="city" class="form-control border border-secondary-2 search-slt">
+      </div>
+    </div>
+    
+    <div class="col-lg-1 col-md-1 col-sm-12 p-1 mr-3">
+      <div class="form-group">
+      <button type="button" class="form-control border border-secondary-2 search-slt FlterButton" 
+      (click)="Search()">Search</button>
+      </div>
+    </div>
+    <div class="col-lg-1 col-md-1 col-sm-12 p-1">
+      <div class="form-group">
+      <button type="button" class="form-control border border-secondary-2 search-slt FlterButton" 
+      (click)="Search()">Export</button>
       </div>
     </div>
 
-    <div class="row align-items-center mb-2">
-      <div class="col-4">
-        <label for="state" class="form-label mb-0">State:</label>
-      </div>
-      <div class="col-8">
-        <input type="text" class="form-control" id="state" placeholder="Enter State" />
-      </div>
-    </div>
 
-    <div class="row align-items-center mb-2">
-      <div class="col-4">
-        <label for="country" class="form-label mb-0">Country:</label>
-      </div>
-      <div class="col-8">
-        <input type="text" class="form-control" id="country" placeholder="Enter Country" />
-      </div>
-    </div>
-
-    <div class="row justify-content-end mt-3">
-      <div class="col-12">
-        <button class="btn btn-primary w-100" (click)="Search()">Search</button>
-      </div>
-    </div>
   </div>
 </div>
+<div class="col-md-12 mt-3">
+  <h5 style="color :#1c4876"> Available Permit Count : {{dataCount}}</h5>
+</div>
+<div class="col-md-12 rounded mt-4" style="height:500px; border: 1px solid  #1c4876; border-radius: 12px;">
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card-body">
+        <div class="table-responsive-md">
+          <table class="table table-hover orange-bordered-table">
+            <thead>
+              <tr>
+                <th style="width: 20px;" class="checkbox-cell"><input type="checkbox" class="big-checkbox"
+                    [(ngModel)]="SelecAll" (click)="SelectAll($event)"></th>
+                <th style="width: 80px;">Permit</th>
+                <th style="width: 150px;">Regulatory Agency</th>
+                <th style="width: 60px;">Time Frame</th>
+
+                <th style="width: 60px;">Review Time</th>
+                <th style="width: 80px;">Fees</th>
+
+              </tr>
+            </thead>
+            <tbody class="">
+              <tr *ngFor="let item of PermitList; let i = index">
+                <td style="width: 10px;" class="checkbox-cell"><input type="checkbox" class="big-checkbox"
+                    (change)="OnSingleChange($event, item.Id)" [(ngModel)]="item.Ischecked"></td>
+                <td>{{item.Permit}}</td>
+                <td>{{item.RegulatoryAgency}}</td>
+                <td>{{item.TimeFrame}}</td>
+
+                <td>{{item.ReviewTime}}</td>
+                <td>{{item.Fees}}</td>
+              </tr>
+
+            </tbody>
+          </table>
 
 
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <!-- <mat-paginator *ngIf="PermitList != null" [length]="dataCount" [pageSize]="pageSize" style="margin-top: 10px;"
+                [pageSizeOptions]='pageOption' (page)="paginatorevt($event)" #paginator></mat-paginator> -->
+</div>
+<div class="col-md-12 d-flex justify-content-end">
+  <div class="col-lg-1 col-md-2 col-sm-4 p-1">
+    <div class="form-group">
+      <button type="button"
+              class="form-control border border-secondary-2 search-slt FlterButton"
+              (click)="Search()">
+        Next
+      </button>
     </div>
   </div>
 </div>
