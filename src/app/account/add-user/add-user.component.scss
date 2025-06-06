@@ -1,0 +1,86 @@
+@import 'bootstrap/scss/bootstrap';
+
+.add-edit-popuop {
+  height: 55vh;
+  overflow: hidden;
+  width: 20vw;
+  box-sizing: border-box;
+}
+
+.shadowed-panel {
+overflow-y: none;
+.row {
+    padding: 20px 30px 30px;
+  }
+
+
+
+
+  &.shadowed-panel-header {
+    box-shadow: -2px 1px 10px 4px rgba(44, 101, 155, 0.2);
+    margin-top: -100px;
+  }
+
+
+  .panel-header {
+    background: #1c4876;
+    border-radius: 5px 5px 0px 0px;
+    padding: 5px 20px;
+
+    h5 {
+      font-weight: 600;
+      font-size: 17px;
+      line-height: 30px;
+      color: #ffffff;
+      margin: 0;
+    }
+  }
+}
+
+.panel-header {
+  background-image: l #1c4876;
+  ;
+  border-radius: 5px 5px 0px 0px;
+  padding: 5px 20px;
+
+  h5 {
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 30px;
+    color: #ffffff;
+    margin: 0;
+  }
+}
+
+.fa-times {
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.search-slt {
+  display: block;
+  width: 100%;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #55595c;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  height: calc(3rem + 2px) !important;
+  border-radius: 0;
+}
+
+.labelClass {
+  display: block;
+  border-bottom: 1px solid #8d0f0f;
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+  font-size: 18px;
+
+}
+.FlterButton{
+
+  font-size: 18px;
+  border: 1px solid #8d0f0f !important;
+  color: #1c4876;
+}

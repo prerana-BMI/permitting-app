@@ -6,6 +6,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service'
+import { MatDialog } from '@angular/material/dialog';
+import { AddUserComponent } from '../add-user/add-user.component';
 
 @Component({
   selector: 'app-users-list',
@@ -46,7 +48,8 @@ PermitList : Array<any> = [{
     private toastr: ToastrService,
     public router: Router,
     private fb: FormBuilder,
-    private auth : AuthService
+    private auth : AuthService,
+    private dialog : MatDialog
   ) {
 
   }
@@ -74,6 +77,15 @@ PermitList : Array<any> = [{
   Search()
   {
    this.auth.getAccessToken('');
+  }
+  AddUser() {
+    let dialogRef = this.dialog.open(AddUserComponent, {
+
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res != null) {
+      }
+    });
   }
   
 }
