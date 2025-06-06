@@ -120,10 +120,15 @@
   <div class="col-lg-1 col-md-2 col-sm-4 p-1">
     <div class="form-group">
       <button type="button"
-              class="form-control border border-secondary-2 search-slt FlterButton"
-              (click)="Search()">
-        Next
+        class="form-control d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton"
+        (click)="Search()">
+        <span class="flex-grow-1 text-start">Next</span>
+        <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
+        <i class="fa-solid fa-arrow-right"></i>
       </button>
+
+      
+
     </div>
   </div>
 </div>
