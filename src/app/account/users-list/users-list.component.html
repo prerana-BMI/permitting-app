@@ -20,23 +20,34 @@
     
     <div class="col-lg-1 col-md-1 col-sm-12 p-1 mr-3">
       <div class="form-group">
-      <button type="button" class="form-control border border-secondary-2 search-slt FlterButton" 
-      (click)="Search()">Search</button>
+      <button
+        class="form-control d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton"
+        (click)="Search()" style="font-size: 16px;">
+        <span class="flex-grow-1 text-start">Search</span>
+        <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
+        <i class="fas fa-search"></i>
+      </button>
       </div>
     </div>
      <div class="col-lg-1 col-md-1 p-1 col-sm-12 mr-3">
       <div class="form-group">
-      <button type="button" class="form-control border border-secondary-2 search-slt FlterButton" 
-      (click)="Search()">Clear</button>
+        <button type="button"
+          class="form-control d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton"
+          (click)="Search()">
+          <span class="flex-grow-1 text-start">Clear</span>
+          <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
+          <i class="fa fa-eraser"></i>
+        </button>
       </div>
     </div>
     <div class="col-lg-1 col-md-1 p-1 col-sm-12">
-      <button class="form-control d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton"
-        style="font-size: 18px; min-width: 160px; gap: 0.5rem;">
-  <span class="flex-grow-1 text-start">Add User</span>
-  <span style="border-left: 1px solid #555; height: 50px; margin: 0 8px;"></span>
-  <i class="fa fa-plus"></i>
-</button>
+      <button type="button"
+          class="form-control d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton" style="width: 140px;"
+          (click)="Search()">
+          <span class="flex-grow-1 text-start">Add User</span>
+          <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
+          <i class="fa fa-plus"></i>
+        </button>
     </div>
 
 

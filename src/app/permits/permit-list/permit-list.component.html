@@ -31,20 +31,36 @@
     
     <div class="col-lg-1 col-md-1 col-sm-12 ">
       <div class="form-group">
-      <button type="button" class="form-control border border-secondary-2 search-slt FlterButton" 
-      (click)="Search()">Search</button>
-      </div>
-    </div>
-     <div class="col-lg-1 col-md-1 col-sm-12">
-      <div class="form-group">
-      <button type="button" class="form-control border border-secondary-2 search-slt FlterButton" 
-      (click)="Search()">Clear</button>
+     
+      <button
+        class="form-control d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton"
+        (click)="Search()" style="font-size: 16px;">
+        <span class="flex-grow-1 text-start">Search</span>
+        <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
+        <i class="fas fa-search"></i>
+      </button>
       </div>
     </div>
     <div class="col-lg-1 col-md-1 col-sm-12">
       <div class="form-group">
-      <button type="button" class="form-control border border-secondary-2 search-slt FlterButton" 
-      (click)="Search()">Export</button>
+        <button type="button"
+          class="form-control d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton"
+          (click)="Search()">
+          <span class="flex-grow-1 text-start">Clear</span>
+          <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
+          <i class="fa fa-eraser"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-lg-1 col-md-1 col-sm-12">
+      <div class="form-group">
+        <button type="button"
+          class="form-control d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton"
+          (click)="Search()">
+          <span class="flex-grow-1 text-start">Export</span>
+          <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
+          <i class="fa-solid fa-download"></i>
+        </button>
       </div>
     </div>
 
