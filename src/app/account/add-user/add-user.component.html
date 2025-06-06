@@ -2,7 +2,7 @@
     <div class="shadowed-panel">
         <div class="panel-header d-flex justify-content-between align-items-center">
             <h5> Add / Edit User </h5>
-            <div><i class="fa fa-times" aria-hidden="true"></i></div>
+            <div><i class="fa fa-times" aria-hidden="true" (click)="clear()"></i></div>
         </div>
          <div class="row">
         <div class="col-md-12 p-3" style="border: 1px solid #8d0f0f; border-radius: 12px;">
@@ -60,7 +60,7 @@
                 <!-- Clear Button -->
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <button type="button"
+                        <button type="button" (click)="clear()"
                             class="w-100 d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton"
                             >
                             <span class="flex-grow-1 text-start">Clear</span>
