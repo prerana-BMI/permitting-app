@@ -35,6 +35,7 @@ import {
 } from '@azure/msal-browser';
 import { firstValueFrom } from 'rxjs';
 import { MaterialModule } from './material/material.module';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
@@ -103,7 +104,8 @@ export function initializeMsalInstance(msalService: MsalService): () => Promise<
       useFactory: initializeMsalInstance,
       deps: [MsalService],
       multi: true,
-    }
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     
   ],
   bootstrap: [AppComponent],

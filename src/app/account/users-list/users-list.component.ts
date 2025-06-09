@@ -33,6 +33,7 @@ PermitList : Array<any> = [{
     
     Id : 2
   }];
+  UserList : Array<any> = [];
   pageSize: number = 10;
   SelecAll : boolean= true;
   pageOption: any;
@@ -49,7 +50,8 @@ PermitList : Array<any> = [{
     public router: Router,
     private fb: FormBuilder,
     private auth : AuthService,
-    private dialog : MatDialog
+    private dialog : MatDialog,
+   
   ) {
 
   }
@@ -61,10 +63,8 @@ PermitList : Array<any> = [{
       RfiQueryType: '',
       Status: ''
     });
-    ;
- 
-
-  }
+    this.GetAllUsers();
+     }
 
 
   paginatorevt(evt: any) {
@@ -87,5 +87,13 @@ PermitList : Array<any> = [{
       }
     });
   }
-  
+  GetAllUsers()
+  {
+    this.httpService.httpGetCall(Constants.GetAllUsers, {}, true).subscribe((res: any) => {
+      if (res["Success"]) {
+        this.UserList = res["Data"];
+        this.dataCount = res["Count"];
+      }
+    });
+  }  
 }

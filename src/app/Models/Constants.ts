@@ -1,6 +1,6 @@
 export class Constants{
     public static GetAllProjectMaster  = '/api/RFI/GetProjectMasterList';
-
+    public static GetAllUsers  = '/api/Account/GetUsers';
     public static PageSizeOptions: Array<{ "key": number, "value": number }> =
         [
             { "key": 10, "value": 10 },

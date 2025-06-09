@@ -17,10 +17,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.11" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include=".\Data\Data.csproj" />
-     <ProjectReference Include=".\contract\contract.csproj" />
-</ItemGroup>
+  
 
 
 </Project>

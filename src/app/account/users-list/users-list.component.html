@@ -55,7 +55,7 @@
 </div>
 <div class="col-md-12 mt-3 d-flex">
   <h5 style="color :#1c4876"> Users List : </h5>
-  <h5 style="color :#1c4876"> 2</h5>
+  <h5 style="color :#1c4876"> {{dataCount}}</h5>
 
 </div>
 <div class="col-md-12 rounded mt-4" style="height:500px; border: 1px solid  #1c4876; border-radius: 12px;">
@@ -78,14 +78,14 @@
               </tr>
             </thead>
             <tbody class="">
-              <tr *ngFor="let item of PermitList; let i = index">
+              <tr *ngFor="let item of UserList; let i = index">
               
-                <td>{{item.Permit}}</td>
-                <td>{{item.RegulatoryAgency}}</td>
-                <td>{{item.TimeFrame}}</td>
+                <td>{{item.UserName}}</td>
+                <td>{{item.UserRole}}</td>
+                <td>{{item.CreatedBy}}</td>
 
-                <td>{{item.ReviewTime}}</td>
-                <td>Yes</td>
+                <td>{{item.CreatedOn | date}}</td>
+                <td>{{item.IsActive == true ? 'Yes' : 'No'}}</td>
                 <td>
                       <a class="btn btn-sm btn-outline-success rounded-1 ">
                         <i class="far fa-edit"></i>

@@ -17,23 +17,41 @@ namespace permitapi.Controllers
         {
             _context = context;
         }
+
+        [HttpGet]
         [Route("GetUsers")]
         public BaseReturn<List<EUsers>> GetALLUsers()
         {
             var BaseObj = new BaseReturn<List<EUsers>>();
-            var result = _context.Users.Select(a => new EUsers
+            List<EUsers> Result = new List<EUsers>();
+            try
             {
-                Id = a.Id,
-                UserName = a.UserName,
-                UserRole = a.UserRole,
-                IsActive = a.IsActive,
-                CreatedBy = a.CreatedBy,
-                CreatedOn = a.CreatedOn
-            }).ToList();
-            BaseObj.Data = result;
-            BaseObj.Count = result.Count;
-            BaseObj.Success = true;
-            return BaseObj;
+
+                Result = _context.Users.Select(a => new EUsers
+                {
+                    Id = a.Id,
+                    UserName = a.UserName,
+                    UserRole = a.UserRole,
+                    IsActive = a.IsActive,
+                    CreatedBy = a.CreatedBy,
+                    CreatedOn = a.CreatedOn
+                }).ToList();
+                BaseObj.Data = Result;
+                BaseObj.Count = Result.Count;
+                BaseObj.Success = true;
+
+            }
+            catch (Exception ex)
+            {
+                BaseObj.Data = Result;
+                BaseObj.Count = Result.Count;
+                BaseObj.Success = true;
+            }
+            finally
+            {
+
+            }
+            return BaseObj; 
         }
 
     }
