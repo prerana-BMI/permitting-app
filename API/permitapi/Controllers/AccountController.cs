@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace permitapi.Controllers
 {
     [Route("api/[controller]")]
-    
+
     // [Authorize]
     public class AccountController : ControllerBase
     {
@@ -56,5 +56,31 @@ namespace permitapi.Controllers
             return BaseObj;
         }
 
+        [HttpGet]
+        [Route("IsUserExist")]
+        public BaseReturn<bool> IsUserExisit(string UserName)
+        {
+            var BaseObj = new BaseReturn<bool>();
+
+            try
+            {
+
+                var Result = _context.Users.Where(a => a.UserName == UserName && a.IsActive == true).AsNoTracking().FirstOrDefault();
+                BaseObj.Data = Result != null ? true : false;
+                BaseObj.Success = true;
+
+
+            }
+            catch (Exception ex)
+            {
+                BaseObj.Message = ex.Message;
+                BaseObj.Success = false;
+            }
+            finally
+            {
+
+            }
+            return BaseObj;
+        }
     }
 }

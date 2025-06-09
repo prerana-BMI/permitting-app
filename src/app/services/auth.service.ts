@@ -12,6 +12,9 @@ import {
 import { filter, take } from 'rxjs';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { HttpService } from './http.service';
+import { Constants } from '../Models/Constants';
+import { ToastrService } from 'ngx-toastr';
 
 ;
 @Injectable({
@@ -24,7 +27,9 @@ export class AuthService {
 
   constructor(private msalService: MsalService,
     private msalBroadcastService: MsalBroadcastService,
-     private router: Router) {}
+     private router: Router,
+     private toastr: ToastrService,
+    private HttpService : HttpService) {}
 
 //  async loginSilently() {
 //  console.log('[MSAL] Init: Starting login flow...');
@@ -114,5 +119,17 @@ export class AuthService {
     
      }
       return this.AccessToken
+  }
+  IsUserAuthorized(UserName : string ) {
+      this.HttpService.httpGetCall(Constants.IsUserExist+ UserName, {},true).subscribe((res:any)=>{
+      if(res['Success'])
+      {
+        this.router.navigate(['/permits/permithome']);
+      }
+      else{
+        this.toastr.error('You are an unauthorized user,Please contact your help tesk team!');
+        this.router.navigate(['/account/login']);
+      }
+      })
   }
 }

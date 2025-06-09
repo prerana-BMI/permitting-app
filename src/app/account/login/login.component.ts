@@ -34,7 +34,7 @@ const activeAccount = this.msalService.instance.getActiveAccount();
     });
   } else {
     this.authService.getAccessToken('');
-    this.router.navigate(['permits/permithome']);
+    this.authService.IsUserAuthorized(activeAccount.username);
   }
 this.LoderService.display(false);
 }

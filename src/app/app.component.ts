@@ -29,7 +29,7 @@ showLoader : boolean = false;
   if (result?.account) {
     this.msalService.instance.setActiveAccount(result.account);
     this.auth.getAccessToken('');
-    this.router.navigate(['/permits/permithome']);
+    this.auth.IsUserAuthorized(result.account.username);
   } 
   // else {
   //   const account = this.msalService.instance.getActiveAccount();
