@@ -22,14 +22,19 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     var autoLoader = request.headers.get('Loader');
+    if(request.url.includes('https://api.openweathermap.org/'))
+    {
+      return next.handle(request);
+    }
     if (autoLoader == 'true' || autoLoader == null) {
       this.LoaderserviceService.display(true);
     }
-     request = request.clone({
-                setHeaders: {
-                    Authorization: `Bearer ${ this.auth.GetLocalStorageToken()}`
-                }
-            })
+   
+    request = request.clone({
+      setHeaders: {
+        Authorization: `Bearer ${this.auth.GetLocalStorageToken()}`
+      }
+    });
     return next.handle(request).pipe(tap(event => {
       
       if (event instanceof HttpResponse) {

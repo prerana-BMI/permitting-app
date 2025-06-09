@@ -17,7 +17,6 @@ export class UserActivityComponent {
   }
   ngOninit()
   {
-    debugger
      this.userActivity =[
       {
       'VisitCount' : 80,

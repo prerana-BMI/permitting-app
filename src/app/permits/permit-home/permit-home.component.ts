@@ -44,9 +44,8 @@ initializeTyopeAhead()
 this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
       if (typeof val === 'string' && val.length >= 1) {
          this.isCityLoading = true;
-        this.HttpService.httpGetThirdPartyCall('',  val.toLocaleLowerCase(),false).subscribe((res :any) => {
+        this.HttpService.httpGetThirdPartyCall('',  val.toLocaleLowerCase()).subscribe((res :any) => {
           if (res.length > 0) {
-            debugger
             this.CityList = res.filter((a : any)=>a.country == "US");
           }
           this.isCityLoading = false;
