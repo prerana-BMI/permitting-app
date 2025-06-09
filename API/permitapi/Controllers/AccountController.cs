@@ -4,12 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using contract;
 using Data.DbEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace permitapi.Controllers
 {
     [Route("api/[controller]")]
+    
+    // [Authorize]
     public class AccountController : ControllerBase
     {
         private readonly permit_account_serviceContext _context;
@@ -43,15 +46,14 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
-                BaseObj.Data = Result;
-                BaseObj.Count = Result.Count;
-                BaseObj.Success = true;
+                BaseObj.Message = ex.Message;
+                BaseObj.Success = false;
             }
             finally
             {
 
             }
-            return BaseObj; 
+            return BaseObj;
         }
 
     }

@@ -30,15 +30,16 @@ showLoader : boolean = false;
     this.msalService.instance.setActiveAccount(result.account);
     this.auth.getAccessToken('');
     this.router.navigate(['/permits/permithome']);
-  } else {
-    const account = this.msalService.instance.getActiveAccount();
-    if (!account) {
-      const allAccounts = this.msalService.instance.getAllAccounts();
-      if (allAccounts.length > 0) {
-        this.msalService.instance.setActiveAccount(allAccounts[0]);
-      }
-    }
-  }
+  } 
+  // else {
+  //   const account = this.msalService.instance.getActiveAccount();
+  //   if (!account) {
+  //     const allAccounts = this.msalService.instance.getAllAccounts();
+  //     if (allAccounts.length > 0) {
+  //       this.msalService.instance.setActiveAccount(allAccounts[0]);
+  //     }
+  //   }
+  // }
 }
 
 }

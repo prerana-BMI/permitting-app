@@ -72,7 +72,6 @@ export class MyPermitsComponent {
 
   Search()
   {
-   this.auth.getAccessToken('');
   }
  
  

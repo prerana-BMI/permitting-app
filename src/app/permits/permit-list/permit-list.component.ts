@@ -73,7 +73,6 @@ export class PermitListComponent {
 
   Search()
   {
-   this.auth.getAccessToken('');
   }
   SelectAll(event: any) {
      const isChecked = (event.target as HTMLInputElement).checked;

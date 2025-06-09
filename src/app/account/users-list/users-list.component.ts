@@ -76,7 +76,7 @@ PermitList : Array<any> = [{
 
   Search()
   {
-   this.auth.getAccessToken('');
+  
   }
   AddUser() {
     let dialogRef = this.dialog.open(AddUserComponent, {
