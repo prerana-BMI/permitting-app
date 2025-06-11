@@ -113,10 +113,9 @@ table th {
   color: white;
 }
 
-.custom-input:focus {
-  border-color: #0e3b64 !important;
-  /* Custom border color */
+.custom-input {
   box-shadow: none !important;
+  border-color: #a1aebb !important;
 }
 
 .random {
@@ -132,4 +131,12 @@ table th {
   position: absolute;
   border-radius: 20px;
 
+}
+.PageLayout
+{
+height:500px;
+border: 1px solid #d7d0d08f; 
+border-radius: 12px;
+background: white;
+box-shadow: 1px 1px 2px rgb(91 101 130 / 18%);
 }
