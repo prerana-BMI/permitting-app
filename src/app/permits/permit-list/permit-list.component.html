@@ -1,87 +1,103 @@
 <div class="col-md-12 rounded" style="height:120px; 
-            border: 1px solid #8d0f0f; 
+            border: 1px solid #d7d0d08f; 
             border-radius: 12px;
-            background: rgb(229 224 224);
-            color: #1c4876;">
+            background: white;
+            box-shadow: 1px 1px 2px rgb(91 101 130 / 18%);">
   <div class="d-flex mt-2">
     <div class="col-lg-3 col-md-3 col-sm-12 p-1">
       <div class="form-group">
-        <label for="city" class="form-label labelClass">
+        <label for="city" class="form-label labelClass lableSyle">
           Category
         </label>
-        <input type="text" id="city" class="form-control border border-secondary-2 search-slt">
+        <input type="text" id="city" class="form-control custom-input" style=" border-color: #a1aebb !important;">
       </div>
     </div>
     <div class="col-lg-3 col-md-3 col-sm-12 p-1">
       <div class="form-group">
-        <label for="city" class="form-label labelClass">
+        <label for="city" class="form-label labelClass lableSyle">
           Client
         </label>
-        <input type="text" id="city" class="form-control border border-secondary-2 search-slt">
+        <input type="text" id="city" class="form-control custom-input" style=" border-color: #a1aebb !important;">
       </div>
     </div>
     <div class="col-lg-3 col-md-3 col-sm-12 p-1">
       <div class="form-group">
-        <label for="city" class="form-label labelClass">
+        <label for="city" class="form-label labelClass lableSyle">
           Regulatory Agency
         </label>
-        <input type="text" id="city" class="form-control border border-secondary-2 search-slt">
+        <input type="text" id="city" class="form-control custom-input" style=" border-color: #a1aebb !important;">
       </div>
     </div>
-    
-    <div class="col-lg-1 col-md-1 col-sm-12 ">
-      <div class="form-group">
-     
-      <button
-        class="form-control d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton"
-        (click)="Search()" style="font-size: 16px;">
-        <span class="flex-grow-1 text-start">Search</span>
-        <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
+
+    <div class="col-lg-1 col-md-1 col-sm-12 mr-4">
+      <!-- <div class="form-group"> -->
+
+      <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
+        (click)="Search()">
+        <span style=" margin: 0 1px;"></span>
         <i class="fas fa-search"></i>
+        <span class="flex-grow-1 text-start">Search</span>
+
       </button>
-      </div>
+      <!-- </div> -->
     </div>
     <div class="col-lg-1 col-md-1 col-sm-12">
-      <div class="form-group">
-        <button type="button"
-          class="form-control d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton"
-          (click)="Search()">
-          <span class="flex-grow-1 text-start">Clear</span>
-          <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
-          <i class="fa fa-eraser"></i>
-        </button>
-      </div>
+
+      <button type="button"
+        class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
+        (click)="Search()">
+        <span style=" margin: 0 1px;"></span>
+        <i class="fa fa-eraser"></i>
+        <span class="flex-grow-1 text-start">Clear</span>
+
+      </button>
+
     </div>
-    <div class="col-lg-1 col-md-1 col-sm-12">
+    <!-- <div class="col-lg-1 col-md-1 col-sm-12">
       <div class="form-group">
         <button type="button"
-          class="form-control d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton"
+          class="btn btn-outline-primary form-control d-flex align-items-center search-slt FlterButton"
           (click)="Search()">
           <span class="flex-grow-1 text-start">Export</span>
-          <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
+          <span style=" margin: 0 6px;"></span>
           <i class="fa-solid fa-download"></i>
         </button>
       </div>
-    </div>
+    </div> -->
 
 
   </div>
 </div>
-<div class="col-md-12 mt-3 d-flex">
+<!-- <div class="col-md-12 mt-3 d-flex">
   <h5 style="color :#1c4876"> Available Permit Count : </h5>
-  <h5 style="color :#8d0f0f">{{dataCount}}</h5>
-</div>
-<div class="col-md-12 rounded mt-4" style="height:400px; border: 1px solid  #1c4876; border-radius: 12px;">
+  <h5 style="color :#1c4876">2</h5>
+</div> -->
+<div class="col-md-12 rounded mt-5" style="height:500px;
+            border: 1px solid #d7d0d08f; 
+            border-radius: 12px;
+            background: white;
+            box-shadow: 1px 1px 2px rgb(91 101 130 / 18%);">
+  <div class="col-md-12 mt-3 d-flex justify-content-between align-items-center">
+    <div class="d-flex">
+      <p class="lableSyle mb-0 me-2">Permit Count : </p>
+      <p class="lableSyle mb-0"> 2</p>
+    </div>
+
+    <a class="btn btn-sm rounded-1 mr-2" style="border: 1px solid #1c4876;">
+      <i class="fa-solid fa-download"></i>
+    </a>
+  </div>
+
 
   <div class="row">
     <div class="col-md-12">
       <div class="card-body">
         <div class="table-responsive-md">
-          <table class="table table-hover orange-bordered-table">
+          <table class="table table-hover">
             <thead>
-              <tr style="background: rgb(229 224 224);">
-                <th  class="checkbox-cell"><input type="checkbox" class="big-checkbox"
-                    [(ngModel)]="SelecAll" (click)="SelectAll($event)"></th>
+              <tr style="background-color: #bbbbbb4d; border: 1px solid #e1dbdba6;">
+                <th class="checkbox-cell"><input type="checkbox" class="big-checkbox" [(ngModel)]="SelecAll"
+                    (click)="SelectAll($event)"></th>
                 <th style="width: 80px;">Permit</th>
                 <th style="width: 150px;">Regulatory Agency</th>
                 <th style="width: 60px;">Time Frame</th>
@@ -92,43 +108,39 @@
               </tr>
             </thead>
             <tbody class="">
-              <tr *ngFor="let item of PermitList; let i = index">
+                    <tr *ngFor="let item of PermitList; let i = index">
                 <td class="checkbox-cell"><input type="checkbox" class="big-checkbox"
                     (change)="OnSingleChange($event, item.Id)" [(ngModel)]="item.Ischecked"></td>
                 <td>{{item.Permit}}</td>
                 <td>{{item.RegulatoryAgency}}</td>
                 <td>{{item.TimeFrame}}</td>
-
+              
                 <td>{{item.ReviewTime}}</td>
                 <td>{{item.Fees}}</td>
-              </tr>
-
-            </tbody>
-          </table>
+                    </tr>
+              
+                  </tbody>
+                </table>
 
 
         </div>
       </div>
 
     </div>
-
   </div>
-  <!-- <mat-paginator *ngIf="PermitList != null" [length]="dataCount" [pageSize]="pageSize" style="margin-top: 10px;"
-                [pageSizeOptions]='pageOption' (page)="paginatorevt($event)" #paginator></mat-paginator> -->
-</div>
-<div class="col-md-12 d-flex justify-content-end">
-  <div class="col-lg-1 col-md-2 col-sm-4 p-1">
-    <div class="form-group">
-      <button type="button"
-        class="form-control d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton"
-        (click)="Search()">
-        <span class="flex-grow-1 text-start">Next</span>
-        <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
-        <i class="fa-solid fa-arrow-right"></i>
-      </button>
+  <div class="row">
+    <div class="col-md-12 d-flex justify-content-end">
+      <div class="col-lg-1 col-md-2 col-sm-4 p-1 mr-2">
+        <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn" style="margin-top: 0px;"
+          (click)="Search()">
+          <span style=" margin: 0 1px;"></span>
+          <i class="fa-solid fa-arrow-right"></i>
+          <span class="flex-grow-1 text-start">Next</span>
 
-      
-
+        </button>
+      </div>
     </div>
   </div>
+
+
 </div>

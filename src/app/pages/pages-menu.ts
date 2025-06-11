@@ -14,7 +14,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     
   },
    {
-    title: 'My List',
+    title: 'Matrix',
     icon: 'bookmark-outline',
     link: '/permits/MyPermits',
     
