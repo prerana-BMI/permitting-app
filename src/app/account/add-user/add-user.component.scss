@@ -1,7 +1,7 @@
 @import 'bootstrap/scss/bootstrap';
 
 .add-edit-popuop {
-  height: 55vh;
+  height: 40vh;
   overflow: hidden;
   width: 20vw;
   box-sizing: border-box;
@@ -17,13 +17,13 @@ overflow-y: none;
 
 
   &.shadowed-panel-header {
-    box-shadow: -2px 1px 10px 4px rgba(44, 101, 155, 0.2);
+    box-shadow: #1c4876;
     margin-top: -100px;
   }
 
 
   .panel-header {
-    background: #1c4876;
+    background:#1c4876;
     border-radius: 5px 5px 0px 0px;
     padding: 5px 20px;
 
@@ -38,7 +38,7 @@ overflow-y: none;
 }
 
 .panel-header {
-  background-image: l #1c4876;
+  background-image: #1c4876;
   ;
   border-radius: 5px 5px 0px 0px;
   padding: 5px 20px;
@@ -70,17 +70,50 @@ overflow-y: none;
   border-radius: 0;
 }
 
+
+.FlterButton {
+  margin-top: 45px;
+  font-size: 16px;
+  width: 120px;
+  font-family: Open Sans, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
 .labelClass {
   display: block;
-  border-bottom: 1px solid #8d0f0f;
+  border-bottom: 1px solid rgb(165 163 163 / 20%);
   padding-bottom: 4px;
-  margin-bottom: 8px;
-  font-size: 18px;
-
+  margin-bottom: 10px;
 }
-.FlterButton{
 
-  font-size: 18px;
-  border: 1px solid #8d0f0f !important;
-  color: #1c4876;
+.lableSyle {
+  font-family: Open Sans, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+.custom-input {
+  box-shadow: none !important;
+  border-color: #a1aebb !important;
+}
+.FlterButton {
+  margin-top: 45px;
+  font-size: 16px;
+  width: 120px;
+  font-family: Open Sans, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+.custom-outline-btn {
+  border: 1px solid #0e3b64;
+  color: #0e3b64;
+  background-color: transparent;
+}
+
+.custom-outline-btn:hover {
+  background-color: #0e3b64;
+  color: white;
 }

@@ -1,7 +1,7 @@
 @import 'bootstrap/scss/bootstrap';
 
 .search-sec {
-  padding: 12rem;
+  padding: 5rem;
   background: transparent; // Add background for visibility
   border-radius: 5px;
 }
@@ -39,7 +39,7 @@
 }
 
   .card-title{
-   background: #1c4876
+   background: #0e3b64
 }
 h5
 {
@@ -52,7 +52,7 @@ h5
   display: flex;
   justify-content: space-between;
   padding: 4px 8px;
-  border-bottom:  1px solid #a77d7d !important;
+  border-bottom:  1px solid #e1dbdba6 !important;
   align-items: center;
 }
  .mat-opt1 {
@@ -60,7 +60,7 @@ h5
   justify-content: space-between;
   padding: 4px 8px;
  
-  border-bottom: 1px solid #6c757d !important;
+  border-bottom: 1px solid #e1dbdba6 !important;
   align-items: center;
 }
 
@@ -74,6 +74,40 @@ h5
   width: 50%;
   text-align: left;
 }
+.custom-input {
+  box-shadow: none !important;
+  border-color: #6688ab61 !important;
+  height: 120%;
+}
+.FlterButton {
+  font-size: 16px !important;
+  font-family: Open Sans, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+.custom-outline-btn {
+  border: 1px solid #1c4876;
+  color: #1c4876;
+  height: 120%;
+  background-color: white;
+  width: 40%;
+}
+
+.custom-outline-btn:hover {
+  background-color: #1c4876;
+  color: white;
+  height: 120%;
+  width: 40%;
+  box-shadow: none !important;
+}
+.custom-input:disabled {
+            
+  background-color: #fff;  /* Custom background color */
+        /* Optional: show "not allowed" cursor */
+}
+
 
  
  

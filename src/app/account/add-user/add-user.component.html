@@ -4,73 +4,52 @@
             <h5> Add / Edit User </h5>
             <div><i class="fa fa-times" aria-hidden="true" (click)="clear()"></i></div>
         </div>
-         <div class="row">
-        <div class="col-md-12 p-3" style="border: 1px solid #8d0f0f; border-radius: 12px;">
-           
-            <!-- User Name -->
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="username" class="form-label labelClass">User Name</label>
-                    <input type="text" id="username" class="form-control border border-secondary-2 search-slt">
-                </div>
-            </div>
+        <div class="row">
+            <div class="col-md-12 p-3">
 
-            <!-- User Role -->
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="role" class="form-label labelClass">User Role</label>
-                    <select id="role" class="form-control border border-secondary-2 search-slt">
-                        <option value="">Select</option>
-                        <option value="A">Admin</option>
-                        <option value="U">User</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Active Status -->
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="active" class="form-label labelClass">Active Status</label>
-                    <select id="role" class="form-control border border-secondary-2 search-slt">
-                        <option value="">Select</option>
-                        <option value="Y">Yes</option>
-                        <option value="N">No</option>
-                    </select>
-                </div>
-            </div>
-            </div>
-        </div>
-        </div>
-        
-        <div class="col-md-12">
-            <div class="row justify-content-center">
-                <!-- Search Button -->
-                <div class="col-sm-4 pr-2">
+                <div class="col-md-12">
                     <div class="form-group">
-                        <button
-                            class="w-100 d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton" style="width: 140px;"
-                           >
-                            <span class="flex-grow-1 text-start">Submit</span>
-                            <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
-                           <i class="fas fa-save"></i>
-                        </button>
+                        <label for="username" class="form-label labelClass lableSyle">User Name</label>
+                        <input type="text" id="username" class="form-control custom-input">
                     </div>
                 </div>
-        
-                <!-- Clear Button -->
-                <div class="col-sm-4">
+
+                <div class="col-md-12">
                     <div class="form-group">
-                        <button type="button" (click)="clear()"
-                            class="w-100 d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton"
-                            >
-                            <span class="flex-grow-1 text-start">Clear</span>
-                            <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
-                            <i class="fa fa-eraser"></i>
-                        </button>
+                        <label for="role" class="form-label labelClass lableSyle">User Role</label>
+                        <select id="role" class="form-control custom-input">
+                            <option value="">Select</option>
+                            <option value="A">Admin</option>
+                            <option value="U">User</option>
+                        </select>
                     </div>
                 </div>
+
+                <!-- Active Status -->
+                <div class="col-md-12">
+                    <div class="form-group d-flex">
+                        <label for="active" class="form-label labelClass lableSyle mr-4">Active Status</label>
+                        <div class="form-check form-switch">
+                            <input id="active" class="form-check-input" type="checkbox" />
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
- 
-    
+    </div>
+
+    <div class="col-md-12">
+        <div class="row justify-content-center">
+            <div class="col-sm-4 pr-2" style="margin-top: -100px;">
+                <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn">
+                    <span style=" margin: 0 1px;"></span>
+                    <i class="fas fa-save"></i>
+                    <span class="flex-grow-1 text-start">Submit</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
 </div>

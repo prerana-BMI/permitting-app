@@ -1,72 +1,71 @@
-<div class="col-md-12 rounded" style="height:120px; border: 1px solid #8d0f0f; border-radius: 12px;background: rgb(229 224 224);">
+<div class="col-md-12 rounded PageLayout" style="height:120px;">
   <div class="d-flex mt-2">
     <div class="col-lg-3 col-md-3 col-sm-12 p-1">
       <div class="form-group">
-        <label for="city" class="form-label labelClass">
+        <label for="city" class="form-label labelClass lableSyle">
          User Name
         </label>
-        <input type="text" id="city" class="form-control border border-secondary-2 search-slt">
+        <input type="text" id="city" class="form-control custom-input">
       </div>
     </div>
    
-    <div class="col-lg-3 col-md-3 col-sm-12 p-1">
+    <div class="col-lg-3 col-md-3 col-sm-12 p-1 mr-4">
       <div class="form-group">
-        <label for="city" class="form-label labelClass">
+        <label for="city" class="form-label labelClass  lableSyle">
          Role
         </label>
-        <input type="text" id="city" class="form-control border border-secondary-2 search-slt">
+        <input type="text" id="city" class="form-control custom-input">
       </div>
     </div>
     
     <div class="col-lg-1 col-md-1 col-sm-12 p-1 mr-3">
-      <div class="form-group">
-      <button
-        class="form-control d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton"
+     
+     <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
         (click)="Search()">
-        <span class="flex-grow-1 text-start">Search</span>
-        <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
+        <span style=" margin: 0 1px;"></span>
         <i class="fas fa-search"></i>
+        <span class="flex-grow-1 text-start">Search</span>
+
       </button>
-      </div>
+     
     </div>
      <div class="col-lg-1 col-md-1 p-1 col-sm-12 mr-3">
-      <div class="form-group">
-        <button type="button"
-          class="form-control d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton"
-          (click)="Search()">
-          <span class="flex-grow-1 text-start">Clear</span>
-          <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
-          <i class="fa fa-eraser"></i>
-        </button>
-      </div>
+       <button type="button"
+        class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
+        (click)="Search()">
+        <span style=" margin: 0 1px;"></span>
+        <i class="fa fa-eraser"></i>
+        <span class="flex-grow-1 text-start">Clear</span>
+
+      </button>
     </div>
     <div class="col-lg-1 col-md-1 p-1 col-sm-12">
-      <button type="button"
-          class="form-control d-flex align-items-center justify-content-between border border-secondary-2 search-slt FlterButton" style="width: 140px;"
-          (click)="AddUser()">
-          <span class="flex-grow-1 text-start">Add User</span>
-          <span style="border-left: 1px solid #555; height: 50px; margin: 0 6px;"></span>
-          <i class="fa fa-plus"></i>
-        </button>
+    <button type="button" class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
+      (click)="AddUser()">
+      <span style=" margin: 0 1px;"></span>
+      <i class="fa fa-plus"></i>
+      <span class="flex-grow-1 text-start">Add</span>
+    
+    </button>
     </div>
 
 
   </div>
 </div>
-<div class="col-md-12 mt-3 d-flex">
-  <h5 style="color :#1c4876"> Users List : </h5>
-  <h5 style="color :#1c4876"> {{dataCount}}</h5>
-
+<div class="col-md-12 rounded PageLayout mt-5" style="height:500px;">
+<div class="col-md-12 mt-3 d-flex justify-content-between align-items-center">
+    <div class="d-flex">
+      <p class="lableSyle mb-0 me-2"> Users List : </p>
+      <p class="lableSyle mb-0"> 2</p>
+    </div>
 </div>
-<div class="col-md-12 rounded mt-4" style="height:500px; border: 1px solid  #1c4876; border-radius: 12px;">
-
   <div class="row">
     <div class="col-md-12">
       <div class="card-body">
         <div class="table-responsive-md">
-          <table class="table table-hover orange-bordered-table">
+          <table class="table table-hover">
             <thead>
-              <tr style="background: rgb(229 224 224);">
+              <tr style="background-color: #bbbbbb4d; border: 1px solid #e1dbdba6;">
                
                 <th style="width: 80px;">User Name</th>
                 <th style="width: 60px;"> User Role</th>

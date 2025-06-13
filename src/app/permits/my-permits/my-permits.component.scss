@@ -1,4 +1,5 @@
 @import 'bootstrap/scss/bootstrap';
+
 .search-sec {
   padding: 12rem;
   background: transparent; // Add background for visibility
@@ -14,69 +15,113 @@
   background-color: #fff;
   border: 1px solid #ccc;
   height: calc(3rem + 2px) !important;
-  border-radius: 0;
+  border-radius: 12;
 }
+
 table td {
   padding: 0.75rem;
   vertical-align: center;
-  border-bottom: 1px solid #8b9eb3 !important;
-  border-left: 1px solid #a77d7d;
-  border-right: 1px solid #a77d7d;
+  border-bottom: 1px solid #e1dbdba6 !important;
+  border-left: 1px solid #e1dbdba6;
+  border-right: 1px solid #e1dbdba6;
 
 }
 
-  .orange-bordered-table,
-.orange-bordered-table th
- {
+table th {
+  border-left: 1px solid #e1dbdba6;
+  border-right: 1px solid #e1dbdba6
+}
+
+.orange-bordered-table,
+.orange-bordered-table th {
   border: 1px solid #8d0f0f !important;
 }
 
 .orange-bordered-table1 {
-  
+
   border-bottom: 1px solid #1c4876 !important;
-  
+
 }
-.big-checkbox{
+
+.big-checkbox {
   transform: scale(1.5);
-   accent-color: #1c4876
-
+  accent-color: #1c4876
 }
 
-  .checkbox-cell {
-    width: 10px;
-    text-align: center;
-    vertical-align: middle;
-  }
-  .mat-paginator {
+.checkbox-cell {
+  width: 10px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.mat-paginator {
   background-color: #a7a7a7;
-  .mat-paginator-page-size {
-      align-items: center;
 
-      .mat-select-trigger {
-          transform: translateY(-8px);
-      }
+  .mat-paginator-page-size {
+    align-items: center;
+
+    .mat-select-trigger {
+      transform: translateY(-8px);
+    }
   }
 
-  
+
 }
-.labelClass{
-display: block;
-    border-bottom: 1px solid #8d0f0f;
-    padding-bottom: 4px;
-    margin-bottom: 8px;
-    font-size: 18px;
-    
+
+.labelClass {
+  display: block;
+  border-bottom: 1px solid rgb(165 163 163 / 20%);
+  padding-bottom: 4px;
+  margin-bottom: 10px;
 }
-.FlterButton{
-  margin-top :31px;
-  margin-left: 20px;
-  font-size: 18px;
-  border: 1px solid #8d0f0f !important;
-  color: #1c4876;
+
+.lableSyle {
+  font-family: Open Sans, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+.FlterButton {
+  margin-top: 42px;
+  font-size: 16px;
+  width: 120px;
+  font-family: Open Sans, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.5rem;
 }
 
 table th {
   font-size: 14px;
   vertical-align: center;
-   color: #1c4876;
+  color: #1c4876;
+  font-family: Open Sans, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+.custom-outline-btn {
+  border: 1px solid #0e3b64;
+  color: #0e3b64;
+  background-color: transparent;
+}
+
+.custom-outline-btn:hover {
+  background-color: #0e3b64;
+  color: white;
+}
+
+.custom-input {
+  box-shadow: none !important;
+  border-color: #a1aebb !important;
+}
+.PageLayout
+{
+height:500px;
+border: 1px solid #d7d0d08f; 
+border-radius: 12px;
+background: white;
+box-shadow: 1px 1px 2px rgb(91 101 130 / 18%);
 }

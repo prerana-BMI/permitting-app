@@ -16,7 +16,7 @@ export class PermitHomeComponent {
   SearchForm! : FormGroup;
   typeaheadDebounce : number = 500;
   StateList : Array<any> = [];
-  CountryList : Array<any> = [];
+ 
   constructor(private Formbuilder : FormBuilder,
     private HttpService : HttpService,
     private router : Router
@@ -36,8 +36,9 @@ ngOnInit()
     this.SearchForm = this.Formbuilder.group({
       city : [''],
       state : [''],
-      country : ['']
-    })
+     
+    });
+    this.SearchForm.controls['state'].disable();
   }
 initializeTyopeAhead()
 {
@@ -60,12 +61,9 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
   if (res != null) {
     const state = res.state ?? '';
     const country = res.country ?? '';
-
-    this.StateList = [{ state }];
-    this.CountryList = [{ country }];
+    this.StateList = [{ state ,country}];
     this.SearchForm.patchValue({
-      state,
-      country
+      state : `${state} - ${country}`
     });
 
     return `${res.name} - ${state}`;
