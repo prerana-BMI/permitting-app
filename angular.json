@@ -22,15 +22,21 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/leaflet/dist/images/",
+                "output": "./"
+              }
             ],
             "styles": [
+              "node_modules/leaflet/dist/leaflet.css",
               "@angular/material/prebuilt-themes/pink-bluegrey.css",
               "src/styles.scss",
               "node_modules/nebular-icons/scss/nebular-icons.scss",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-               "node_modules/ngx-toastr/toastr.css",
-                "@angular/material/prebuilt-themes/pink-bluegrey.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "@angular/material/prebuilt-themes/pink-bluegrey.css"
              ],
             "scripts": []
           },
@@ -89,15 +95,21 @@
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/leaflet/dist/images/",
+                "output": "./"
+              }
             ],
             "styles": [
               "src/styles.scss",
               "src/styles.scss",
               "node_modules/nebular-icons/scss/nebular-icons.scss",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-               "node_modules/ngx-toastr/toastr.css",
-                "@angular/material/prebuilt-themes/pink-bluegrey.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "@angular/material/prebuilt-themes/pink-bluegrey.css",
+               "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []
           }

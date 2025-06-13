@@ -9,7 +9,7 @@ import { PermitHomeComponent } from './permit-home/permit-home.component';
 import { MaterialModule } from '../material/material.module';
 import { MyPermitsComponent } from './my-permits/my-permits.component';
 import { PermitMasterComponent } from './permit-master/permit-master.component';
-
+import { MapComponent } from './map/map.component';
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
@@ -22,7 +22,7 @@ const routes: Routes = [{
 }];
 
 @NgModule({
-  declarations :[PermitListComponent , PermitHomeComponent, MyPermitsComponent],
+  declarations :[PermitListComponent , PermitHomeComponent, MyPermitsComponent,MapComponent],
   imports: [RouterModule.forChild(routes),
     ToastrModule,
     CommonModule,
