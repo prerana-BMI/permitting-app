@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject ,AfterViewInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -6,14 +6,15 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   templateUrl: './add-user.component.html',
   styleUrls: ['./add-user.component.scss']
 })
-export class AddUserComponent {
-constructor(  
-  @Inject(MAT_DIALOG_DATA) public data: any,
+export class AddUserComponent   {
+  isToggled = true;
+constructor( @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddUserComponent>)
     {
       
     }
-    clear() {
+    
+ clear() {
     this.dialogRef.close();
     }
 }

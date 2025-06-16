@@ -76,7 +76,7 @@ h5
 }
 .custom-input {
   box-shadow: none !important;
-  border-color: #6688ab61 !important;
+  border-color: #a1aebb !important;
   height: 120%;
 }
 .FlterButton {
@@ -111,7 +111,21 @@ h5
     border: 1px solid #1c4876; // Add a border around the map
      border-radius: 2px;
 }
+.PageLayout
+{
+height:500px;
+border: 1px solid #d7d0d08f; 
+border-radius: 12px;
+background: white;
+box-shadow: 1px 1px 2px rgb(91 101 130 / 18%);
+}
 
+.lableSyle {
+  font-family: Open Sans, sans-serif;
+  font-size: 16px !important;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
 
  
  

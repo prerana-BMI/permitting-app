@@ -27,12 +27,13 @@
 
                 <!-- Active Status -->
                 <div class="col-md-12">
-                    <div class="form-group d-flex">
+                     <div class="form-group d-flex">
                         <label for="active" class="form-label labelClass lableSyle mr-4">Active Status</label>
-                        <div class="form-check form-switch">
-                            <input id="active" class="form-check-input" type="checkbox" />
-                        </div>
-                    </div>
+                    <label class="switch">
+                        <input type="checkbox" [(ngModel)]="isToggled">
+                        <span class="slider"></span>
+                    </label>
+                </div>
                 </div>
 
             </div>
@@ -41,7 +42,7 @@
 
     <div class="col-md-12">
         <div class="row justify-content-center">
-            <div class="col-sm-4 pr-2" style="margin-top: -100px;">
+            <div class="col-sm-4 pr-2" style="margin-top: -80px;">
                 <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn">
                     <span style=" margin: 0 1px;"></span>
                     <i class="fas fa-save"></i>

@@ -1,20 +1,7 @@
-<div class="position-relative" style="height: 200px; overflow: hidden;">
-
-  <!-- 3 Image Columns -->
-  <div class="row h-100 m-0 position-absolute w-100" style="z-index: 1;">
-    <div class="col-md-4 p-0" style="background-image: url('assets/images/images (1).jpg'); background-size: cover; background-position: center;"></div>
-    <div class="col-md-4 p-0" style="background-image: url('assets/images/istockphoto-1477334129-612x612.jpg'); background-size: cover; background-position: center;"></div>
-    <div class="col-md-4 p-0" style="background-image: url('assets/images/images1.jpg'); background-size: cover; background-position: center;"></div>
-  </div>
-
-  <!-- Text Overlay (Above Search Bar) -->
-  
-
-  <!-- Search Form Overlay -->
-  <div class="position-relative top-50 start-50 translate-middle w-100 px-3" style="z-index: 2;" [formGroup]="SearchForm">
-    <div class="row justify-content-center search-sec">
-      <div class="col-lg-3 col-md-3 col-sm-12 p-1">
-        <input type="text" class="form-control custom-input" placeholder="Enter City" 
+<div class="col-md-12 rounded PageLayout position-relative" style="height:110px;">
+ <div class="d-flex mt-4" [formGroup]="SearchForm">
+    <div class="col-lg-3 col-md-3 col-sm-12 p-1 mr-3">
+        <input type="text" class="form-control custom-input lableSyle" placeholder="Enter City" 
         oninput="this.value = this.value.toUpperCase()" 
          formControlName="city"  [matAutocomplete]="ctlist">
          <mat-autocomplete #ctlist="matAutocomplete"
@@ -49,7 +36,7 @@
         </mat-autocomplete>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-12 p-1 mr-3">
-        <input type="text" class="form-control custom-input" placeholder="State - Country"   formControlName="state">
+        <input type="text" class="form-control custom-input lableSyle" placeholder="State - Country"   formControlName="state">
        
       </div>
       <div class="col-lg-3 col-md-3 col-sm-12 p-1">
@@ -59,8 +46,7 @@
           <span class="flex-grow-1 text-start">Search</span>
         </button>
 
-        
-      </div>
+    
     </div>
   </div>
 
