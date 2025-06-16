@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using contract;
+using contract.Entities;
 using Data.DbEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace permitapi.Controllers
 
         [HttpGet]
         [Route("GetUsers")]
-        public BaseReturn<List<EUsers>> GetALLUsers()
+        public BaseReturn<List<EUsers>> GetALLUsers(EPaginationReq Request)
         {
             var BaseObj = new BaseReturn<List<EUsers>>();
             List<EUsers> Result = new List<EUsers>();
@@ -38,9 +39,13 @@ namespace permitapi.Controllers
                     IsActive = a.IsActive,
                     CreatedBy = a.CreatedBy,
                     CreatedOn = a.CreatedOn
-                }).ToList();
-                BaseObj.Data = Result;
+                }).OrderByDescending(a=>a.Id).ToList();
                 BaseObj.Count = Result.Count;
+                if (Result.Count > 0 && Request.pageSize > 0)
+                {
+                    Result = Result.Skip((Request.pageIndex - 1) * Request.pageSize).Take(Request.pageSize).ToList();
+                }
+                BaseObj.Data = Result;
                 BaseObj.Success = true;
 
             }
@@ -82,5 +87,84 @@ namespace permitapi.Controllers
             }
             return BaseObj;
         }
+
+        [HttpGet]
+        [Route("GetUserById")]
+        public BaseReturn<EUsers> GetUserById(int Id)
+        {
+            var BaseObj = new BaseReturn<EUsers>();
+
+            try
+            {
+
+                var Result = _context.Users.Where(c => c.Id == Id).Select(a => new EUsers
+                {
+                    UserName = a.UserName,
+                    UserRole = a.UserRole,
+                    CreatedOn = a.CreatedOn,
+                    CreatedBy = a.CreatedBy,
+                    IsActive = a.IsActive
+                }).FirstOrDefault();
+                BaseObj.Data = Result;
+                BaseObj.Success = true;
+            }
+            catch (Exception ex)
+            {
+                BaseObj.Message = ex.Message;
+                BaseObj.Success = false;
+            }
+            finally
+            {
+
+            }
+            return BaseObj;
+        }
+
+        [HttpGet]
+        [Route("SaveUser")]
+        public BaseReturn<int> SaveUser(EUsers Request)
+        {
+            var BaseObj = new BaseReturn<int>();
+
+            try
+            {
+                if (Request.Id > 0)
+                {
+                    var user = _context.Users.Where(a => a.Id == Request.Id).FirstOrDefault();
+                    if (user != null)
+                    {
+                        user.UserRole = Request.UserRole;
+                        user.IsActive = Request.IsActive;
+                        _context.Users.Update(user);
+                        BaseObj.Message = "User Data Updated";
+
+                    }
+                }
+                else
+                {
+                    var UserObj = new User();
+                    UserObj.UserName = Request.UserName;
+                    UserObj.UserRole = Request.UserRole;
+                    UserObj.IsActive = Request.IsActive;
+                    _context.Users.Add(UserObj);
+                    BaseObj.Message = "User Data Saved";
+
+                }
+                _context.SaveChanges();
+                BaseObj.Success = true;
+
+            }
+            catch (Exception ex)
+            {
+                BaseObj.Message = ex.Message;
+                BaseObj.Success = false;
+            }
+            finally
+            {
+
+            }
+            return BaseObj;
+        }
+
     }
 }

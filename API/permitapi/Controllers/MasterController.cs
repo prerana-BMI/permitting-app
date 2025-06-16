@@ -29,11 +29,11 @@ namespace permitapi.Controllers
 
                 Result = _context.CityMasters.Where(a => a.City.ToLower().Contains(City) && a.State == State).AsNoTracking().Select(a => new ECityMaster
                 {
-                   
+
                     City = a.City,
                     State = a.State,
                     Country = a.Country,
-                   
+
                 }).ToList();
                 BaseObj.Data = Result;
                 BaseObj.Count = Result.Count;
@@ -70,7 +70,7 @@ namespace permitapi.Controllers
                     Country = a.Country
                 })
                 .ToList();
-                
+
                 BaseObj.Data = Result;
                 BaseObj.Count = Result.Count;
                 BaseObj.Success = true;

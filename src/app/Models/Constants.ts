@@ -4,6 +4,8 @@ export class Constants{
     public static IsUserExist  = '/api/Account/IsUserExist?UserName=';
     public static GetCityBySearchText  = '/api/Master/GetCityBySearchText';
     public static GetStateBySearchText  = '/api/Master/GetStateBySearchText?State=';
+    public static GetUserById  = '/api/Account/GetUserById?Id=';
+    public static SaveUser  = '/api/Account/SaveUser';
     public static PageSizeOptions: Array<{ "key": number, "value": number }> =
         [
             { "key": 10, "value": 10 },

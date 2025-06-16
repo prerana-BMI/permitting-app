@@ -15,27 +15,27 @@ import { AddUserComponent } from '../add-user/add-user.component';
   styleUrls: ['./users-list.component.scss']
 })
 export class UsersListComponent {
-PermitList : Array<any> = [{
-    Permit : 'National Historic Preservation Act',
-    RegulatoryAgency : 'efferson City, MO 65102',
-    TimeFrame : '30-60 Days',
-    ReviewTime : '90-180 Days',
-    Fees : '$4210',
-   
-    Id : 1
+  PermitList: Array<any> = [{
+    Permit: 'National Historic Preservation Act',
+    RegulatoryAgency: 'efferson City, MO 65102',
+    TimeFrame: '30-60 Days',
+    ReviewTime: '90-180 Days',
+    Fees: '$4210',
+
+    Id: 1
   },
-{
-    Permit : 'National Historic Preservation Act',
-    RegulatoryAgency : 'efferson City, MO 65102',
-    TimeFrame : '30-60 Days',
-    ReviewTime : '90-180 Days',
-    Fees : '$4210',
-    
-    Id : 2
+  {
+    Permit: 'National Historic Preservation Act',
+    RegulatoryAgency: 'efferson City, MO 65102',
+    TimeFrame: '30-60 Days',
+    ReviewTime: '90-180 Days',
+    Fees: '$4210',
+
+    Id: 2
   }];
-  UserList : Array<any> = [];
+  UserList: Array<any> = [];
   pageSize: number = 10;
-  SelecAll : boolean= true;
+  SelecAll: boolean = true;
   pageOption: any;
   pageIndex: number = 1;
   SearchForm!: FormGroup;
@@ -49,9 +49,9 @@ PermitList : Array<any> = [{
     private toastr: ToastrService,
     public router: Router,
     private fb: FormBuilder,
-    private auth : AuthService,
-    private dialog : MatDialog,
-   
+    private auth: AuthService,
+    private dialog: MatDialog,
+
   ) {
 
   }
@@ -64,36 +64,57 @@ PermitList : Array<any> = [{
       Status: ''
     });
     this.GetAllUsers();
-     }
+  }
 
 
   paginatorevt(evt: any) {
     this.pageIndex = evt.pageIndex + 1;
     this.pageSize = evt.pageSize;
-   
+
   }
 
 
-  Search()
-  {
-  
+  Search() {
+
   }
   AddUser() {
     let dialogRef = this.dialog.open(AddUserComponent, {
-
+      data: null
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res != null) {
+        this.GetAllUsers();
       }
     });
   }
-  GetAllUsers()
-  {
-    this.httpService.httpGetCall(Constants.GetAllUsers, {}, true).subscribe((res: any) => {
+  GetAllUsers() {
+    let param = {
+      'pageIndex': this.pageIndex,
+      'pageSize': this.pageSize,
+
+    }
+    this.httpService.httpGetCall(Constants.GetAllUsers, param, true).subscribe((res: any) => {
       if (res["Success"]) {
         this.UserList = res["Data"];
         this.dataCount = res["Count"];
       }
     });
-  }  
+  }
+  EditUser(Item: object) {
+    let dialogRef = this.dialog.open(AddUserComponent, {
+      data: { Item }
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res != null) {
+        this.GetAllUsers();
+      }
+    });
+
+    // this.httpService.httpGetCall(Constants.GetUserById+Id, true).subscribe((res: any) => {
+    //   if (res["Success"]) {
+    //     this.UserList = res["Data"];
+    //     this.dataCount = res["Count"];
+    //   }
+    // });
+  }
 }
