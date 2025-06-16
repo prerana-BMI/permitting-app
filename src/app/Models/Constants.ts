@@ -2,6 +2,8 @@ export class Constants{
     public static GetAllProjectMaster  = '/api/RFI/GetProjectMasterList';
     public static GetAllUsers  = '/api/Account/GetUsers';
     public static IsUserExist  = '/api/Account/IsUserExist?UserName=';
+    public static GetCityBySearchText  = '/api/Master/GetCityBySearchText';
+    public static GetStateBySearchText  = '/api/Master/GetStateBySearchText?State=';
     public static PageSizeOptions: Array<{ "key": number, "value": number }> =
         [
             { "key": 10, "value": 10 },

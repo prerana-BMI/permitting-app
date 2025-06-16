@@ -1,7 +1,42 @@
 <div class="col-md-12 rounded PageLayout position-relative" style="height:110px;">
  <div class="d-flex mt-4" [formGroup]="SearchForm">
     <div class="col-lg-3 col-md-3 col-sm-12 p-1 mr-3">
-        <input type="text" class="form-control custom-input lableSyle" placeholder="Enter City" 
+        
+      
+ <input type="text" class="form-control custom-input lableSyle" placeholder="Enter State"   formControlName="state"
+        placeholder="Enter State"  [matAutocomplete]="statelist"
+        oninput="this.value = this.value.toUpperCase()" >
+        <mat-autocomplete #statelist="matAutocomplete" [displayWith]="StateTypeAheadDisplay.bind(this)">
+          <mat-option *ngIf="isStateLoading">
+            <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
+            </mat-spinner>
+          </mat-option>
+          <mat-option class="mat-opt1" disabled>
+            <div>
+              <table>
+                <tr class="tr">
+                  <td style="width: 200px;">State</td>
+                </tr>
+              </table>
+            </div>
+          </mat-option>
+          <mat-option *ngFor="let l of StateList | slice:0:30" [value]="l.State" class="mat-opt">
+            <div>
+              <table>
+                <tr class="tr">
+        
+                  <td class="td td1" style="width: 200px;">{{l.State}} - US</td>
+                </tr>
+              </table>
+            </div>
+          </mat-option>
+          <mat-option *ngIf="StateList.length == 0" disabled>
+            No Options
+          </mat-option>
+        </mat-autocomplete>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 p-1 mr-3">
+       <input type="text" class="form-control custom-input lableSyle" placeholder="Enter City" 
         oninput="this.value = this.value.toUpperCase()" 
          formControlName="city"  [matAutocomplete]="ctlist">
          <mat-autocomplete #ctlist="matAutocomplete"
@@ -15,17 +50,17 @@
                           <table>
                             <tr class="tr">
                               <td  style="width: 200px;">City</td>
-                              <td  style="width: 200px;">State</td>
+                             
                             </tr>
                           </table>
                         </div>
                       </mat-option>
-                      <mat-option *ngFor="let l of CityList | slice:0:30" [value]="l" class ="mat-opt" >
+                      <mat-option *ngFor="let l of CityList | slice:0:30" [value]="l.City"  class ="mat-opt" >
                         <div>
                           <table>
                             <tr class="tr">
-                              <td class="td td1" style="width: 200px;">{{l.name}}</td>
-                              <td class="td td1" style="width: 200px;">{{l.state}}</td>
+                              <td class="td td1" style="width: 200px;">{{l.City}}</td>
+                             
                             </tr>
                           </table>
                         </div>
@@ -35,12 +70,8 @@
                       </mat-option>
         </mat-autocomplete>
       </div>
-      <div class="col-lg-3 col-md-3 col-sm-12 p-1 mr-3">
-        <input type="text" class="form-control custom-input lableSyle" placeholder="State - Country"   formControlName="state">
-       
-      </div>
       <div class="col-lg-3 col-md-3 col-sm-12 p-1">
-        <button type="button" class="btn btn-outline form-control d-flex align-items-center custom-outline-btn FlterButton" >
+        <button type="button" class="btn btn-outline form-control d-flex align-items-center custom-outline-btn FlterButton" (click)="Search()">
           <span style=" margin: 0 1px;"></span>
           <i class="fas fa-search"></i>
           <span class="flex-grow-1 text-start">Search</span>
@@ -55,7 +86,7 @@
     
       <div class="col-12 col-xl-8 mb-4">
         <div class="map-container">
-          <app-map></app-map>
+          <app-map (citySelected)="handleCitySelected($event)"></app-map>
         </div>
       </div>
       <div class="col-12 col-xl-4 mb-4">

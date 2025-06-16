@@ -13,6 +13,7 @@ import { HttpService } from 'src/app/services/http.service';
 export class PermitHomeComponent {
   CityList : Array<any> = [];
   isCityLoading : boolean= false;
+  isStateLoading : boolean= false;
   SearchForm! : FormGroup;
   typeaheadDebounce : number = 500;
   StateList : Array<any> = [];
@@ -38,18 +39,30 @@ ngOnInit()
       state : [''],
      
     });
-    this.SearchForm.controls['state'].disable();
+    
   }
 initializeTyopeAhead()
 {
 this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
       if (typeof val === 'string' && val.length >= 1) {
          this.isCityLoading = true;
-        this.HttpService.httpGetThirdPartyCall('',  val.toLocaleLowerCase()).subscribe((res :any) => {
-          if (res.length > 0) {
-            this.CityList = res.filter((a : any)=>a.country == "US");
+         let state = this.SearchForm.controls['state'].value;
+        this.HttpService.httpGetCall(`${Constants.GetCityBySearchText}?City=${val.toLowerCase()}&State=${state.toLowerCase()}`,false,false).subscribe((res :any) => {
+          if (res["Success"] ) {
+            this.CityList = res["Data"];
           }
           this.isCityLoading = false;
+        });
+      }
+    });
+    this.SearchForm.controls['state'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
+      if (typeof val === 'string' && val.length >= 1) {
+         this.isStateLoading = true;
+        this.HttpService.httpGetCall(Constants.GetStateBySearchText+  val.toLowerCase(),false , false).subscribe((res :any) => {
+          if (res["Success"]) {
+            this.StateList = res["Data"];
+          }
+          this.isStateLoading = false;
         });
       }
     });
@@ -57,20 +70,29 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
   
 
   CityTypeAheadDisplay(val: any) {
-  let res = this.CityList.find(a => a.name == val.name && a.state == val.state );
-  if (res != null) {
-    const state = res.state ?? '';
-    const country = res.country ?? '';
-    this.StateList = [{ state ,country}];
-    this.SearchForm.patchValue({
-      state : `${state} - ${country}`
-    });
-
-    return `${res.name} - ${state}`;
+    let res = this.CityList.find(a => a.City == val);
+    if (res != null) {
+      return res.City;
+    };
+    return '';
   }
-  return '';
-}
-Search(){
-  this.router.navigate(["permits/permitlist"])
-}
+
+  StateTypeAheadDisplay(val: any) {
+    let res = this.StateList.find(a => a.State == val);
+    if (res != null) {
+      return res.State
+    }
+    return ''
+  }
+  Search() {
+    this.router.navigate(["permits/permitlist"])
+  }
+  handleCitySelected(Event: any) {
+    this.CityList = [{ City: Event.City }];
+    this.StateList = [{ State: Event.State }];
+    this.SearchForm.patchValue({
+      city: Event.City,
+      state: Event.State
+    })
+  }
 }

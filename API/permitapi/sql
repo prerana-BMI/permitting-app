@@ -7,5 +7,13 @@ CREATE TABLE `permit_account_service`.`users` (
   `created_on` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `id` INT NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`));
-  
-  CREATE SCHEMA `permit_repository_service` ;
+
+CREATE SCHEMA `permit_repository_service` ;
+ CREATE TABLE `permit_account_service`.`city_master` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `city` VARCHAR(45) NULL DEFAULT NULL,
+  `state` VARCHAR(45) NULL DEFAULT NULL,
+  `country` VARCHAR(45) NULL DEFAULT NULL,
+  `created_on` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_by` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`));

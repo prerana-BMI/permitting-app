@@ -16,6 +16,7 @@ namespace Data.DbEntities
         {
         }
 
+        public virtual DbSet<CityMaster> CityMasters { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -31,6 +32,32 @@ namespace Data.DbEntities
         {
             modelBuilder.UseCollation("utf8mb4_0900_ai_ci")
                 .HasCharSet("utf8mb4");
+
+            modelBuilder.Entity<CityMaster>(entity =>
+            {
+                entity.ToTable("city_master");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.City)
+                    .HasMaxLength(45)
+                    .HasColumnName("city");
+
+                entity.Property(e => e.Country)
+                    .HasMaxLength(45)
+                    .HasColumnName("country");
+
+                entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasColumnName("created_on")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.Property(e => e.State)
+                    .HasMaxLength(45)
+                    .HasColumnName("state");
+            });
 
             modelBuilder.Entity<User>(entity =>
             {
