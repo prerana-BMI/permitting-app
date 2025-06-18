@@ -72,9 +72,7 @@ namespace Data.DbEntities
                     .HasColumnName("created_on")
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.Property(e => e.IsActive)
-                    .HasColumnName("is_active")
-                    .HasDefaultValueSql("b'1'");
+                entity.Property(e => e.IsActive).HasColumnName("is_active");
 
                 entity.Property(e => e.UserName)
                     .HasMaxLength(45)

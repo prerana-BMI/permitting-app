@@ -36,12 +36,15 @@ export class PermitListComponent {
   pageOption: any;
   pageIndex: number = 1;
   SearchForm!: FormGroup;
-  dataCount: number = 0;
+  dataCount: number = 2;
   ProgramList: Array<any> = [];
   ProgramId: number = 0;
   breadcrumbs: string[] = ['RFI', 'RFI List'];
   messageSource = new BehaviorSubject<string>('0');
   isFilterOpened: boolean = false;
+  CategoryList = Constants.CategoryList;
+  ClientList : Array<any> = [];
+  RegulatoryAgencyList : Array<any> = [];
   constructor(private httpService: HttpService,
     private toastr: ToastrService,
     public router: Router,
@@ -52,19 +55,14 @@ export class PermitListComponent {
   }
   ngOnInit() {
     this.SearchForm = this.fb.group({
-      RfiNumber: '',
-      RfiTitle: '',
-      FpNumber: '',
-      RfiQueryType: '',
-      Status: ''
-    });
-    ;
- 
+      Category: '',
+      Client: '',
+      RegulatoryAgency: ''
+  });
+ // this.GetAllPermits();
+ }
 
-  }
-
-
-  paginatorevt(evt: any) {
+paginatorevt(evt: any) {
     this.pageIndex = evt.pageIndex + 1;
     this.pageSize = evt.pageSize;
    
@@ -73,6 +71,13 @@ export class PermitListComponent {
 
   Search()
   {
+   
+    this.GetAllPermits();
+  }
+  Clear()
+  {
+    this.SearchForm.reset();
+    this.GetAllPermits();
   }
   SelectAll(event: any) {
      const isChecked = (event.target as HTMLInputElement).checked;
@@ -87,6 +92,27 @@ export class PermitListComponent {
 
     }
   }
+  GetAllPermits()
+  {
+     let param= {
+      '': this.SearchForm.controls['Category'].value== null || this.SearchForm.controls['Category'].value== "" ? '' :  this.SearchForm.controls['Category'].value,
+      '':this.SearchForm.controls['Client'].value== null || this.SearchForm.controls['Client'].value== "" ? '' : this.SearchForm.controls['Client'].value,
+      '':this.SearchForm.controls['RegulatoryAgency'].value == null || this.SearchForm.controls['RegulatoryAgency'].value =="" ? '' :  this.SearchForm.controls['RegulatoryAgency'].value
+    }
+    this.httpService.httpGetCall(Constants.CategoryList.toString(), param,true).subscribe((res: any)=>{
+      if (res["Success"]) {
+        this.PermitList = res['Data'];
+        this.dataCount = res['Count'];
+        this.PermitList.forEach(a => {
+          a.Ischecked = true
+        });
+      }
+    })
+  }
+  //this.GetAllPermits;
+  //this.httpService.httpGetCall(Constants.CategoryList.toString(), null,true).sub
+ 
+
 
 }
 

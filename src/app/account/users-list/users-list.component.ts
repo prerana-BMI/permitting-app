@@ -36,7 +36,7 @@ export class UsersListComponent {
   UserList: Array<any> = [];
   pageSize: number = 10;
   SelecAll: boolean = true;
-  pageOption: any;
+  pageOption: any = Constants.PageSizeOptions.map(a=>a.value);
   pageIndex: number = 1;
   SearchForm!: FormGroup;
   dataCount: number = 0;
@@ -57,11 +57,8 @@ export class UsersListComponent {
   }
   ngOnInit() {
     this.SearchForm = this.fb.group({
-      RfiNumber: '',
-      RfiTitle: '',
-      FpNumber: '',
-      RfiQueryType: '',
-      Status: ''
+    UserName :[''],
+    UserRole : ['']
     });
     this.GetAllUsers();
   }
@@ -70,12 +67,12 @@ export class UsersListComponent {
   paginatorevt(evt: any) {
     this.pageIndex = evt.pageIndex + 1;
     this.pageSize = evt.pageSize;
-
+     this.GetAllUsers();
   }
-
+  
 
   Search() {
-
+    this.GetAllUsers();
   }
   AddUser() {
     let dialogRef = this.dialog.open(AddUserComponent, {
@@ -91,8 +88,9 @@ export class UsersListComponent {
     let param = {
       'pageIndex': this.pageIndex,
       'pageSize': this.pageSize,
-
-    }
+      'UserName': this.SearchForm.controls['UserName'].value== null || this.SearchForm.controls['UserName'].value== "" ? '' :  this.SearchForm.controls['UserName'].value,
+      'UserRole':this.SearchForm.controls['UserRole'].value== null || this.SearchForm.controls['UserRole'].value== "" ? '' : this.SearchForm.controls['UserRole'].value,
+  }
     this.httpService.httpGetCall(Constants.GetAllUsers, param, true).subscribe((res: any) => {
       if (res["Success"]) {
         this.UserList = res["Data"];
@@ -116,5 +114,10 @@ export class UsersListComponent {
     //     this.dataCount = res["Count"];
     //   }
     // });
+  }
+  Clear()
+  {
+    this.SearchForm.reset();
+    this.GetAllUsers()
   }
 }

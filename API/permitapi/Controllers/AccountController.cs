@@ -24,24 +24,27 @@ namespace permitapi.Controllers
 
         [HttpGet]
         [Route("GetUsers")]
-        public BaseReturn<List<EUsers>> GetALLUsers(EPaginationReq Request)
+        public BaseReturn<List<EUsers>> GetALLUsers(EUsers Request)
         {
             var BaseObj = new BaseReturn<List<EUsers>>();
             List<EUsers> Result = new List<EUsers>();
             try
             {
 
-                Result = _context.Users.Select(a => new EUsers
-                {
-                    Id = a.Id,
-                    UserName = a.UserName,
-                    UserRole = a.UserRole,
-                    IsActive = a.IsActive,
-                    CreatedBy = a.CreatedBy,
-                    CreatedOn = a.CreatedOn
-                }).OrderByDescending(a=>a.Id).ToList();
+                Result = _context.Users.Where(a => (string.IsNullOrEmpty(Request.UserName) || a.UserName.Contains(Request.UserName)) &&
+                                            (string.IsNullOrEmpty(Request.UserRole) || a.UserRole.Contains(Request.UserRole)))
+                                            .Select(a => new EUsers
+                                            {
+                                                Id = a.Id,
+                                                UserName = a.UserName,
+                                                UserRole = a.UserRole,
+                                                IsActive = a.IsActive,
+                                                CreatedBy = a.CreatedBy,
+                                                CreatedOn = a.CreatedOn
+                                            })
+                                            .OrderByDescending(a => a.Id).ToList();
                 BaseObj.Count = Result.Count;
-                if (Result.Count > 0 && Request.pageSize > 0)
+                if(Result.Count > 0 && Request.pageSize > 0)
                 {
                     Result = Result.Skip((Request.pageIndex - 1) * Request.pageSize).Take(Request.pageSize).ToList();
                 }
@@ -70,11 +73,18 @@ namespace permitapi.Controllers
             try
             {
 
-                var Result = _context.Users.Where(a => a.UserName == UserName && a.IsActive == true).AsNoTracking().FirstOrDefault();
-                BaseObj.Data = Result != null ? true : false;
-                BaseObj.Success = true;
-
-
+                var Result = _context.Users.Where(a => a.UserName == UserName).AsNoTracking().FirstOrDefault();
+                if (Result == null)
+                {
+                    var UserObj = new User();
+                    UserObj.UserName = UserName;
+                    UserObj.UserRole = "User";
+                    UserObj.IsActive = false;
+                    _context.Users.Add(UserObj);
+                    _context.SaveChanges();
+                }
+                BaseObj.Data = Result != null && Result.IsActive == true ? true : false;
+                BaseObj.Success = Result != null && Result.IsActive == true ? true : false;
             }
             catch (Exception ex)
             {

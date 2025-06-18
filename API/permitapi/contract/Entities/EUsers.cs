@@ -1,8 +1,9 @@
 ﻿using System;
+using contract.Entities;
 
 namespace contract;
 
-public class EUsers
+public class EUsers : EPaginationReq
 {
     public string? UserName { get; set; }
     public string? UserRole { get; set; }

@@ -1,45 +1,46 @@
 <div class="col-md-12 rounded PageLayout" style="height:120px;">
-  <div class="d-flex mt-2">
+  <div class="d-flex mt-2" [formGroup]="SearchForm">
     <div class="col-lg-3 col-md-3 col-sm-12 p-1">
       <div class="form-group">
         <label for="city" class="form-label labelClass lableSyle">
          User Name
         </label>
-        <input type="text" id="city" class="form-control custom-input">
+        <input type="text" id="city" class="form-control custom-input" formControlName="UserName">
       </div>
     </div>
    
     <div class="col-lg-3 col-md-3 col-sm-12 p-1 mr-4">
       <div class="form-group">
-        <label for="city" class="form-label labelClass  lableSyle">
+        <label for="city" class="form-label labelClass lableSyle">
          Role
         </label>
-        <input type="text" id="city" class="form-control custom-input">
+        <select id="role" class="form-control custom-input" formControlName="UserRole">
+          <option value="">Select</option>
+          <option value="Admin">Admin</option>
+          <option value="User">User</option>
+        </select>
       </div>
     </div>
     
-    <div class="col-lg-1 col-md-1 col-sm-12 p-1 mr-3">
-     
-     <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
-        (click)="Search()">
+    <div class="col-lg-1 col-md-1 col-sm-12 p-1 mr-2">
+      <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn" (click)="Search()">
         <span style=" margin: 0 1px;"></span>
         <i class="fas fa-search"></i>
         <span class="flex-grow-1 text-start">Search</span>
-
-      </button>
+    </button>
      
     </div>
      <div class="col-lg-1 col-md-1 p-1 col-sm-12 mr-3">
        <button type="button"
         class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
-        (click)="Search()">
+        (click)="Clear()">
         <span style=" margin: 0 1px;"></span>
         <i class="fa fa-eraser"></i>
         <span class="flex-grow-1 text-start">Clear</span>
 
       </button>
     </div>
-    <div class="col-lg-1 col-md-1 p-1 col-sm-12">
+    <!-- <div class="col-lg-1 col-md-1 p-1 col-sm-12">
     <button type="button" class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
       (click)="AddUser()">
       <span style=" margin: 0 1px;"></span>
@@ -47,24 +48,37 @@
       <span class="flex-grow-1 text-start">Add</span>
     
     </button>
-    </div>
+    </div> -->
 
 
   </div>
 </div>
-<div class="col-md-12 rounded PageLayout mt-5" style="height:500px;">
+<div class="col-md-12 rounded PageLayout mt-4" style="height:500px;">
 <div class="col-md-12 mt-3 d-flex justify-content-between align-items-center">
-    <div class="d-flex">
-      <p class="lableSyle mb-0 me-2"> Users List : </p>
-      <p class="lableSyle mb-0"> 2</p>
-    </div>
+  <div class="d-flex align-items-center">
+    <p class="lableSyle mb-0 me-2 ml-2"> Users List : </p>
+    <p class="lableSyle mb-0"> {{dataCount}}</p>
+
+  </div>
+  <div class="d-flex align-items-center mr-4">
+    <mat-paginator *ngIf="UserList != null" [length]="dataCount" [pageSize]="pageSize" [pageSizeOptions]="pageOption"
+      (page)="paginatorevt($event)" #paginator>
+    </mat-paginator>
+
+    <button type="button" class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
+      style="margin-top: 0px !important;" (click)="AddUser()">
+      <span style=" margin: 0 1px;"></span>
+      <i class="fa fa-plus"></i>
+      <span class="flex-grow-1 text-start">Add</span>
+    </button>
+  </div>
 </div>
   <div class="row">
     <div class="col-md-12">
       <div class="card-body">
-        <div class="table-responsive-md">
+        <div class="table-responsive-md" style="max-height: 350px; overflow-y: auto;">
           <table class="table table-hover">
-            <thead>
+            <thead style="position: sticky; top: 0; z-index: 0; background-color: #f8f9fa;">
               <tr style="background-color: #bbbbbb4d; border: 1px solid #e1dbdba6;">
                
                 <th style="width: 80px;">User Name</th>
@@ -77,12 +91,11 @@
               </tr>
             </thead>
             <tbody class="">
-              <tr *ngFor="let item of UserList; let i = index">
+              <tr *ngFor="let item of UserList; let i = index;">
               
                 <td>{{item.UserName}}</td>
                 <td>{{item.UserRole}}</td>
                 <td>{{item.CreatedBy}}</td>
-
                 <td>{{item.CreatedOn | date}}</td>
                 <td>{{item.IsActive == true ? 'Yes' : 'No'}}</td>
                 <td>
@@ -102,7 +115,7 @@
     </div>
 
   </div>
-  <!-- <mat-paginator *ngIf="PermitList != null" [length]="dataCount" [pageSize]="pageSize" style="margin-top: 10px;"
+  <!--<mat-paginator *ngIf="PermitList != null" [length]="dataCount" [pageSize]="pageSize" style="margin-top: 10px;"
                 [pageSizeOptions]='pageOption' (page)="paginatorevt($event)" #paginator></mat-paginator> -->
 </div>
 

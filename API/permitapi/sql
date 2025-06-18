@@ -2,7 +2,7 @@ CREATE SCHEMA `permit_account_service` ;
 CREATE TABLE `permit_account_service`.`users` (
   `user_name` VARCHAR(45) NULL DEFAULT NULL,
   `user_role` VARCHAR(20) NULL DEFAULT NULL,
-  `is_active` BIT(1) NULL DEFAULT b'1',
+  `is_active` BIT(1) NULL DEFAULT NULL,
   `created_by` INT NULL DEFAULT NULL,
   `created_on` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -17,3 +17,4 @@ CREATE SCHEMA `permit_repository_service` ;
   `created_on` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id`));
+
