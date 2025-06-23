@@ -14,5 +14,7 @@ export class Constants{
             { "key": 40, "value": 40 },
             { "key": 50, "value": 50 }
         ];
-     public static CategoryList = ["Wildlife Permits","Wetlands/Surface Water Permits","Air Permits", "Stormwater Permits"]
+     public static CategoryList = ["Wildlife Permits","Wetlands/Surface Water Permits","Air Permits", "Stormwater Permits"];
+     public static GetAllMasterPermits  = '/api/Permit/GetAllMasterPermits';
+     
 }

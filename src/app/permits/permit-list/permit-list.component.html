@@ -15,7 +15,7 @@
     <div class="col-lg-3 col-md-3 col-sm-12 p-1">
       <div class="form-group">
         <label for="city" class="form-label labelClass lableSyle">
-          Client
+          Permit Name
         </label>
        <select name="" id="" class="form-control custom-input" formControlName="Client">
         <option value="" >Select</option>
@@ -81,8 +81,8 @@
   
   <!-- Left side: Permit Count -->
   <div class="d-flex align-items-center">
-    <p class="lableSyle mb-0 me-2 ml-2">Permit Count:</p>
-    <p class="lableSyle mb-0">2</p>
+    <!-- <p class="lableSyle mb-0 me-2 ml-2">Permit Count:</p>
+    <p class="lableSyle mb-0">2</p> -->
   </div>
 
   <!-- Right side: Paginator and Download button -->
@@ -114,10 +114,10 @@
                     (click)="SelectAll($event)"></th>
                 <th style="width: 80px;">Permit</th>
                 <th style="width: 150px;">Regulatory Agency</th>
-                <th style="width: 60px;">Time Frame</th>
+                <th style="width: 60px;">Category</th>
 
-                <th style="width: 60px;">Review Time</th>
-                <th style="width: 80px;">Fees</th>
+                <th style="width: 60px;">Level</th>
+               
 
               </tr>
             </thead>
@@ -127,9 +127,8 @@
                 <input type="checkbox" class="big-checkbox" (change)="OnSingleChange($event, item.Id)" [(ngModel)]="item.Ischecked"></td>
                 <td>{{item.Permit}}</td>
                 <td>{{item.RegulatoryAgency}}</td>
-                <td>{{item.TimeFrame}}</td>
-                <td>{{item.ReviewTime}}</td>
-                <td>{{item.Fees}}</td>
+                <td>Stormwater Permits</td>
+                <td>State</td>
                 </tr>
               
             </tbody>

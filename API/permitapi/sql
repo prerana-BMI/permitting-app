@@ -18,3 +18,46 @@ CREATE SCHEMA `permit_repository_service` ;
   `created_by` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id`));
 
+  CREATE TABLE `permit_account_service`.`permit_master` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `category` VARCHAR(45) NULL DEFAULT NULL,
+  `type_of_project` VARCHAR(45) NULL DEFAULT NULL,
+  `level` VARCHAR(45) NULL DEFAULT NULL,
+  `state` VARCHAR(45) NULL DEFAULT NULL,
+  `county` VARCHAR(45) NULL DEFAULT NULL,
+  `city` VARCHAR(45) NULL DEFAULT NULL,
+  `permit_name` VARCHAR(100) NULL DEFAULT NULL,
+  `regulatory_agency_name` VARCHAR(100) NULL DEFAULT NULL,
+  `regulatory_agency_id` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`));
+
+  ALTER TABLE `permit_account_service`.`permit_master` 
+  ADD COLUMN `created_by` INT NULL DEFAULT NULL AFTER `regulatory_agency_id`,
+  ADD COLUMN `created_on` DATETIME NULL DEFAULT CURRENT_TIMESTAMP AFTER `created_by`;
+
+
+  CREATE TABLE `permit_account_service`.`permit_details` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `permit_id` INT NULL DEFAULT NULL,
+  `description` VARCHAR(200) NULL DEFAULT NULL,
+  `threshold` VARCHAR(200) NULL DEFAULT NULL,
+  `prep_time_min` INT NULL DEFAULT NULL,
+  `prep_time_max` INT NULL DEFAULT NULL,
+  `agency_review_time_min` INT NULL DEFAULT NULL,
+  `agency_review_time_max` INT NULL DEFAULT NULL,
+  `basic_fees` DECIMAL(8,3) NULL DEFAULT NULL,
+  `additional_basic` VARCHAR(200) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`));
+
+  CREATE TABLE `permit_account_service`.`regulatory_agency_master` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NULL DEFAULT NULL,
+  `address` VARCHAR(200) NULL DEFAULT NULL,
+  `contact` VARCHAR(45) NULL DEFAULT NULL,
+  `link` VARCHAR(100) NULL DEFAULT NULL,
+  `department` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`));
+
+
+
+

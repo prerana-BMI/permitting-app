@@ -9,7 +9,7 @@ import {
   InteractionStatus,
   SilentRequest
 } from '@azure/msal-browser';
-import { filter, take } from 'rxjs';
+import { filter, map, Observable, switchAll, take } from 'rxjs';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { HttpService } from './http.service';
@@ -103,6 +103,7 @@ export class AuthService {
         // Fallback to redirect if needed
         //this.msalService.loginRedirect();
       });
+    
   }
   GetLoggedInUser() {
     let user = localStorage.getItem('user');
@@ -132,4 +133,27 @@ export class AuthService {
       }
       })
   }
+ GetUserProfilePhoto(): Observable<string> {
+  this.getAccessToken('');
+  let token = localStorage.getItem('token');
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'image/jpeg'
+  };
+ return this.HttpService.httpGetBlob('https://graph.microsoft.com/v1.0/me/photo/$value', headers).pipe(
+    map(blob => {
+      const reader = new FileReader();
+      return new Observable<string>(observer => {
+        reader.onloadend = () => {
+          observer.next(reader.result as string);
+          observer.complete();
+        };
+        reader.onerror = err => observer.error(err);
+        reader.readAsDataURL(blob);
+      });
+    }),
+    // Flatten the nested Observable
+    switchAll()
+  );
+}
 }

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbActionsModule, NbButtonModule, NbCardModule, NbIconModule, NbListItemComponent, NbListModule, NbMenuModule } from '@nebular/theme';
+import { NbActionsModule, NbButtonModule, NbCardModule, NbContextMenuModule, NbIconModule, NbLayoutModule, NbListItemComponent, NbListModule, NbMenuModule, NbSearchModule, NbSelectModule, NbSidebarModule, NbUserModule } from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
@@ -15,7 +15,20 @@ import { WheatherDataComponent } from './dashboard/wheather-data/wheather-data.c
 import { BackCardComponent } from './dashboard/back-card/back-card.component';
 import { PagelayoutModule } from '../pagelayout/pagelayout.module';
 import { UserActivityComponent } from './dashboard/user-activity/user-activity.component';
-
+import { NbEvaIconsModule } from '@nebular/eva-icons';
+const NB_MODULES = [
+  NbLayoutModule,
+  NbMenuModule,
+  NbUserModule,
+  NbActionsModule,
+  NbSearchModule,
+  NbSidebarModule,
+  NbContextMenuModule,
+  NbButtonModule,
+  NbSelectModule,
+  NbIconModule,
+  NbEvaIconsModule,
+];
 @NgModule({
   imports: [
     PagesRoutingModule,
@@ -28,6 +41,7 @@ import { UserActivityComponent } from './dashboard/user-activity/user-activity.c
     NbButtonModule,
     ThemeModule,
     NbListModule,
+     ...NB_MODULES
     
   ],
   declarations: [

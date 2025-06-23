@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'ngx-header',
@@ -12,6 +13,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
+  ProfileUrl : any;
   user: any;
 
   themes = [
@@ -38,11 +40,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
 
   constructor(private sidebarService: NbSidebarService,
-              private themeService: NbThemeService) {
+              private themeService: NbThemeService,
+              private authServcie : AuthService) {
   }
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
+    this.authServcie.GetUserProfilePhoto().subscribe(res=>{
+        this.ProfileUrl = res;
+      })
+
   }
 
   ngOnDestroy() {

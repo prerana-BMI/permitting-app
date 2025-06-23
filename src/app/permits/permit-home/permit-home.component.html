@@ -2,8 +2,7 @@
  <div class="d-flex mt-4" [formGroup]="SearchForm">
     <div class="col-lg-3 col-md-3 col-sm-12 p-1 mr-3">
         
-      
- <input type="text" class="form-control custom-input lableSyle" placeholder="Enter State"   formControlName="state"
+<input type="text" class="form-control custom-input lableSyle" placeholder="Enter State"   formControlName="state"
         placeholder="Enter State"  [matAutocomplete]="statelist"
         oninput="this.value = this.value.toUpperCase()" >
         <mat-autocomplete #statelist="matAutocomplete" [displayWith]="StateTypeAheadDisplay.bind(this)">
@@ -86,7 +85,7 @@
     
       <div class="col-12 col-xl-8 mb-4">
         <div class="map-container">
-          <app-map (citySelected)="handleCitySelected($event)"></app-map>
+          <app-map (citySelected)="handleCitySelected($event)" [StateName]="SearchForm.get('state')?.value"></app-map>
         </div>
       </div>
       <div class="col-12 col-xl-4 mb-4">

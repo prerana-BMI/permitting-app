@@ -7,12 +7,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/permits/permithome',
  
   },
-  {
-    title: 'Permits',
-    icon: 'grid-outline',
-    link: '/permits/permitlist',
-    
-  },
    {
     title: 'Matrix',
     icon: 'bookmark-outline',
@@ -23,6 +17,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Admin',
     icon: 'person-outline',
     link: '/account/UsersList',
+    
+  },
+   {
+    title: 'Permit Master',
+    icon: 'person-outline',
+    link: '/permits/PermitMasterList',
     
   },
   

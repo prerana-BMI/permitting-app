@@ -1,1 +1,143 @@
-<p>permit-master works!</p>
+<div class="col-md-12 rounded PageLayout" style="height:120px;">
+  <div class="d-flex mt-2" [formGroup]="SearchForm">
+    <div class="col-lg-3 col-md-3 col-sm-12 p-1">
+      <div class="form-group">
+        <label for="city" class="form-label labelClass lableSyle">
+          Category
+        </label>
+      
+        <select name="" id="" class="form-control custom-input" formControlName="Category">
+          <option value="" >Select</option>
+          <option value="" *ngFor="let i of CategoryList">{{i}}</option>
+        </select>
+      </div>
+    </div>
+  
+    <div class="col-lg-3 col-md-3 col-sm-12 p-1">
+      <div class="form-group">
+        <label for="city" class="form-label labelClass lableSyle">
+         Permit Name
+        </label>
+        <input type="text" formControlName="PermitName" class="form-control custom-input">
+      </div>
+    </div>
+
+    <div class="col-lg-1 col-md-1 col-sm-12 mr-2">
+      <!-- <div class="form-group"> -->
+
+      <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
+        (click)="Search()">
+        <span style=" margin: 0 1px;"></span>
+        <i class="fas fa-search"></i>
+        <span class="flex-grow-1 text-start">Search</span>
+
+      </button>
+      <!-- </div> -->
+    </div>
+    <div class="col-lg-1 col-md-1 col-sm-12">
+      <button type="button" class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
+        (click)="Clear()">
+        <span style=" margin: 0 1px;"></span>
+        <i class="fa fa-eraser"></i>
+        <span class="flex-grow-1 text-start">Clear</span>
+      </button>
+    
+    </div>
+    <!-- <div class="col-lg-1 col-md-1 col-sm-12">
+      <div class="form-group">
+        <button type="button"
+          class="btn btn-outline-primary form-control d-flex align-items-center search-slt FlterButton"
+          (click)="Search()">
+          <span class="flex-grow-1 text-start">Export</span>
+          <span style=" margin: 0 6px;"></span>
+          <i class="fa-solid fa-download"></i>
+        </button>
+      </div>
+    </div> -->
+
+
+  </div>
+</div>
+<!-- <div class="col-md-12 mt-3 d-flex">
+  <h5 style="color :#1c4876"> Available Permit Count : </h5>
+  <h5 style="color :#1c4876">2</h5>
+</div> -->
+<div class="col-md-12 rounded PageLayout mt-4" style="height:500px;">
+<div class="col-md-12 mt-3 d-flex justify-content-between align-items-center">
+  
+  <!-- Left side: Permit Count -->
+
+  
+  <div class="d-flex align-items-center">
+    <!-- <p class="lableSyle mb-0 me-2 ml-2">Permit Count:</p>
+    <p class="lableSyle mb-0">2</p> -->
+    <button type="button" class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn  ml-2"
+      style="margin-top: 0px !important;" >
+      <span style=" margin: 0 1px;"></span>
+      <i class="fa fa-plus"></i>
+      <span class="flex-grow-1 text-start">Add</span>
+    </button>
+  </div>
+
+  <!-- Right side: Paginator and Download button -->
+  <div class="d-flex align-items-center mr-2">
+    <mat-paginator 
+      *ngIf="PermitList != null"
+      [length]="dataCount"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageOption"
+      (page)="paginatorevt($event)"
+      #paginator>
+    </mat-paginator>
+
+</div>
+
+</div>
+
+ <div class="row">
+    <div class="col-md-12">
+      <div class="card-body">
+        <div class="table-responsive-md">
+          <table class="table table-hover">
+            <thead>
+              <tr style="background-color: #bbbbbb4d; border: 1px solid #e1dbdba6;">
+              
+                <th style="width: 80px;">Permit</th>
+                <th style="width: 150px;">Regulatory Agency</th>
+                <th style="width: 60px;">Category</th>
+                <th style="width: 60px;">Level</th>
+                <th style="width: 80px;">State</th>
+                <th style="width: 80px;">City</th>
+                <th style="width: 10px;">Action</th>
+
+              </tr>
+            </thead>
+            <tbody class="">
+                <tr *ngFor="let item of PermitList; let i = index">
+                
+                <td>{{item.Permit}}</td>
+                <td>{{item.RegulatoryAgency}}</td>
+                <td>{{item.Category}}</td>
+                <td>{{item.Level}}</td>
+                <td>{{item.State}}</td>
+                <td>{{item.City == null || item.City == '' ? '' : item.City }}</td>
+                <td>
+                      <a class="btn btn-sm rounded-1" style="border: 1px solid #1c4876;">
+                        <i class="far fa-edit"></i>
+                      </a>
+                </td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+ 
+
+
+</div>

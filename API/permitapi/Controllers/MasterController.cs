@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using contract;
 using contract.Entities;
 using Data.DbEntities;
@@ -87,5 +83,6 @@ namespace permitapi.Controllers
             }
             return BaseObj;
         }
+
     }
 }

@@ -22,7 +22,7 @@ const routes: Routes = [{
 }];
 
 @NgModule({
-  declarations :[PermitListComponent , PermitHomeComponent, MyPermitsComponent,MapComponent],
+  declarations :[PermitListComponent , PermitHomeComponent, MyPermitsComponent,MapComponent , PermitMasterComponent],
   imports: [RouterModule.forChild(routes),
     ToastrModule,
     CommonModule,

@@ -2,6 +2,7 @@ using Data.DbEntities;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Data;
+using permitapi;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,13 @@ builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<permit_account_serviceContext>(options =>
 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+var mappingConfig = new MapperConfiguration(mc =>
+                                {
+                                    mc.AddProfile(new MappingProfile());
+                                    //mc.AddProfile(new ServiceEntityMapper());
+                                });
+            IMapper mapper = mappingConfig.CreateMapper();
+            builder.Services.AddSingleton(mapper);
 
 var app = builder.Build();
 

@@ -1,4 +1,23 @@
- <app-layout>
-      <nb-menu [items]="menu"></nb-menu>
-      <router-outlet></router-outlet>
-</app-layout>
+<nb-layout windowMode>
+      <nb-layout-header fixed>
+            <ngx-header></ngx-header>
+      </nb-layout-header>
+
+      <nb-sidebar class="menu-sidebar" tag="menu-sidebar">
+            <nb-menu [items]="menu"></nb-menu>
+            <ng-content select="nb-menu"></ng-content>
+      </nb-sidebar>
+
+      <!-- <app-layout>
+            <router-outlet></router-outlet>
+      </app-layout> -->
+
+       <nb-layout-column style="background-color: #fcfcfd;">
+         <router-outlet></router-outlet>
+      </nb-layout-column>
+
+
+      <nb-layout-footer fixed>
+            <ngx-footer></ngx-footer>
+      </nb-layout-footer>
+</nb-layout>

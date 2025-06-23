@@ -10,11 +10,12 @@ import { MaterialModule } from '../material/material.module';
 import { AddUserComponent } from './add-user/add-user.component';
 const routes: Routes = [
   
-  {path:'login',component : LoginComponent},
-   {path: '',
+  { path: 'login', component: LoginComponent },
+  {
+    path: '',
     component: PagesComponent,
     children: [
-       {path : 'UsersList', component : UsersListComponent}
+      { path: 'UsersList', component: UsersListComponent }
     ]
   }
  
