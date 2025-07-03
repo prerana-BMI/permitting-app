@@ -8,17 +8,46 @@
       
         <select name="" id="" class="form-control custom-input" formControlName="Category">
           <option value="" >Select</option>
-          <option value="" *ngFor="let i of CategoryList">{{i}}</option>
+          <option value="{{i}}" *ngFor="let i of CategoryList">{{i}}</option>
         </select>
       </div>
     </div>
   
     <div class="col-lg-3 col-md-3 col-sm-12 p-1">
       <div class="form-group">
-        <label for="city" class="form-label labelClass lableSyle">
+        <label for="" class="form-label labelClass lableSyle">
          Permit Name
         </label>
-        <input type="text" formControlName="PermitName" class="form-control custom-input">
+        <input type="text" formControlName="PermitName" class="form-control custom-input" [matAutocomplete]="permitlist">
+                      <mat-autocomplete #permitlist="matAutocomplete" [displayWith]="PermitTypeAheadDisplay.bind(this)">
+                        <mat-option *ngIf="ispermitLoading">
+                            <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
+                            </mat-spinner>
+                        </mat-option>
+                        <mat-option class="mat-opt1" disabled>
+                            <div>
+                                <table>
+                                    <tr class="tr">
+                                        <td style="width: 200px;">Permit Name</td>
+                    
+                                    </tr>
+                                </table>
+                            </div>
+                        </mat-option>
+                        <mat-option *ngFor="let l of PermitNameList | slice:0:30" [value]="l.PermitName" class="mat-opt">
+                            <div>
+                                <table>
+                                    <tr class="tr">
+                                        <td >{{l.PermitName}}</td>
+                    
+                                    </tr>
+                                </table>
+                            </div>
+                        </mat-option>
+                        <mat-option *ngIf="PermitNameList.length == 0" disabled>
+                            No Options
+                        </mat-option>
+                    </mat-autocomplete>
       </div>
     </div>
 
@@ -119,7 +148,7 @@
                 <td>{{item.RegulatoryAgencyName}}</td>
                 <td>{{item.Category}}</td>
                 <td>{{item.Level== null || item.Level=='' ? '--' : item.Level}}</td>
-                <td>{{item.State == null || item.state =="" ? '--' : item.state}}</td>
+                <td>{{item.State == null || item.State =="" ? '--' : item.State}}</td>
                 <td>{{item.City == null || item.City == '' ? '--' : item.City }}</td>
                 <td>
                       <a class="btn btn-sm rounded-1" style="border: 1px solid #1c4876;" (click)="EditPermit(item.Id)">

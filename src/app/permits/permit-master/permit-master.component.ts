@@ -4,7 +4,7 @@ import { HttpService } from 'src/app/services/http.service';
 import { Constants } from 'src/app/Models/Constants';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, debounceTime } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -33,12 +33,16 @@ export class PermitMasterComponent {
   ClientList : Array<any> = [];
   RegulatoryAgencyList : Array<any> = [];
   PermitData : any ;
+  PermitNameList : Array<any> = []; 
+  ispermitLoading : boolean =false;
+  typeaheadDebounce : number = 500;
   constructor(private httpService: HttpService,
     private toastr: ToastrService,
     public router: Router,
     private fb: FormBuilder,
     private auth : AuthService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private HttpService : HttpService
   ) {
 
   }
@@ -48,8 +52,24 @@ export class PermitMasterComponent {
       PermitName: ''
     });
     this.GetAllPermits();
+    this.InitializedTypeAhead()
   }
+InitializedTypeAhead()
+{
+this.SearchForm.controls['PermitName'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
+      this.PermitNameList = [];
+      if (typeof val === 'string' && val.length >= 1) {
+         this.ispermitLoading = true;
+        this.HttpService.httpGetCall(Constants.GetPermitNameBySearchText +  val.toLowerCase(),false , false).subscribe((res :any) => {
+          if (res["Success"]) {
 
+            this.PermitNameList = res["Data"];
+          }
+          this.ispermitLoading = false;
+        });
+      }
+    })
+}
 paginatorevt(evt: any) {
     this.pageIndex = evt.pageIndex + 1;
     this.pageSize = evt.pageSize;
@@ -114,6 +134,15 @@ AddPermit()
         });
       }
     })
+  }
+
+  PermitTypeAheadDisplay(val:string)
+  {
+    let res = this.PermitNameList.find(a => a.PermitName == val);
+    if (res != null) {
+      return res.PermitName;
+    };
+    return '';
   }
 
 }

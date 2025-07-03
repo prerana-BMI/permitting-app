@@ -122,5 +122,39 @@ namespace permitapi.Controllers
             return BaseObj;
         }
 
+
+        [HttpGet]
+        [Route("GetPermitNameBySearchText")]
+        public BaseReturn<List<EPermitMaster>> GetPermitNameBySearchText(string SearchText)
+        {
+            var BaseObj = new BaseReturn<List<EPermitMaster>>();
+            List<EPermitMaster> Result = new List<EPermitMaster>();
+            try
+            {
+
+                Result = _context.PermitMasters.Where(a => a.PermitName.ToLower().Contains(SearchText))
+                .Select(a => new EPermitMaster
+                {
+                    PermitName = a.PermitName,
+                    Id = a.Id
+                })
+                .ToList();
+                BaseObj.Data = Result;
+                BaseObj.Count = Result.Count;
+                BaseObj.Success = true;
+
+            }
+            catch (Exception ex)
+            {
+                BaseObj.Message = ex.Message;
+                BaseObj.Success = false;
+            }
+            finally
+            {
+
+            }
+            return BaseObj;
+        }
+
     }
 }
