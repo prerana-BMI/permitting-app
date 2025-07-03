@@ -20,5 +20,7 @@ export class Constants{
      public static SavePermits  = '/api/Permit/SavePermits';
      public static GetRegulatoryAgencyBySearchText = '/api/Master/GetRegulatoryAgencyBySearchText?SearchText='; 
      public static GetPermitNameBySearchText = '/api/Master/GetPermitNameBySearchText?SearchText='; 
+     public static GetPermitByLocation = '/api/Permit/GetPermitByLocation'; 
+     
      
 }

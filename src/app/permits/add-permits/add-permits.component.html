@@ -115,7 +115,7 @@
                         <label for="role" class="form-label labelClass lableSyle">Regulatory Agency Name</label>
                        <input type="text" class="form-control custom-input" formControlName="RegulatoryAgency" [matAutocomplete]="agencyLst">
                         <mat-autocomplete #agencyLst="matAutocomplete" [displayWith]="AgencyTypeAheadDisplay.bind(this)">
-                        <mat-option *ngIf="isCityLoading">
+                        <mat-option *ngIf="isAgencyLoading">
                             <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
                             </mat-spinner>
                         </mat-option>

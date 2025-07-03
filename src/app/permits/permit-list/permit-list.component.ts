@@ -3,8 +3,8 @@ import { HttpService } from 'src/app/services/http.service';
 import { Constants } from 'src/app/Models/Constants';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
-import { Router } from '@angular/router';
+import { BehaviorSubject, debounceTime } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-permit-list',
@@ -12,25 +12,9 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./permit-list.component.scss']
 })
 export class PermitListComponent {
- 
-  PermitList : Array<any> = [{
-    Permit : 'National Historic Preservation Act',
-    RegulatoryAgency : 'efferson City, MO 65102',
-    TimeFrame : '30-60 Days',
-    ReviewTime : '90-180 Days',
-    Fees : '$4210',
-    Ischecked : true ,
-    Id : 1
-  },
-{
-    Permit : 'National Historic Preservation Act',
-    RegulatoryAgency : 'efferson City, MO 65102',
-    TimeFrame : '30-60 Days',
-    ReviewTime : '90-180 Days',
-    Fees : '$4210',
-    Ischecked : true ,
-    Id : 2
-  }];
+  City :string | null;
+  State :string | null;
+  PermitList : Array<any> = [];
   pageSize: number = 10;
   SelecAll : boolean= true;
   pageOption: any;
@@ -45,21 +29,32 @@ export class PermitListComponent {
   CategoryList = Constants.CategoryList;
   ClientList : Array<any> = [];
   RegulatoryAgencyList : Array<any> = [];
+  PermitNameList :   Array<any> = [];
+  ispermitLoading:  boolean = false;
+  typeaheadDebounce : number = 500;
+  isAgencyLoading: boolean = false;
+  RegagencyList :  Array<any> = [];
   constructor(private httpService: HttpService,
     private toastr: ToastrService,
     public router: Router,
     private fb: FormBuilder,
-    private auth : AuthService
+    private auth : AuthService,
+    private route: ActivatedRoute,
+    private  HttpService : HttpService
   ) {
+  debugger
+  this.State = this.route.snapshot.paramMap.get('state');
+  this.City= this.route.snapshot.paramMap.get('city');
 
   }
   ngOnInit() {
     this.SearchForm = this.fb.group({
       Category: '',
-      Client: '',
+      PermitName: '',
       RegulatoryAgency: ''
   });
- // this.GetAllPermits();
+ this.GetAllPermits();
+ this.InitializedTypeAhead();
  }
 
 paginatorevt(evt: any) {
@@ -77,6 +72,8 @@ paginatorevt(evt: any) {
   Clear()
   {
     this.SearchForm.reset();
+    this.PermitList = [];
+    this.RegagencyList = [];
     this.GetAllPermits();
   }
   SelectAll(event: any) {
@@ -87,19 +84,68 @@ paginatorevt(evt: any) {
   }
   OnSingleChange(event: any, Id: number) : void  {
      const isChecked = (event.target as HTMLInputElement).checked;
-    if (isChecked) {
-      this.PermitList.filter(a => a.Id == Id)
+    
+      this.PermitList.filter(a => a.Id == Id)[0].Ischecked = isChecked
 
-    }
+    
+  }
+  InitializedTypeAhead()
+  {
+  this.SearchForm.controls['PermitName'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
+        this.PermitNameList = [];
+        if (typeof val === 'string' && val.length >= 1) {
+           this.ispermitLoading = true;
+          this.HttpService.httpGetCall(Constants.GetPermitNameBySearchText +  val.toLowerCase(),false , false).subscribe((res :any) => {
+            if (res["Success"]) {
+  
+              this.PermitNameList = res["Data"];
+            }
+            this.ispermitLoading = false;
+          });
+        }
+      });
+         this.SearchForm.controls['RegulatoryAgency'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
+     
+      if (typeof val === 'string' && val.length >= 1) {
+         this.isAgencyLoading = true;
+        this.HttpService.httpGetCall(Constants.GetRegulatoryAgencyBySearchText+  val.toLowerCase(),false , false).subscribe((res :any) => {
+          if (res["Success"]) {
+
+            this.RegagencyList = res["Data"];
+          }
+          this.isAgencyLoading = false;
+        });
+      }
+    });
+  }
+  PermitTypeAheadDisplay(val:string)
+  {
+    let res = this.PermitNameList.find(a => a.PermitName == val);
+    if (res != null) {
+      return res.PermitName;
+    };
+    return '';
+  }
+
+  AgencyTypeAheadDisplay(val: any)
+  {
+     let res = this.RegagencyList.find(a => a.Name == val);
+    if (res != null) {
+      return res.Name;
+    };
+    return '';
   }
   GetAllPermits()
   {
-     let param= {
-      '': this.SearchForm.controls['Category'].value== null || this.SearchForm.controls['Category'].value== "" ? '' :  this.SearchForm.controls['Category'].value,
-      '':this.SearchForm.controls['Client'].value== null || this.SearchForm.controls['Client'].value== "" ? '' : this.SearchForm.controls['Client'].value,
-      '':this.SearchForm.controls['RegulatoryAgency'].value == null || this.SearchForm.controls['RegulatoryAgency'].value =="" ? '' :  this.SearchForm.controls['RegulatoryAgency'].value
+    debugger
+    let param= {
+      'State' : this.State,
+      'City' : this.City,
+      'Category' : this.SearchForm.controls['Category'].value == null ? '': this.SearchForm.controls['Category'].value,
+       'PermitName': this.SearchForm.controls['PermitName'].value == null ? '': this.SearchForm.controls['PermitName'].value,
+      'RegulatoryAgencyName': this.SearchForm.controls['RegulatoryAgency'].value == null ? '': this.SearchForm.controls['RegulatoryAgency'].value,
     }
-    this.httpService.httpGetCall(Constants.CategoryList.toString(), param,true).subscribe((res: any)=>{
+    this.httpService.httpGetCall(Constants.GetPermitByLocation ,param, true) .subscribe((res: any)=>{
       if (res["Success"]) {
         this.PermitList = res['Data'];
         this.dataCount = res['Count'];

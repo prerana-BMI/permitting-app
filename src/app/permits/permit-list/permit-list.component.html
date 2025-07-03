@@ -8,7 +8,7 @@
       
         <select name="" id="" class="form-control custom-input" formControlName="Category">
           <option value="" >Select</option>
-          <option value="" *ngFor="let i of CategoryList">{{i}}</option>
+          <option value="{{i}}" *ngFor="let i of CategoryList">{{i}}</option>
         </select>
       </div>
     </div>
@@ -17,10 +17,36 @@
         <label for="city" class="form-label labelClass lableSyle">
           Permit Name
         </label>
-       <select name="" id="" class="form-control custom-input" formControlName="Client">
-        <option value="" >Select</option>
-          <option value="" *ngFor="let i of ClientList">{{i.ClientName}}</option>
-        </select>
+       <input type="text" formControlName="PermitName" class="form-control custom-input" [matAutocomplete]="permitlist">
+                      <mat-autocomplete #permitlist="matAutocomplete" [displayWith]="PermitTypeAheadDisplay.bind(this)">
+                        <mat-option *ngIf="ispermitLoading">
+                            <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
+                            </mat-spinner>
+                        </mat-option>
+                        <mat-option class="mat-opt1" disabled>
+                            <div>
+                                <table>
+                                    <tr class="tr">
+                                        <td style="width: 200px;">Permit Name</td>
+                    
+                                    </tr>
+                                </table>
+                            </div>
+                        </mat-option>
+                        <mat-option *ngFor="let l of PermitNameList | slice:0:30" [value]="l.PermitName" class="mat-opt">
+                            <div>
+                                <table>
+                                    <tr class="tr">
+                                        <td >{{l.PermitName}}</td>
+                    
+                                    </tr>
+                                </table>
+                            </div>
+                        </mat-option>
+                        <mat-option *ngIf="PermitNameList.length == 0" disabled>
+                            No Options
+                        </mat-option>
+                    </mat-autocomplete>
       </div>
     </div>
     <div class="col-lg-3 col-md-3 col-sm-12 p-1">
@@ -28,13 +54,38 @@
         <label for="city" class="form-label labelClass lableSyle">
           Regulatory Agency
         </label>
+      <input type="text" class="form-control custom-input" formControlName="RegulatoryAgency" [matAutocomplete]="agencyLst">
+      <mat-autocomplete #agencyLst="matAutocomplete" [displayWith]="AgencyTypeAheadDisplay.bind(this)">
+        <mat-option *ngIf="isAgencyLoading">
+          <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
+          </mat-spinner>
+        </mat-option>
+        <mat-option class="mat-opt1" disabled>
+          <div>
+            <table>
+              <tr class="tr">
+                <td style="width: 200px;">Agenct Name</td>
       
-        <select name="" id="" class="form-control custom-input" formControlName="RegulatoryAgency">
-          <option value="" >Select</option>
-          <option value="" *ngFor="let i of RegulatoryAgencyList">{{i.RegulatoryAgencyName}}</option>
-        </select>
+              </tr>
+            </table>
+          </div>
+        </mat-option>
+        <mat-option *ngFor="let l of RegagencyList | slice:0:30" [value]="l.Name" class="mat-opt">
+          <div>
+            <table>
+              <tr class="tr">
+                <td class="td td1">{{l.Name}}</td>
+      
+              </tr>
+            </table>
+          </div>
+        </mat-option>
+        <mat-option *ngIf="RegagencyList.length == 0" disabled>
+          No Options
+        </mat-option>
+      </mat-autocomplete>
       </div>
-    </div>
+      </div>
 
     <div class="col-lg-1 col-md-1 col-sm-12 mr-2">
       <!-- <div class="form-group"> -->
@@ -125,10 +176,10 @@
                 <tr *ngFor="let item of PermitList; let i = index">
                 <td class="checkbox-cell">
                 <input type="checkbox" class="big-checkbox" (change)="OnSingleChange($event, item.Id)" [(ngModel)]="item.Ischecked"></td>
-                <td>{{item.Permit}}</td>
-                <td>{{item.RegulatoryAgency}}</td>
-                <td>Stormwater Permits</td>
-                <td>State</td>
+                <td>{{item.PermitName}}</td>
+                <td>{{item.RegulatoryAgencyName}}</td>
+                <td>{{item.Category}}</td>
+                <td>{{item.Level}}</td>
                 </tr>
               
             </tbody>

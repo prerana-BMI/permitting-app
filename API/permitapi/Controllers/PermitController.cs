@@ -68,6 +68,58 @@ namespace permitapi.Controllers
             return BaseObj;
         }
 
+         [HttpGet]
+        [Route("GetPermitByLocation")]
+        public BaseReturn<List<EPermitMaster>> GetPermitByLocation(EPermitByLocation Request)
+        {
+            var BaseObj = new BaseReturn<List<EPermitMaster>>();
+            List<EPermitMaster> Result = new List<EPermitMaster>();
+            try
+            {
+
+                Result = _context.PermitMasters.Where(a =>
+                                                (a.State == Request.State || string.IsNullOrEmpty(Request.State)) &&
+                                                (a.City == Request.City || string.IsNullOrEmpty(Request.City)) &&
+                                                 (a.Category == Request.Category || string.IsNullOrEmpty(Request.Category)) &&
+                                                  (a.PermitName == Request.PermitName || string.IsNullOrEmpty(Request.PermitName)) &&
+                                                   (a.RegulatoryAgencyName == Request.RegulatoryAgencyName || string.IsNullOrEmpty(Request.RegulatoryAgencyName)) 
+
+                                                )
+                .Select(a => new EPermitMaster
+                {
+                    Category = a.Category,
+                    PermitName = a.PermitName,
+                    State = a.State,
+                    City = a.City,
+                    County = a.County,
+                    Level = a.Level,
+                    RegulatoryAgencyName = a.RegulatoryAgencyName,
+                    Id = a.Id
+                })
+                .OrderByDescending(a=>a.Id)
+                .ToList();
+                BaseObj.Count = Result.Count;
+                // if (Result.Count > 0 && Request.pageSize > 0)
+                // {
+                //     Result = Result.Skip((Request.pageIndex - 1) * Request.pageSize).Take(Request.pageSize).ToList();
+                // }
+                BaseObj.Data = Result;
+                BaseObj.Success = true;
+
+            }
+            catch (Exception ex)
+            {
+                BaseObj.Message = ex.Message;
+                BaseObj.Success = false;
+            }
+            finally
+            {
+
+            }
+            return BaseObj;
+        }
+
+
         [HttpGet]
         [Route("GetPermitById")]
         public BaseReturn<EPermitMasterDetail> GetPermitById(int PermitId)

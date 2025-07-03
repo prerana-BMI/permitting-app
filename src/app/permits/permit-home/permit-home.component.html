@@ -85,7 +85,7 @@
     
       <div class="col-12 col-xl-8 mb-4">
         <div class="map-container">
-          <app-map (citySelected)="handleCitySelected($event)" [StateName]="SearchForm.get('state')?.value"></app-map>
+          <app-map (citySelected)="handleCitySelected($event)" [StateName]="SelectedStateName"></app-map>
         </div>
       </div>
       <div class="col-12 col-xl-4 mb-4">

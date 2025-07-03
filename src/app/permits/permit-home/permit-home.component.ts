@@ -17,6 +17,7 @@ export class PermitHomeComponent {
   SearchForm! : FormGroup;
   typeaheadDebounce : number = 500;
   StateList : Array<any> = [];
+  SelectedStateName : string = '';
  
   constructor(private Formbuilder : FormBuilder,
     private HttpService : HttpService,
@@ -78,14 +79,17 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
   }
 
   StateTypeAheadDisplay(val: any) {
+      this.SelectedStateName = '';
     let res = this.StateList.find(a => a.State == val);
     if (res != null) {
+      this.SelectedStateName = res.State;
       return res.State
     }
     return ''
   }
   Search() {
-    this.router.navigate(["permits/permitlist"])
+
+    this.router.navigate(["permits/permitlist", this.SearchForm.controls['state'].value,this.SearchForm.controls['city'].value]);
   }
   handleCitySelected(Event: any) {
     this.CityList = [{ City: Event.City }];
