@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace contract.Entities
 {
-    public class EPermitMasterDetail
+    public class EPermitMasterDetail : EPermitMaster
     {
         public int Id { get; set; }
         public int? PermitId { get; set; }

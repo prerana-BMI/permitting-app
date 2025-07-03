@@ -8,10 +8,12 @@ namespace permitapi
 
 public class MappingProfile : Profile
 {
-    public MappingProfile()
-    {
-        CreateMap<EPermitMaster, PermitMaster>();
+        public MappingProfile()
+        {
+            CreateMap<EPermitMaster, PermitMaster>();
+            CreateMap<EPermitMasterDetail, PermitMasterDetail>();
+            
         // Add other mappings here
-    }
+        }
 }
 }

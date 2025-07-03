@@ -84,5 +84,43 @@ namespace permitapi.Controllers
             return BaseObj;
         }
 
+        [HttpGet]
+        [Route("GetRegulatoryAgencyBySearchText")]
+        public BaseReturn<List<ERegulatoryAgencyMaster>> GetRegulatoryAgencyBySearchText(string SearchText)
+        {
+            var BaseObj = new BaseReturn<List<ERegulatoryAgencyMaster>>();
+            List<ERegulatoryAgencyMaster> Result = new List<ERegulatoryAgencyMaster>();
+            try
+            {
+
+                Result = _context.RegulatoryAgencyMasters.Where(a => a.Name.ToLower().Contains(SearchText))
+                .ToList()
+                .GroupBy(a => a.Name)
+                .Select(a => a.FirstOrDefault())
+
+                .Select(a => new ERegulatoryAgencyMaster
+                {
+                    Name = a.Name,
+                    Id = a.Id
+                })
+                .Take(20)
+                .ToList();
+                BaseObj.Data = Result;
+                BaseObj.Count = Result.Count;
+                BaseObj.Success = true;
+
+            }
+            catch (Exception ex)
+            {
+                BaseObj.Message = ex.Message;
+                BaseObj.Success = false;
+            }
+            finally
+            {
+
+            }
+            return BaseObj;
+        }
+
     }
 }

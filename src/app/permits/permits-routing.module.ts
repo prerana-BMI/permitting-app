@@ -10,6 +10,7 @@ import { MaterialModule } from '../material/material.module';
 import { MyPermitsComponent } from './my-permits/my-permits.component';
 import { PermitMasterComponent } from './permit-master/permit-master.component';
 import { MapComponent } from './map/map.component';
+import {AddPermitsComponent} from './add-permits/add-permits.component';
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
@@ -22,7 +23,7 @@ const routes: Routes = [{
 }];
 
 @NgModule({
-  declarations :[PermitListComponent , PermitHomeComponent, MyPermitsComponent,MapComponent , PermitMasterComponent],
+  declarations :[PermitListComponent , PermitHomeComponent, MyPermitsComponent,MapComponent , PermitMasterComponent , AddPermitsComponent],
   imports: [RouterModule.forChild(routes),
     ToastrModule,
     CommonModule,

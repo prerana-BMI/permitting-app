@@ -16,5 +16,8 @@ export class Constants{
         ];
      public static CategoryList = ["Wildlife Permits","Wetlands/Surface Water Permits","Air Permits", "Stormwater Permits"];
      public static GetAllMasterPermits  = '/api/Permit/GetAllMasterPermits';
+     public static GetPermitById  = '/api/Permit/GetPermitById';
+     public static SavePermits  = '/api/Permit/SavePermits';
+     public static GetRegulatoryAgencyBySearchText = '/api/Master/GetRegulatoryAgencyBySearchText?SearchText='; 
      
 }
