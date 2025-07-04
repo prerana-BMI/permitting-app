@@ -6,6 +6,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { BehaviorSubject, debounceTime } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateMatrixComponent } from '../create-matrix/create-matrix.component';
 @Component({
   selector: 'app-permit-list',
   templateUrl: './permit-list.component.html',
@@ -40,9 +42,9 @@ export class PermitListComponent {
     private fb: FormBuilder,
     private auth : AuthService,
     private route: ActivatedRoute,
-    private  HttpService : HttpService
+    private  HttpService : HttpService,
+    private dialog: MatDialog,
   ) {
-  debugger
   this.State = this.route.snapshot.paramMap.get('state');
   this.City= this.route.snapshot.paramMap.get('city');
 
@@ -137,12 +139,11 @@ paginatorevt(evt: any) {
   }
   GetAllPermits()
   {
-    debugger
     let param= {
       'State' : this.State,
       'City' : this.City,
       'Category' : this.SearchForm.controls['Category'].value == null ? '': this.SearchForm.controls['Category'].value,
-       'PermitName': this.SearchForm.controls['PermitName'].value == null ? '': this.SearchForm.controls['PermitName'].value,
+      'PermitName': this.SearchForm.controls['PermitName'].value == null ? '': this.SearchForm.controls['PermitName'].value,
       'RegulatoryAgencyName': this.SearchForm.controls['RegulatoryAgency'].value == null ? '': this.SearchForm.controls['RegulatoryAgency'].value,
     }
     this.httpService.httpGetCall(Constants.GetPermitByLocation ,param, true) .subscribe((res: any)=>{
@@ -157,7 +158,17 @@ paginatorevt(evt: any) {
   }
   //this.GetAllPermits;
   //this.httpService.httpGetCall(Constants.CategoryList.toString(), null,true).sub
- 
+ CreateMatrix()
+ {
+   let dialogRef = this.dialog.open(CreateMatrixComponent, {
+          data: null
+        });
+        dialogRef.afterClosed().subscribe(res => {
+          if (res != null) {
+            this.GetAllPermits();
+          }
+        });
+ }
 
 
 }

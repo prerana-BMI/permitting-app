@@ -11,6 +11,8 @@ import { MyPermitsComponent } from './my-permits/my-permits.component';
 import { PermitMasterComponent } from './permit-master/permit-master.component';
 import { MapComponent } from './map/map.component';
 import {AddPermitsComponent} from './add-permits/add-permits.component';
+import { CreateMatrixComponent } from './create-matrix/create-matrix.component';
+
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
@@ -23,7 +25,7 @@ const routes: Routes = [{
 }];
 
 @NgModule({
-  declarations :[PermitListComponent , PermitHomeComponent, MyPermitsComponent,MapComponent , PermitMasterComponent , AddPermitsComponent],
+  declarations :[PermitListComponent , PermitHomeComponent, MyPermitsComponent,MapComponent , PermitMasterComponent , AddPermitsComponent ,CreateMatrixComponent],
   imports: [RouterModule.forChild(routes),
     ToastrModule,
     CommonModule,

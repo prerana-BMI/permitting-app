@@ -1,0 +1,85 @@
+<div class="add-edit-popuop">
+    <div class="shadowed-panel" [formGroup]="AddMatrixForm">
+        <div class="panel-header d-flex justify-content-between align-items-center">
+            <h5> Create Matrix </h5>
+            <div><i class="fa fa-times" aria-hidden="true" (click)="clear()"></i></div>
+        </div>
+        <div class="row pb-0">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="username" class="form-label labelClass lableSyle">Type Of Project</label>
+                    <select name="" id="" class="form-control custom-input" formControlName="TypeOfProject">
+                        <option value="">Select</option>
+                        <option value="{{i}}" *ngFor="let i of TypeofPermitList">{{i}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+         <div class="row pt-0 pb-0">
+            <div class="col-md-12">
+              <div class="form-group">
+                        <label for="username" class="form-label labelClass lableSyle">Client</label>
+                         <input type="text" class="form-control custom-input" formControlName="RegulatoryAgency" [matAutocomplete]="agencyLst">
+                          <mat-autocomplete #agencyLst="matAutocomplete" [displayWith]="AgencyTypeAheadDisplay.bind(this)">
+                        <mat-option *ngIf="isAgencyLoading">
+                            <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
+                            </mat-spinner>
+                        </mat-option>
+                        <mat-option class="mat-opt1" disabled>
+                            <div>
+                                <table>
+                                    <tr class="tr">
+                                        <td style="width: 200px;">Agenct Name</td>
+                    
+                                    </tr>
+                                </table>
+                            </div>
+                        </mat-option>
+                        <mat-option *ngFor="let l of RegagencyList | slice:0:30" [value]="l.Name" class="mat-opt">
+                            <div>
+                                <table>
+                                    <tr class="tr">
+                                        <td class="td td1">{{l.Name}}</td>
+                    
+                                    </tr>
+                                </table>
+                            </div>
+                        </mat-option>
+                        <mat-option *ngIf="RegagencyList.length == 0" disabled>
+                            No Options
+                        </mat-option>
+                    </mat-autocomplete>
+                    </div>
+             </div>
+        </div>
+         <div class="row pt-0">
+            <div class="col-md-12">
+              
+                 
+                    <div class="form-group">
+                        <label for="username" class="form-label labelClass lableSyle">Matrix Name</label>
+                         <input type="text" class="form-control custom-input" formControlName="MatrixName">
+                    </div>
+                
+              
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 p-0">
+        <div class="row justify-content-center">
+            <div class="col-sm-4 pr-2" style="    margin-top: -60px;
+    margin-bottom: 20px;
+    margin-left: 60px;">
+                <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn" (click)="Submit()">
+                    <span style=" margin: 0 1px;"></span>
+                    <i class="fas fa-save"></i>
+                    <span class="flex-grow-1 text-start">Submit</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+</div>
