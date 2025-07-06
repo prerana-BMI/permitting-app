@@ -45,7 +45,7 @@ namespace permitapi.Controllers
                     RegulatoryAgencyName = a.RegulatoryAgencyName,
                     Id = a.Id
                 })
-                .OrderByDescending(a=>a.Id)
+                .OrderByDescending(a => a.Id)
                 .ToList();
                 BaseObj.Count = Result.Count;
                 if (Result.Count > 0 && Request.pageSize > 0)
@@ -68,7 +68,7 @@ namespace permitapi.Controllers
             return BaseObj;
         }
 
-         [HttpGet]
+        [HttpGet]
         [Route("GetPermitByLocation")]
         public BaseReturn<List<EPermitMaster>> GetPermitByLocation(EPermitByLocation Request)
         {
@@ -82,7 +82,7 @@ namespace permitapi.Controllers
                                                 (a.City == Request.City || string.IsNullOrEmpty(Request.City)) &&
                                                  (a.Category == Request.Category || string.IsNullOrEmpty(Request.Category)) &&
                                                   (a.PermitName == Request.PermitName || string.IsNullOrEmpty(Request.PermitName)) &&
-                                                   (a.RegulatoryAgencyName == Request.RegulatoryAgencyName || string.IsNullOrEmpty(Request.RegulatoryAgencyName)) 
+                                                   (a.RegulatoryAgencyName == Request.RegulatoryAgencyName || string.IsNullOrEmpty(Request.RegulatoryAgencyName))
 
                                                 )
                 .Select(a => new EPermitMaster
@@ -96,7 +96,7 @@ namespace permitapi.Controllers
                     RegulatoryAgencyName = a.RegulatoryAgencyName,
                     Id = a.Id
                 })
-                .OrderByDescending(a=>a.Id)
+                .OrderByDescending(a => a.Id)
                 .ToList();
                 BaseObj.Count = Result.Count;
                 // if (Result.Count > 0 && Request.pageSize > 0)
@@ -125,37 +125,37 @@ namespace permitapi.Controllers
         public BaseReturn<EPermitMasterDetail> GetPermitById(int PermitId)
         {
             var BaseObj = new BaseReturn<EPermitMasterDetail>();
-           
+
             try
             {
-              BaseObj.Data = _context.PermitMasters
-                .Where(master => master.Id == PermitId)
-                .Join(_context.PermitMasterDetails.Where(a=>a.PermitId == PermitId),
-                        master => master.Id,
-                        detail => detail.PermitId,
-                        (master, detail) => new EPermitMasterDetail
-                        {
-                            Category = master.Category,
-                            RegulatoryAgencyName = master.RegulatoryAgencyName,
-                            RegulatoryAgencyId = master.RegulatoryAgencyId,
-                            Level = master.Level,
-                            State = master.State,
-                            City = master.City,
-                            County = master.County,
-                            CreatedBy = master.CreatedBy,
-                            CreatedOn = master.CreatedOn,
-                            TypeOfProject = master.TypeOfProject,
-                            Description = detail.Description,
-                            Threshold = detail.Threshold,
-                            PrepTimeMin = detail.PrepTimeMin,
-                            PrepTimeMax = detail.PrepTimeMax,
-                            AgencyReviewTimeMin = detail.AgencyReviewTimeMin,
-                            AgencyReviewTimeMax = detail.AgencyReviewTimeMax,
-                            BasicFees = detail.BasicFees,
-                            PermitName = master.PermitName,
-                            Id = master.Id
-                        })
-                .FirstOrDefault();
+                BaseObj.Data = _context.PermitMasters
+                  .Where(master => master.Id == PermitId)
+                  .Join(_context.PermitMasterDetails.Where(a => a.PermitId == PermitId),
+                          master => master.Id,
+                          detail => detail.PermitId,
+                          (master, detail) => new EPermitMasterDetail
+                          {
+                              Category = master.Category,
+                              RegulatoryAgencyName = master.RegulatoryAgencyName,
+                              RegulatoryAgencyId = master.RegulatoryAgencyId,
+                              Level = master.Level,
+                              State = master.State,
+                              City = master.City,
+                              County = master.County,
+                              CreatedBy = master.CreatedBy,
+                              CreatedOn = master.CreatedOn,
+                              TypeOfProject = master.TypeOfProject,
+                              Description = detail.Description,
+                              Threshold = detail.Threshold,
+                              PrepTimeMin = detail.PrepTimeMin,
+                              PrepTimeMax = detail.PrepTimeMax,
+                              AgencyReviewTimeMin = detail.AgencyReviewTimeMin,
+                              AgencyReviewTimeMax = detail.AgencyReviewTimeMax,
+                              BasicFees = detail.BasicFees,
+                              PermitName = master.PermitName,
+                              Id = master.Id
+                          })
+                  .FirstOrDefault();
                 BaseObj.Success = true;
 
             }
@@ -172,7 +172,7 @@ namespace permitapi.Controllers
         }
         [HttpPost]
         [Route("SavePermits")]
-        public BaseReturn<int> SavePermits([FromBody] EPermitMasterDetail Request )
+        public BaseReturn<int> SavePermits([FromBody] EPermitMasterDetail Request)
         {
             var BaseObj = new BaseReturn<int>();
 
@@ -182,7 +182,7 @@ namespace permitapi.Controllers
                 {
                     var permitObj = _context.PermitMasters.FirstOrDefault(a => a.Id == Request.Id);
                     var PermitDetailsObj = _context.PermitMasterDetails.FirstOrDefault(a => a.PermitId == Request.PermitId);
-                    
+
                     if (permitObj != null && PermitDetailsObj != null)
                     {
                         permitObj.Category = Request.Category;
@@ -237,6 +237,42 @@ namespace permitapi.Controllers
                     BaseObj.Message = "New Permit Added";
 
                 }
+                BaseObj.Success = true;
+
+            }
+            catch (Exception ex)
+            {
+                BaseObj.Message = ex.Message;
+                BaseObj.Success = false;
+            }
+            finally
+            {
+
+            }
+            return BaseObj;
+        }
+
+        [HttpPost]
+        [Route("SavePermitMatrix")]
+        public BaseReturn<int> SavePermitMatrix([FromBody] EPermitMatrix Request)
+        {
+            var BaseObj = new BaseReturn<int>();
+
+            try
+            {
+
+                var PermitObj = new PermitMatrix()
+                {
+                    TypeOfProject = Request.TypeOfProject,
+                    MatrixName = Request.MatrixName,
+                    ClientId = Request.ClientId,
+                    PermitList = Request.PermitList
+                };
+                _context.PermitMatrices.Add(PermitObj);
+                _context.SaveChanges();
+                BaseObj.Message = "New Matrix Added";
+
+
                 BaseObj.Success = true;
 
             }

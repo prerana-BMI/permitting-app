@@ -165,7 +165,7 @@ namespace permitapi.Controllers
             try
             {
 
-                Result = _context.PermitMasters.Select(a => a.TypeOfProject).Distinct().ToList();
+                Result = _context.PermitMasters.Where(a=>!string.IsNullOrEmpty(a.TypeOfProject)).Select(a => a.TypeOfProject).Distinct().ToList();
                 
                 
                 BaseObj.Data = Result;

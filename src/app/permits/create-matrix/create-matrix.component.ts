@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { debounceTime } from 'rxjs';
 import { Constants } from 'src/app/Models/Constants';
 import { HttpService } from 'src/app/services/http.service';
@@ -16,11 +17,14 @@ export class CreateMatrixComponent {
 typeaheadDebounce : number = 500;
 CityList : Array<any> = [];
 isCityLoading : boolean= false;
+SelectedPermit : Array<number> = [];
 TypeofPermitList : Array<string>= [];
-constructor(private fb : FormBuilder, private HttpService : HttpService)
-{
-
-}
+  constructor(private fb: FormBuilder, private HttpService: HttpService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<CreateMatrixComponent>,
+  ) {
+    this.SelectedPermit = this.data;
+  }
   ngOnInit()
   {
     this.AddMatrixForm = this.fb.group({
@@ -32,10 +36,22 @@ constructor(private fb : FormBuilder, private HttpService : HttpService)
     this.InitializedTypeAhead();
     this.GeAllMasterPermitType()
   }
-Submit()
-{
+  Submit() {
+    debugger
+    let param = {
+      TypeOfProject: this.AddMatrixForm.controls['TypeOfProject'].value,
+      ClientId: this.AddMatrixForm.controls['RegulatoryAgency'].value,
+      MatrixName: this.AddMatrixForm.controls['MatrixName'].value,
+      PermitList: this.SelectedPermit.join(',')
 
-}
+    };
+    this.HttpService.httpPostCall(Constants.SavePermitMatrix, param).subscribe((res: any) => {
+      if (res["Success"]) {
+      }
+      this.dialogRef.close()
+    });
+
+  }
 clear()
 {
 
@@ -67,7 +83,7 @@ this.AddMatrixForm.controls['RegulatoryAgency'].valueChanges.pipe(debounceTime(t
   }
 AgencyTypeAheadDisplay(val: any)
   {
-     let res = this.RegagencyList.find(a => a.Name == val);
+     let res = this.RegagencyList.find(a => a.Id == val);
     if (res != null) {
       return res.Name;
     };

@@ -58,6 +58,16 @@ CREATE SCHEMA `permit_repository_service` ;
   `department` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id`));
 
+  CREATE TABLE `permit_account_service`.`permit_matrix` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `type_of_project` VARCHAR(100) NULL DEFAULT NULL,
+  `matrix_name` VARCHAR(100) NULL DEFAULT NULL,
+  `client_id` INT NULL DEFAULT NULL,
+  `permit_list` VARCHAR(200) NULL DEFAULT NULL,
+  `created_by` INT NULL DEFAULT NULL,
+  `created_on` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`));
+
 
 
 

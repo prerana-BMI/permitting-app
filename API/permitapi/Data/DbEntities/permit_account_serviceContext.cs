@@ -19,6 +19,7 @@ namespace Data.DbEntities
         public virtual DbSet<CityMaster> CityMasters { get; set; } = null!;
         public virtual DbSet<PermitMaster> PermitMasters { get; set; } = null!;
         public virtual DbSet<PermitMasterDetail> PermitMasterDetails { get; set; } = null!;
+        public virtual DbSet<PermitMatrix> PermitMatrices { get; set; } = null!;
         public virtual DbSet<RegulatoryAgencyMaster> RegulatoryAgencyMasters { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
@@ -141,6 +142,34 @@ namespace Data.DbEntities
                 entity.Property(e => e.Threshold)
                     .HasMaxLength(200)
                     .HasColumnName("threshold");
+            });
+
+            modelBuilder.Entity<PermitMatrix>(entity =>
+            {
+                entity.ToTable("permit_matrix");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.ClientId).HasColumnName("client_id");
+
+                entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasColumnName("created_on")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.Property(e => e.MatrixName)
+                    .HasMaxLength(100)
+                    .HasColumnName("matrix_name");
+
+                entity.Property(e => e.PermitList)
+                    .HasMaxLength(200)
+                    .HasColumnName("permit_list");
+
+                entity.Property(e => e.TypeOfProject)
+                    .HasMaxLength(100)
+                    .HasColumnName("type_of_project");
             });
 
             modelBuilder.Entity<RegulatoryAgencyMaster>(entity =>

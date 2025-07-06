@@ -21,7 +21,8 @@ export class Constants{
      public static GetRegulatoryAgencyBySearchText = '/api/Master/GetRegulatoryAgencyBySearchText?SearchText='; 
      public static GetPermitNameBySearchText = '/api/Master/GetPermitNameBySearchText?SearchText='; 
      public static GetPermitByLocation = '/api/Permit/GetPermitByLocation'; 
-    public static GetMasterPermitType = '/api/Master/GetMasterPermitType';
+     public static GetMasterPermitType = '/api/Master/GetMasterPermitType';
+     public static SavePermitMatrix = '/api/Permit/SavePermitMatrix';
      
      
      

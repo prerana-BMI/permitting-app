@@ -146,7 +146,7 @@ paginatorevt(evt: any) {
       'PermitName': this.SearchForm.controls['PermitName'].value == null ? '': this.SearchForm.controls['PermitName'].value,
       'RegulatoryAgencyName': this.SearchForm.controls['RegulatoryAgency'].value == null ? '': this.SearchForm.controls['RegulatoryAgency'].value,
     }
-    this.httpService.httpGetCall(Constants.GetPermitByLocation ,param, true) .subscribe((res: any)=>{
+    this.httpService.httpGetCall(Constants.GetPermitByLocation ,param, true).subscribe((res: any)=>{
       if (res["Success"]) {
         this.PermitList = res['Data'];
         this.dataCount = res['Count'];
@@ -158,17 +158,16 @@ paginatorevt(evt: any) {
   }
   //this.GetAllPermits;
   //this.httpService.httpGetCall(Constants.CategoryList.toString(), null,true).sub
- CreateMatrix()
- {
-   let dialogRef = this.dialog.open(CreateMatrixComponent, {
-          data: null
-        });
-        dialogRef.afterClosed().subscribe(res => {
-          if (res != null) {
-            this.GetAllPermits();
-          }
-        });
- }
+  CreateMatrix() {
+    let dialogRef = this.dialog.open(CreateMatrixComponent, {
+      data: this.PermitList.filter(a => a.Ischecked == true).map(a => a.Id)
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res != null) {
+        this.GetAllPermits();
+      }
+    });
+  }
 
 
 }
