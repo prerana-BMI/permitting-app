@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs';
 import { Constants } from 'src/app/Models/Constants';
 import { HttpService } from 'src/app/services/http.service';
@@ -19,9 +20,11 @@ CityList : Array<any> = [];
 isCityLoading : boolean= false;
 SelectedPermit : Array<number> = [];
 TypeofPermitList : Array<string>= [];
-  constructor(private fb: FormBuilder, private HttpService: HttpService,
+  constructor(private fb: FormBuilder, 
+    private HttpService: HttpService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<CreateMatrixComponent>,
+    private Router : Router
   ) {
     this.SelectedPermit = this.data;
   }
@@ -37,7 +40,6 @@ TypeofPermitList : Array<string>= [];
     this.GeAllMasterPermitType()
   }
   Submit() {
-    debugger
     let param = {
       TypeOfProject: this.AddMatrixForm.controls['TypeOfProject'].value,
       ClientId: this.AddMatrixForm.controls['RegulatoryAgency'].value,
@@ -48,13 +50,14 @@ TypeofPermitList : Array<string>= [];
     this.HttpService.httpPostCall(Constants.SavePermitMatrix, param).subscribe((res: any) => {
       if (res["Success"]) {
       }
-      this.dialogRef.close()
+      this.dialogRef.close();
+      this.Router.navigate(["/permits/MatrixList"]);
     });
 
   }
 clear()
 {
-
+this.dialogRef.close();
 }
 GeAllMasterPermitType()
 {

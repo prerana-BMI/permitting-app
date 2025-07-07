@@ -1,11 +1,11 @@
 <div class="col-md-12 rounded PageLayout" style="height:120px;">
-  <div class="d-flex mt-2">
+  <div class="d-flex mt-2" [formGroup]="SearchForm">
     <div class="col-lg-3 col-md-3 col-sm-12 p-1">
       <div class="form-group">
         <label for="city" class="form-label labelClass lableSyle">
-          Category
+          Matrix Name
         </label>
-        <input type="text" id="city" class="form-control custom-input">
+        <input type="text" id="city" class="form-control custom-input" formControlName="MatrixName">
       </div>
     </div>
    
@@ -14,7 +14,36 @@
         <label for="city" class="form-label labelClass lableSyle">
           Regulatory Agency
         </label>
-        <input type="text" id="city" class="form-control custom-input">
+        <input type="text" class="form-control custom-input" formControlName="RegulatoryAgency" [matAutocomplete]="agencyLst">
+                        <mat-autocomplete #agencyLst="matAutocomplete" [displayWith]="AgencyTypeAheadDisplay.bind(this)">
+                        <mat-option *ngIf="isAgencyLoading">
+                            <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
+                            </mat-spinner>
+                        </mat-option>
+                        <mat-option class="mat-opt1" disabled>
+                            <div>
+                                <table>
+                                    <tr class="tr">
+                                        <td style=""> Client Name</td>
+                    
+                                    </tr>
+                                </table>
+                            </div>
+                        </mat-option>
+                        <mat-option *ngFor="let l of RegagencyList | slice:0:30" [value]="l.Id" class="mat-opt">
+                            <div>
+                                <table>
+                                    <tr class="tr">
+                                        <td class="td td1">{{l.Name}}</td>
+                    
+                                    </tr>
+                                </table>
+                            </div>
+                        </mat-option>
+                        <mat-option *ngIf="RegagencyList.length == 0" disabled>
+                            No Options
+                        </mat-option>
+                    </mat-autocomplete>
       </div>
     </div>
     
@@ -42,11 +71,16 @@
 
   </div>
 </div>
+
 <div class="col-md-12 rounded PageLayout mt-4" style="height:500px;">
  <div class="col-md-12 mt-3 d-flex justify-content-between align-items-center">
-    <div class="d-flex">
-      <!-- <p class="lableSyle mb-0 me-2">Permit Count : </p>
-      <p class="lableSyle mb-0"> 2</p> -->
+  <div class="d-flex align-items-center">
+  </div>
+    <div class="d-flex align-items-center mr-2">
+      <mat-paginator *ngIf="MatrixList != null" [length]="dataCount" [pageSize]="pageSize" [pageSizeOptions]="pageOption"
+        (page)="paginatorevt($event)" #paginator>
+      </mat-paginator>
+    
     </div>
 </div>
   <div class="row">
@@ -57,24 +91,27 @@
             <thead>
               <tr style="background-color: #bbbbbb4d; border: 1px solid #e1dbdba6;">
                
-                <th style="width: 80px;">Permit</th>
-                <th style="width: 150px;">Regulatory Agency</th>
-                <th style="width: 60px;">Time Frame</th>
-
-                <th style="width: 60px;">Review Time</th>
-                <th style="width: 80px;">Fees</th>
+                <th style="width: 80px;">Matrix Name</th>
+                <th style="width: 150px;">Client Name</th>
+                <th style="width: 60px;">Type Of Project</th>
+                <th style="width: 80px;">Applicable Permit Count</th>
+                 <th style="width: 60px;">Action</th>
 
               </tr>
             </thead>
             <tbody class="">
-              <tr *ngFor="let item of PermitList; let i = index">
+              <tr *ngFor="let item of MatrixList; let i = index">
               
-                <td>{{item.Permit}}</td>
-                <td>{{item.RegulatoryAgency}}</td>
-                <td>{{item.TimeFrame}}</td>
+                <td>{{item.MatrixName}}</td>
+                <td>{{item.ClientName}}</td>
+                <td>{{item.TypeOfProject}}</td>
 
-                <td>{{item.ReviewTime}}</td>
-                <td>{{item.Fees}}</td>
+                <td>{{item.PermitCount}}</td>
+                <td>
+                   <a class="btn btn-sm rounded-1" style="border: 1px solid #1c4876;">
+                        <i class="far fa-edit"></i>
+                    </a>
+                </td>
               </tr>
 
             </tbody>

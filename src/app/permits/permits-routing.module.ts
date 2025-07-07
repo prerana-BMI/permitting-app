@@ -19,7 +19,7 @@ const routes: Routes = [{
   children: [
     { path: 'permitlist/:state/:city', component: PermitListComponent },
      { path: 'permithome', component: PermitHomeComponent },
-     {path : 'MyPermits' , component : MyPermitsComponent},
+     {path : 'MatrixList' , component : MyPermitsComponent},
      {path : 'PermitMasterList', component: PermitMasterComponent}
   ]
 }];

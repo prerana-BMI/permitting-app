@@ -288,6 +288,56 @@ namespace permitapi.Controllers
             return BaseObj;
         }
 
+        [HttpGet]
+        [Route("GetAllMatrix")]
+        public BaseReturn<List<EPermitMatrix>> GetAllMatrix(EPermitMatrix Request)
+        {
+            var BaseObj = new BaseReturn<List<EPermitMatrix>>();
+
+            try
+            {
+                var Result = _context.PermitMatrices.Where(a => (a.MatrixName == Request.MatrixName || string.IsNullOrEmpty(Request.MatrixName)) &&
+                                                        (a.ClientId == Request.ClientId || Request.ClientId == null))
+                                                        .Select(a => new { a.TypeOfProject, a.MatrixName, a.ClientId, a.PermitList, a.Id })
+                                                        .ToList()
+                                                        .GroupJoin(_context.RegulatoryAgencyMasters,
+                                                        matrix => matrix.ClientId,
+                                                        agency => agency.Id,
+                                                        (matrix, agency) => new { matrix, agency })
+                                                        .Select(a => new EPermitMatrix()
+                                                        {
+                                                            TypeOfProject = a.matrix.TypeOfProject,
+                                                            MatrixName = a.matrix.MatrixName,
+                                                            ClientName = a.agency.FirstOrDefault().Name,
+                                                            PermitCount = a.matrix.PermitList.Split(new[] { "," }, StringSplitOptions.None).Length,
+                                                            Id = a.matrix.Id
+
+                                                        })
+                                                        .OrderByDescending(a=>a.Id)
+                                                        .ToList();
+
+                if (Result.Count > 0 && Request.pageSize > 0)
+                {
+                    Result = Result.Skip((Request.pageIndex - 1) * Request.pageSize).Take(Request.pageSize).ToList();
+                }
+                BaseObj.Data = Result;
+                BaseObj.Count = Result.Count;
+                BaseObj.Message = "";
+                BaseObj.Success = true;
+
+            }
+            catch (Exception ex)
+            {
+                BaseObj.Message = ex.Message;
+                BaseObj.Success = false;
+            }
+            finally
+            {
+
+            }
+            return BaseObj;
+        }
+
 
     }
 }
