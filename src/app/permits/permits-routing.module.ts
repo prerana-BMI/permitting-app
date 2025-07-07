@@ -12,20 +12,23 @@ import { PermitMasterComponent } from './permit-master/permit-master.component';
 import { MapComponent } from './map/map.component';
 import {AddPermitsComponent} from './add-permits/add-permits.component';
 import { CreateMatrixComponent } from './create-matrix/create-matrix.component';
+import { MatrixDetailsComponent } from './matrix-details/matrix-details.component';
 
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
   children: [
-    { path: 'permitlist/:state/:city', component: PermitListComponent },
+    {path: 'permitlist/:state/:city', component: PermitListComponent },
      { path: 'permithome', component: PermitHomeComponent },
      {path : 'MatrixList' , component : MyPermitsComponent},
-     {path : 'PermitMasterList', component: PermitMasterComponent}
+     {path : 'PermitMasterList', component: PermitMasterComponent},
+     {path : 'MatrixDetails', component: MatrixDetailsComponent}
   ]
 }];
 
 @NgModule({
-  declarations :[PermitListComponent , PermitHomeComponent, MyPermitsComponent,MapComponent , PermitMasterComponent , AddPermitsComponent ,CreateMatrixComponent],
+  declarations :[PermitListComponent , PermitHomeComponent, MyPermitsComponent,MapComponent , PermitMasterComponent ,
+                 AddPermitsComponent ,CreateMatrixComponent,MatrixDetailsComponent],
   imports: [RouterModule.forChild(routes),
     ToastrModule,
     CommonModule,

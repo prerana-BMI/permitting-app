@@ -313,7 +313,7 @@ namespace permitapi.Controllers
                                                             Id = a.matrix.Id
 
                                                         })
-                                                        .OrderByDescending(a=>a.Id)
+                                                        .OrderByDescending(a => a.Id)
                                                         .ToList();
 
                 if (Result.Count > 0 && Request.pageSize > 0)
@@ -337,6 +337,90 @@ namespace permitapi.Controllers
             }
             return BaseObj;
         }
+
+        [HttpGet]
+        [Route("GetMatrixDetailsById")]
+        public BaseReturn<EMatrixWisePermit> GetMatrixDetailsById(int MatrixId)
+        {
+            var BaseObj = new BaseReturn<EMatrixWisePermit>();
+
+            try
+            {
+                var Result = _context.PermitMatrices.Where(a => a.Id == MatrixId)
+                    .GroupJoin(_context.RegulatoryAgencyMasters,
+                        matrix => matrix.ClientId,
+                        agency => agency.Id,
+                        (matrix, agency) => new { matrix, agency })
+                    .Select(a => new EPermitMatrix()
+                    {
+                        TypeOfProject = a.matrix.TypeOfProject,
+                        MatrixName = a.matrix.MatrixName,
+                        ClientName = a.agency.FirstOrDefault().Name,
+                        PermitList = a.matrix.PermitList,
+                        Id = a.matrix.Id
+                    })
+                    .FirstOrDefault();
+
+                if (Result == null || string.IsNullOrEmpty(Result.PermitList))
+                {
+                    BaseObj.Message = "Matrix not found or PermitList is empty.";
+                    BaseObj.Success = false;
+                    return BaseObj;
+                }
+
+                int[] permitData = Result.PermitList
+                    .Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(int.Parse)
+                    .ToArray();
+
+                var data = _context.PermitMasters
+                    .Where(pm => permitData.Contains(pm.Id))
+                    .Join(_context.PermitMasterDetails.Where(pmd => permitData.Contains(pmd.PermitId??0)),
+                        permit => permit.Id,
+                        detail => detail.PermitId,
+                        (permit, detail) => new EPermitMasterDetail
+                        {
+                            Category = permit.Category,
+                            TypeOfProject = permit.TypeOfProject,
+                            Level = permit.Level,
+                            State = permit.State,
+                            City = permit.City,
+                            PermitName = permit.PermitName,
+                            RegulatoryAgencyName = permit.RegulatoryAgencyName,
+                            PrepTimeMin = detail.PrepTimeMin,
+                            PrepTimeMax = detail.PrepTimeMax,
+                            AgencyReviewTimeMin = detail.AgencyReviewTimeMin,
+                            AgencyReviewTimeMax = detail.AgencyReviewTimeMax,
+                            BasicFees = detail.BasicFees
+                        })
+                    .ToList();
+
+                var res = new EMatrixWisePermit()
+                {
+                    MatrixDetails = new EPermitMatrix()
+                    {
+                        TypeOfProject = Result.TypeOfProject,
+                        MatrixName = Result.MatrixName,
+                        ClientName = Result.ClientName,
+                        PermitList = Result.PermitList,
+                        Id = Result.Id
+                    },
+                    PermitList = data
+                };
+
+                BaseObj.Data = res;
+                BaseObj.Message = "";
+                BaseObj.Success = true;
+            }
+            catch (Exception ex)
+            {
+                BaseObj.Message = ex.Message;
+                BaseObj.Success = false;
+            }
+
+            return BaseObj;
+        }
+
 
 
     }

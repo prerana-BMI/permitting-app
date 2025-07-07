@@ -12,7 +12,7 @@
     <div class="col-lg-3 col-md-3 col-sm-12 p-1 mr-4">
       <div class="form-group">
         <label for="city" class="form-label labelClass lableSyle">
-          Regulatory Agency
+         Client Name
         </label>
         <input type="text" class="form-control custom-input" formControlName="RegulatoryAgency" [matAutocomplete]="agencyLst">
                         <mat-autocomplete #agencyLst="matAutocomplete" [displayWith]="AgencyTypeAheadDisplay.bind(this)">
@@ -94,7 +94,7 @@
                 <th style="width: 80px;">Matrix Name</th>
                 <th style="width: 150px;">Client Name</th>
                 <th style="width: 60px;">Type Of Project</th>
-                <th style="width: 80px;">Applicable Permit Count</th>
+                <th style="width: 80px;">Permit Count</th>
                  <th style="width: 60px;">Action</th>
 
               </tr>
@@ -108,9 +108,9 @@
 
                 <td>{{item.PermitCount}}</td>
                 <td>
-                   <a class="btn btn-sm rounded-1" style="border: 1px solid #1c4876;">
-                        <i class="far fa-edit"></i>
-                    </a>
+                  <a class="btn btn-sm rounded-1" style="border: 1px solid #1c4876; color: #1c4876;" title="View" (click)="ViewDetails()">
+                    <i class="far fa-eye"></i>
+                  </a>
                 </td>
               </tr>
 

@@ -23,6 +23,7 @@ export class Constants{
      public static GetPermitByLocation = '/api/Permit/GetPermitByLocation'; 
      public static GetMasterPermitType = '/api/Master/GetMasterPermitType';
      public static SavePermitMatrix = '/api/Permit/SavePermitMatrix';
-    public static GetAllMatrix = '/api/Permit/GetAllMatrix';
+     public static GetAllMatrix = '/api/Permit/GetAllMatrix';
+     public static GetMatrixDetailsById = '/api/Permit/GetMatrixDetailsById';
      
 }
