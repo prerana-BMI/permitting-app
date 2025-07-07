@@ -20,7 +20,7 @@ export class PermitMasterComponent {
   PermitList : Array<any> = [];
   pageSize: number = 10;
   SelecAll : boolean= true;
-  pageOption: any;
+  pageOption: any = Constants.PageSizeOptions.map(a=>a.value);
   pageIndex: number = 1;
   SearchForm!: FormGroup;
   dataCount: number = 2;
