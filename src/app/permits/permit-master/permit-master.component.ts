@@ -81,9 +81,7 @@ paginatorevt(evt: any) {
     this.pageSize = evt.pageSize;
    
   }
-
-
-  Search()
+Search()
   {
    
     this.GetAllPermits();
