@@ -21,7 +21,7 @@ CityList : Array<any> = [];
 RegagencyList : Array<any> = [];
 isCityLoading : boolean= false;
  PermitData : any; 
-CategoryList : Array<any> = Constants.CategoryList;
+CategoryList : Array<string> = [];
  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddPermitsComponent>,
     private HttpService : HttpService,
@@ -31,7 +31,7 @@ CategoryList : Array<any> = Constants.CategoryList;
   }
 ngOnInit()
 {
-
+this.GetMasterCategory();
 this.AddPermitForm= this.fb.group({
       Category: [''],
       TypeOfProject: [''],
@@ -54,6 +54,13 @@ this.AddPermitForm= this.fb.group({
     this.SetData();
   }
 }
+  GetMasterCategory() {
+    this.HttpService.httpGetCall(Constants.CategoryList, false, false).subscribe((res: any) => {
+      if (res["Success"]) {
+        this.CategoryList = res["Data"]
+      }
+    })
+  }
 initializeTyopeAhead()
 {
 this.AddPermitForm.controls['City'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {

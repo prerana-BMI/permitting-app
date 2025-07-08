@@ -29,7 +29,7 @@ export class PermitMasterComponent {
   breadcrumbs: string[] = ['RFI', 'RFI List'];
   messageSource = new BehaviorSubject<string>('0');
   isFilterOpened: boolean = false;
-  CategoryList = Constants.CategoryList;
+  CategoryList : Array<string> = [];
   ClientList : Array<any> = [];
   RegulatoryAgencyList : Array<any> = [];
   PermitData : any ;
@@ -50,7 +50,15 @@ export class PermitMasterComponent {
       PermitName: ''
     });
     this.GetAllPermits();
-    this.InitializedTypeAhead()
+    this.InitializedTypeAhead();
+    this.GetMasterCategory();
+  }
+   GetMasterCategory() {
+    this.HttpService.httpGetCall(Constants.CategoryList, false, false).subscribe((res: any) => {
+      if (res["Success"]) {
+        this.CategoryList = res["Data"]
+      }
+    })
   }
 InitializedTypeAhead()
 {

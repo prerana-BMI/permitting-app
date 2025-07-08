@@ -28,7 +28,7 @@ export class PermitListComponent {
   breadcrumbs: string[] = ['RFI', 'RFI List'];
   messageSource = new BehaviorSubject<string>('0');
   isFilterOpened: boolean = false;
-  CategoryList = Constants.CategoryList;
+  CategoryList : Array<string> = [];
   ClientList : Array<any> = [];
   RegulatoryAgencyList : Array<any> = [];
   PermitNameList :   Array<any> = [];
@@ -40,7 +40,6 @@ export class PermitListComponent {
     private toastr: ToastrService,
     public router: Router,
     private fb: FormBuilder,
-    private auth : AuthService,
     private route: ActivatedRoute,
     private  HttpService : HttpService,
     private dialog: MatDialog,
@@ -57,7 +56,16 @@ export class PermitListComponent {
   });
  this.GetAllPermits();
  this.InitializedTypeAhead();
+ this.GetMasterCategory();
  }
+
+  GetMasterCategory() {
+    this.HttpService.httpGetCall(Constants.CategoryList, false, false).subscribe((res: any) => {
+      if (res["Success"]) {
+        this.CategoryList = res["Data"]
+      }
+    })
+  }
 
 paginatorevt(evt: any) {
     this.pageIndex = evt.pageIndex + 1;

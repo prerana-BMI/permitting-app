@@ -91,6 +91,7 @@ export class MyPermitsComponent {
   }
 
   Clear() {
+    this.SearchForm.reset();
     this.GetAllMatrix();
   }
   ViewDetails(Id : number)

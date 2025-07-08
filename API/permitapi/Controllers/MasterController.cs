@@ -156,7 +156,7 @@ namespace permitapi.Controllers
             return BaseObj;
         }
 
-         [HttpGet]
+        [HttpGet]
         [Route("GetMasterPermitType")]
         public BaseReturn<List<string>> GetMasterPermitType()
         {
@@ -165,9 +165,36 @@ namespace permitapi.Controllers
             try
             {
 
-                Result = _context.PermitMasters.Where(a=>!string.IsNullOrEmpty(a.TypeOfProject)).Select(a => a.TypeOfProject).Distinct().ToList();
-                
-                
+                Result = _context.PermitMasters.Where(a => !string.IsNullOrEmpty(a.TypeOfProject)).Select(a => a.TypeOfProject).Distinct().ToList();
+
+
+                BaseObj.Data = Result;
+                BaseObj.Count = Result.Count;
+                BaseObj.Success = true;
+
+            }
+            catch (Exception ex)
+            {
+                BaseObj.Message = ex.Message;
+                BaseObj.Success = false;
+            }
+            finally
+            {
+
+            }
+            return BaseObj;
+        }
+
+        [HttpGet]
+        [Route("GetMasterCategoryList")]
+        public BaseReturn<List<string>> GetMasterCategoryList()
+        {
+            var BaseObj = new BaseReturn<List<string>>();
+            List<string> Result = new List<string>();
+            try
+            {
+
+                Result = _context.PermitMasters.Where(a=>!string.IsNullOrEmpty(a.Category)).Select(a => a.Category).Distinct().ToList();
                 BaseObj.Data = Result;
                 BaseObj.Count = Result.Count;
                 BaseObj.Success = true;
