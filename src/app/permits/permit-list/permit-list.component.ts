@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateMatrixComponent } from '../create-matrix/create-matrix.component';
+import * as XLSX from 'xlsx'
 @Component({
   selector: 'app-permit-list',
   templateUrl: './permit-list.component.html',
@@ -164,8 +165,6 @@ paginatorevt(evt: any) {
       }
     })
   }
-  //this.GetAllPermits;
-  //this.httpService.httpGetCall(Constants.CategoryList.toString(), null,true).sub
   CreateMatrix() {
     let dialogRef = this.dialog.open(CreateMatrixComponent, {
       data: this.PermitList.filter(a => a.Ischecked == true).map(a => a.Id)
@@ -175,6 +174,46 @@ paginatorevt(evt: any) {
         this.GetAllPermits();
       }
     });
+  }
+  DownloadExcel()
+  {
+    let ExportData : Array<any> = [];
+     let param= {
+      'State' : this.State,
+      'City' : this.City,
+      'Category' : this.SearchForm.controls['Category'].value == null ? '': this.SearchForm.controls['Category'].value,
+      'PermitName': this.SearchForm.controls['PermitName'].value == null ? '': this.SearchForm.controls['PermitName'].value,
+      'RegulatoryAgencyName': this.SearchForm.controls['RegulatoryAgency'].value == null ? '': this.SearchForm.controls['RegulatoryAgency'].value,
+    }
+      this.httpService.httpGetCall(Constants.ExportPermitsToExcel ,param, true).subscribe((res: any)=>{
+        if(res["Success"])
+        {
+         // this.ExportPermitList = res["Data"];
+          res["Data"].forEach((a:any)=>
+            ExportData.push({
+              Category : a.Category,
+                Permit_Name : a.PermitName,
+                State : a.State,
+                City : a.City,
+                Level : a.Level,
+                Regulatory_Agency_Name : a.RegulatoryAgencyName,
+                Description : a.Description,
+                Threshold : a.Threshold,
+                Minimum_Preparation_Time : a.PrepTimeMin,
+                Maximum_Preparation_Time: a.PrepTimeMax,
+                Minimum_Agency_Review_Time : a.AgencyReviewTimeMin,
+                Maximum_Agency_Review_Time : a.AgencyReviewTimeMax,
+                Basic_Fees : a.BasicFees,
+                   
+        })
+        );
+        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(ExportData);
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
+        XLSX.writeFile(wb, 'Permits.xlsx');
+        }
+      })
+    
   }
 
 

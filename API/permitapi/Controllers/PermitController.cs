@@ -376,7 +376,7 @@ namespace permitapi.Controllers
 
                 var data = _context.PermitMasters
                     .Where(pm => permitData.Contains(pm.Id))
-                    .Join(_context.PermitMasterDetails.Where(pmd => permitData.Contains(pmd.PermitId??0)),
+                    .Join(_context.PermitMasterDetails.Where(pmd => permitData.Contains(pmd.PermitId ?? 0)),
                         permit => permit.Id,
                         detail => detail.PermitId,
                         (permit, detail) => new EPermitMasterDetail
@@ -419,6 +419,64 @@ namespace permitapi.Controllers
                 BaseObj.Success = false;
             }
 
+            return BaseObj;
+        }
+        
+        [HttpGet]
+        [Route("ExportPermitToExcel")]
+        public BaseReturn<List<EPermitMasterDetail>> ExportPermitsToExcel(EPermitByLocation Request)
+        {
+            var BaseObj = new BaseReturn<List<EPermitMasterDetail>>();
+            List<EPermitMasterDetail> Result = new List<EPermitMasterDetail>();
+            try
+            {
+
+                Result = _context.PermitMasters.Where(a =>
+                                                (a.State == Request.State || string.IsNullOrEmpty(Request.State)) &&
+                                                (a.City == Request.City || string.IsNullOrEmpty(Request.City)) &&
+                                                (a.Category == Request.Category || string.IsNullOrEmpty(Request.Category)) &&
+                                                (a.PermitName == Request.PermitName || string.IsNullOrEmpty(Request.PermitName)) &&
+                                                (a.RegulatoryAgencyName == Request.RegulatoryAgencyName || string.IsNullOrEmpty(Request.RegulatoryAgencyName)))
+                                                .ToList()
+                                                .Join(_context.PermitMasterDetails,
+                                                permit => permit.Id,
+                                                detail => detail.PermitId,
+                                                (permit, detail) => new { permit, detail })
+                                                
+                .Select(a => new EPermitMasterDetail
+                {
+                    Category = a.permit.Category,
+                    PermitName = a.permit.PermitName,
+                    State = a.permit.State,
+                    City = a.permit.City,
+                  
+                    Level = a.permit.Level,
+                    RegulatoryAgencyName = a.permit.RegulatoryAgencyName,
+                    Description = a.detail.Description,
+                    Threshold = a.detail.Threshold,
+                    PrepTimeMin = a.detail.PrepTimeMin,
+                    PrepTimeMax = a.detail.PrepTimeMax,
+                    AgencyReviewTimeMin = a.detail.AgencyReviewTimeMin,
+                    AgencyReviewTimeMax = a.detail.AgencyReviewTimeMax,
+                    BasicFees = a.detail.BasicFees,
+                    Id = a.permit.Id
+                })
+                .OrderByDescending(a => a.Id)
+                .ToList();
+                BaseObj.Count = Result.Count;
+                BaseObj.Data = Result;
+                BaseObj.Success = true;
+
+            }
+            catch (Exception ex)
+            {
+                BaseObj.Message = ex.Message;
+                BaseObj.Success = false;
+            }
+            finally
+            {
+
+            }
             return BaseObj;
         }
 
