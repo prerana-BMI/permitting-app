@@ -39,31 +39,33 @@
           <table class="table table-hover">
             <thead>
             <tr style="background-color: #bbbbbb4d; border: 1px solid #e1dbdba6;">
-               <th style="width: 80px;">Permit Name</th>
-                <th style="width: 50px;">Category</th>
-                <th style="width: 30px;">Level</th>
-                <th style="width: 30px;">State</th>
-                 <th style="width: 30px;">City</th>
-                 <th style="width: 50px;">Regulatory Agency</th>
-                <th style="width: 50px;">Prep Time</th>
-                <th style="width: 50px;">Agency Review Time</th>
-                <th style="width: 20px;">Basic Fees</th>
-                </tr>
+              <th style="width: 80px;">Permit Name</th>
+              <th style="width: 50px;">Category</th>
+              <th style="width: 10px;">Level</th>
+              <th style="width: 30px;">State</th>
+              <th style="width: 30px;">City</th>
+              <th style="width: 50px;">Regulatory Agency</th>
+              <th style="width: 90px;">Prep Time (days)</th>
+              <th style="width: 90px;">Agency Req Time (days)</th>
+              <th style="width: 20px;">Basic Fees</th>
+            </tr>
             </thead>
             <tbody class="">
-              <tr>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                
+              <tr *ngFor="let i of PermitList;">
+                <td>{{i.PermitName}}</td>
+                <td>{{i.Category}}</td>
+                <td>{{i.Level}}</td>
+                <td>{{i.State}}</td>
+                <td>{{i.City}}</td>
+                <td>{{i.RegulatoryAgencyName}}</td>
+                <td>
+                {{i.PrepTimeMin }} {{ i.PrepTimeMax == null ? ' and above' : ' - ' + i.PrepTimeMax }} 
+                </td>
+                <td>
+                  {{ i.AgencyReviewTimeMin }} {{ i.AgencyReviewTimeMax == null ? ' and above' : ' - ' + i.AgencyReviewTimeMax }}
+                </td>
+                <td>{{i.BasicFees}}</td>
               </tr>
-
             </tbody>
           </table>
 
@@ -75,35 +77,3 @@
 
   </div>
 </div>
-
-<!-- <div class="col-md-12 rounded PageLayout mt-4" style="height:500px;">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card-body">
-        <div class="table-responsive-md">
-          <table class="table table-hover">
-            <thead>
-            <tr style="background-color: #bbbbbb4d; border: 1px solid #e1dbdba6;">
-               <th style="width: 80px;">Matrix Name</th>
-                <th style="width: 150px;">Client Name</th>
-                <th style="width: 60px;">Type Of Project</th>
-                <th style="width: 80px;">Permit Count</th>
-                 <th style="width: 60px;">Action</th>
-             </tr>
-            </thead>
-            <tbody class="">
-              
-
-            </tbody>
-          </table>
-
-
-        </div>
-      </div>
-
-    </div>
-
-  </div>
- 
-</div> -->
-

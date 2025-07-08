@@ -19,9 +19,9 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/account/UsersList',
     
   },
-   {
+  {
     title: 'Permit Master',
-    icon: 'person-outline',
+    icon: 'book-open-outline',
     link: '/permits/PermitMasterList',
     
   },

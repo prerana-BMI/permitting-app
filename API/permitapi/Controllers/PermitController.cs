@@ -347,6 +347,7 @@ namespace permitapi.Controllers
             try
             {
                 var Result = _context.PermitMatrices.Where(a => a.Id == MatrixId)
+                        .ToList()
                     .GroupJoin(_context.RegulatoryAgencyMasters,
                         matrix => matrix.ClientId,
                         agency => agency.Id,

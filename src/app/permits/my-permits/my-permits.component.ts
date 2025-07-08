@@ -93,9 +93,9 @@ export class MyPermitsComponent {
   Clear() {
     this.GetAllMatrix();
   }
-  ViewDetails()
+  ViewDetails(Id : number)
   {
-    this.router.navigate(["/permits/MatrixDetails"]);
+    this.router.navigate(["/permits/MatrixDetails",Id]);
   }
 
 }

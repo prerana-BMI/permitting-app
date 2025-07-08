@@ -22,7 +22,7 @@ const routes: Routes = [{
      { path: 'permithome', component: PermitHomeComponent },
      {path : 'MatrixList' , component : MyPermitsComponent},
      {path : 'PermitMasterList', component: PermitMasterComponent},
-     {path : 'MatrixDetails', component: MatrixDetailsComponent}
+     {path : 'MatrixDetails/:id', component: MatrixDetailsComponent}
   ]
 }];
 

@@ -37,10 +37,8 @@ export class PermitMasterComponent {
   ispermitLoading : boolean =false;
   typeaheadDebounce : number = 500;
   constructor(private httpService: HttpService,
-    private toastr: ToastrService,
     public router: Router,
     private fb: FormBuilder,
-    private auth : AuthService,
     private dialog: MatDialog,
     private HttpService : HttpService
   ) {
