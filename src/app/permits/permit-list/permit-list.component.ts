@@ -37,6 +37,8 @@ export class PermitListComponent {
   typeaheadDebounce : number = 500;
   isAgencyLoading: boolean = false;
   RegagencyList :  Array<any> = [];
+  CityList : Array<any> = [];
+  isCityLoading : boolean= false;
   constructor(private httpService: HttpService,
     private toastr: ToastrService,
     public router: Router,
@@ -55,6 +57,7 @@ export class PermitListComponent {
       PermitName: '',
       RegulatoryAgency: ''
   });
+ this.CityList.push({City : this.City});
  this.GetAllPermits();
  this.InitializedTypeAhead();
  this.GetMasterCategory();
@@ -128,6 +131,7 @@ paginatorevt(evt: any) {
         });
       }
     });
+    
   }
   PermitTypeAheadDisplay(val:string)
   {
@@ -215,7 +219,25 @@ paginatorevt(evt: any) {
       })
     
   }
+   CityTypeAheadDisplay(val: any) {
+    let res = this.CityList.find(a => a.City == val);
+    if (res != null) {
+      this.GetAllPermits();
+      return res.City;
+    };
+    return '';
+  }
 
+  OnValueChanges()
+  {
 
+    this.isCityLoading = true;
+        this.HttpService.httpGetCall(`${Constants.GetCityBySearchText}?City=${this.City??"".toLowerCase()}&State=${this.State??"".toLowerCase()}`,false,false).subscribe((res :any) => {
+          if (res["Success"] ) {
+            this.CityList = res["Data"];
+          }
+          this.isCityLoading = false;
+        });
+}
 }
 

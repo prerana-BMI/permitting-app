@@ -108,44 +108,69 @@
       </button>
     
     </div>
-    <!-- <div class="col-lg-1 col-md-1 col-sm-12">
-      <div class="form-group">
-        <button type="button"
-          class="btn btn-outline-primary form-control d-flex align-items-center search-slt FlterButton"
-          (click)="Search()">
-          <span class="flex-grow-1 text-start">Export</span>
-          <span style=" margin: 0 6px;"></span>
-          <i class="fa-solid fa-download"></i>
-        </button>
-      </div>
-    </div> -->
+    
 
 
   </div>
 </div>
-<!-- <div class="col-md-12 mt-3 d-flex">
-  <h5 style="color :#1c4876"> Available Permit Count : </h5>
-  <h5 style="color :#1c4876">2</h5>
-</div> -->
+
 <div class="col-md-12 rounded PageLayout mt-4" style="height:500px;">
 <div class="col-md-12 mt-3 d-flex justify-content-between align-items-center">
   
-  <!-- Left side: Permit Count -->
   <div class="d-flex align-items-center">
-    <!-- <p class="lableSyle mb-0 me-2 ml-2">Permit Count:</p>
-    <p class="lableSyle mb-0">2</p> -->
+   
+  <mat-form-field appearance="outline" class="mr-2" style="height: 75px;">
+    <mat-label style="color: black;">State</mat-label>
+    <input matInput placeholder="Placeholder" value="{{State}}">
+ </mat-form-field>
+
+ <mat-form-field appearance="outline"  style="height: 75px;">
+    <mat-label style="color: black;">City</mat-label>
+    <input matInput placeholder="Enter City" [(ngModel)]="City" (input)="OnValueChanges()" [matAutocomplete]="ctlist">
+     <mat-autocomplete #ctlist="matAutocomplete"
+                      [displayWith]="CityTypeAheadDisplay.bind(this)">
+                      <mat-option *ngIf="isCityLoading">
+                        <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
+                        </mat-spinner>
+                      </mat-option>
+                      <mat-option class ="mat-opt1" disabled>
+                        <div>
+                          <table>
+                            <tr class="tr">
+                              <td  style="width: 200px;">City</td>
+                             
+                            </tr>
+                          </table>
+                        </div>
+                      </mat-option>
+                      <mat-option *ngFor="let l of CityList | slice:0:30" [value]="l.City"  class ="mat-opt" >
+                        <div>
+                          <table>
+                            <tr class="tr">
+                              <td class="td td1" style="width: 200px;">{{l.City}}</td>
+                             
+                            </tr>
+                          </table>
+                        </div>
+                      </mat-option>
+                      <mat-option *ngIf="CityList.length == 0" disabled>
+                        No Options
+                      </mat-option>
+      </mat-autocomplete>
+ </mat-form-field>
+
   </div>
 
-  <!-- Right side: Paginator and Download button -->
+  
   <div class="d-flex align-items-center mr-2">
-    <mat-paginator 
+    <!-- <mat-paginator 
       *ngIf="PermitList != null"
       [length]="dataCount"
       [pageSize]="pageSize"
       [pageSizeOptions]="pageOption"
       (page)="paginatorevt($event)"
       #paginator>
-    </mat-paginator>
+    </mat-paginator> -->
 
     <a class="btn btn-sm rounded-1 ms-2" style="border: 1px solid #1c4876;" (click)="DownloadExcel()">
       <i class="fa-solid fa-download"></i>
