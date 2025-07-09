@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component  } from '@angular/core';
+import {  Location } from '@angular/common';
 //import { FormBuilder, FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 
 @Component({
@@ -8,40 +9,18 @@ import { Component } from '@angular/core';
  
 })
 export class FooterComponent {
-  //newFormGroup!  : FormGroup;
-  constructor(
-    //private fb: FormBuilder
-
-  ){
-
+ constructor(private location : Location){
+  
   }
   liistodCategory : Array<any> = [];
   ngOnInit()
   {
-    this.liistodCategory = [
-      {
-    title: 'E-commerce',
-    icon: 'shopping-cart-outline',
-    link: '/pages/dashboard',
-    home: true,
-  },
-  {
-    title: 'IoT Dashboard',
-    icon: 'home-outline',
-    link: '/pages/iot-dashboard',
-  },
-  {
-    title: 'Permit List',
-    icon: 'grid-outline',
-    link : '/pages/dashboard'
-  },
-    ];
+    
   }
-  // initForm (){
-  //   this.newFormGroup = this.fb.group({
-  //     id : [ {value : '' , [Validators.required, Validators.pattern] }] 
-  //   })
-  // }
+  back()
+  {
+    this.location.back()
+  }
   
 }
 
