@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateMatrixComponent } from '../create-matrix/create-matrix.component';
 import * as XLSX from 'xlsx'
+import { SelectedPermitComponent } from '../selected-permit/selected-permit.component';
 @Component({
   selector: 'app-permit-list',
   templateUrl: './permit-list.component.html',
@@ -252,6 +253,17 @@ paginatorevt(evt: any) {
     else {
       this.GetAllPermits();
     }
+  }
+  ViewDetails()
+  {
+    let dialogRef = this.dialog.open(SelectedPermitComponent, {
+      data: ''
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res != null) {
+       
+      }
+    });
   }
 }
 

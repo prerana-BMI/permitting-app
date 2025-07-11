@@ -171,12 +171,17 @@
       (page)="paginatorevt($event)"
       #paginator>
     </mat-paginator> -->
+    <div>
+      <a class="btn btn-sm rounded-1 mr-2" style="border: 1px solid #1c4876; color: #1c4876;" title="View"
+        (click)="ViewDetails()">
+        <i class="far fa-eye"></i>
+      </a>
+    </div>
 
-    <a class="btn btn-sm rounded-1 ms-2" style="border: 1px solid #1c4876;" (click)="DownloadExcel()">
+    <a class="btn btn-sm rounded-1 ms-2" style="border: 1px solid #1c4876;color: #1c4876;" (click)="DownloadExcel()" >
       <i class="fa-solid fa-download"></i>
     </a>
   </div>
-
 </div>
 
  <div class="row">
