@@ -11,15 +11,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace permitapi.Controllers
 {
+
+    [Authorize]
     [Route("api/[controller]")]
 
-    // [Authorize]
-    public class AccountController : ControllerBase
+   public class AccountController : ControllerBase
     {
         private readonly permit_account_serviceContext _context;
-        public AccountController(permit_account_serviceContext context)
+        private readonly ICurrentUserService _currentUserService;
+        public AccountController(permit_account_serviceContext context, ICurrentUserService currentUserService)
         {
             _context = context;
+            _currentUserService = currentUserService;
         }
 
         [HttpGet]
@@ -80,6 +83,7 @@ namespace permitapi.Controllers
                     UserObj.UserName = UserName;
                     UserObj.UserRole = "User";
                     UserObj.IsActive = false;
+                    UserObj.CreatedBy = _currentUserService.User.UserId;
                     _context.Users.Add(UserObj);
                     _context.SaveChanges();
                 }
@@ -156,6 +160,7 @@ namespace permitapi.Controllers
                     UserObj.UserName = Request.UserName;
                     UserObj.UserRole = Request.UserRole;
                     UserObj.IsActive = Request.IsActive;
+                    UserObj.CreatedBy = _currentUserService.User.UserId;
                     _context.Users.Add(UserObj);
                     BaseObj.Message = "User Data Saved";
 

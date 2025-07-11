@@ -10,9 +10,7 @@ import {  Location } from '@angular/common';
 })
 export class FooterComponent {
  constructor(private location : Location){
-  
-  }
-  liistodCategory : Array<any> = [];
+ }
   ngOnInit()
   {
     

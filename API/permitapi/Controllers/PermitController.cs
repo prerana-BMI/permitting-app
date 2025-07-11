@@ -6,22 +6,27 @@ using AutoMapper;
 using contract;
 using contract.Entities;
 using Data.DbEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace permitapi.Controllers
 {
+
+    [Authorize]
     [Route("api/[controller]")]
     public class PermitController : ControllerBase
     {
         private readonly permit_account_serviceContext _context;
         private readonly IMapper _mapper;
+        private readonly ICurrentUserService _currentUserService;
 
-        public PermitController(permit_account_serviceContext context, IMapper mapper)
+        public PermitController(permit_account_serviceContext context, IMapper mapper, ICurrentUserService currentUserService)
         {
             _context = context;
             _mapper = mapper;
+            _currentUserService = currentUserService;
         }
-
+        
         [HttpGet]
         [Route("GetAllMasterPermits")]
         public BaseReturn<List<EPermitMaster>> GetAllMasterPermits(EPermitMaster Request)
@@ -30,7 +35,7 @@ namespace permitapi.Controllers
             List<EPermitMaster> Result = new List<EPermitMaster>();
             try
             {
-
+               
                 Result = _context.PermitMasters.Where(a =>
                                                 (a.Category.Contains(Request.Category) || string.IsNullOrEmpty(Request.Category)) &&
                                                 (a.PermitName.Contains(Request.PermitName) || string.IsNullOrEmpty(Request.PermitName)))
@@ -43,7 +48,9 @@ namespace permitapi.Controllers
                     County = a.County,
                     Level = a.Level,
                     RegulatoryAgencyName = a.RegulatoryAgencyName,
-                    Id = a.Id
+                    Id = a.Id,
+                    pageIndex = Request.pageIndex,
+                    pageSize = Request.pageSize
                 })
                 .OrderByDescending(a => a.Id)
                 .ToList();
@@ -190,6 +197,7 @@ namespace permitapi.Controllers
                         permitObj.Level = Request.Level;
                         permitObj.City = Request.City;
                         permitObj.State = Request.State;
+                        permitObj.CreatedBy = _currentUserService.User.UserId;
                         permitObj.RegulatoryAgencyName = Request.RegulatoryAgencyName;
                         permitObj.RegulatoryAgencyId = Request.RegulatoryAgencyId;
                         PermitDetailsObj.Description = Request.Description;
@@ -266,7 +274,8 @@ namespace permitapi.Controllers
                     TypeOfProject = Request.TypeOfProject,
                     MatrixName = Request.MatrixName,
                     ClientId = Request.ClientId,
-                    PermitList = Request.PermitList
+                    PermitList = Request.PermitList,
+                    CreatedBy = _currentUserService.User.UserId
                 };
                 _context.PermitMatrices.Add(PermitObj);
                 _context.SaveChanges();

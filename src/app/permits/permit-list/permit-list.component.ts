@@ -19,7 +19,7 @@ export class PermitListComponent {
   State :string | null;
   PermitList : Array<any> = [];
   pageSize: number = 10;
-  SelecAll : boolean= true;
+  SelecAll : boolean= false;
   pageOption: any;
   pageIndex: number = 1;
   SearchForm!: FormGroup;
@@ -163,9 +163,6 @@ paginatorevt(evt: any) {
       if (res["Success"]) {
         this.PermitList = res['Data'];
         this.dataCount = res['Count'];
-        this.PermitList.forEach(a => {
-          a.Ischecked = true
-        });
       }
     })
   }
@@ -221,23 +218,27 @@ paginatorevt(evt: any) {
   }
    CityTypeAheadDisplay(val: any) {
     let res = this.CityList.find(a => a.City == val);
-    if (res != null) {
+   
       this.GetAllPermits();
       return res.City;
-    };
-    return '';
+   
   }
 
-  OnValueChanges()
-  {
-
+  OnValueChanges() {
     this.isCityLoading = true;
-        this.HttpService.httpGetCall(`${Constants.GetCityBySearchText}?City=${this.City??"".toLowerCase()}&State=${this.State??"".toLowerCase()}`,false,false).subscribe((res :any) => {
-          if (res["Success"] ) {
-            this.CityList = res["Data"];
-          }
-          this.isCityLoading = false;
-        });
-}
+    this.CityList =[];
+    this.PermitList =[];
+    if (this.City) {
+      this.HttpService.httpGetCall(`${Constants.GetCityBySearchText}?City=${this.City ?? "".toLowerCase()}&State=${this.State ?? "".toLowerCase()}`, false, false).subscribe((res: any) => {
+        if (res["Success"]) {
+          this.CityList = res["Data"];
+        }
+        this.isCityLoading = false;
+      });
+    }
+    else {
+      this.GetAllPermits();
+    }
+  }
 }
 
