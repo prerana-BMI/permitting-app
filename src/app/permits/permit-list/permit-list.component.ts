@@ -39,6 +39,7 @@ export class PermitListComponent {
   RegagencyList :  Array<any> = [];
   CityList : Array<any> = [];
   isCityLoading : boolean= false;
+  ListOfId : Array<any> = [];
   constructor(private httpService: HttpService,
     private toastr: ToastrService,
     public router: Router,
@@ -86,7 +87,6 @@ paginatorevt(evt: any) {
   Clear()
   {
     this.SearchForm.reset();
-    this.PermitList = [];
     this.RegagencyList = [];
     this.GetAllPermits();
   }
@@ -95,13 +95,21 @@ paginatorevt(evt: any) {
     this.PermitList.forEach(a => {
       a.Ischecked =isChecked ?  true : false
     });
-  }
-  OnSingleChange(event: any, Id: number) : void  {
-     const isChecked = (event.target as HTMLInputElement).checked;
-    
-      this.PermitList.filter(a => a.Id == Id)[0].Ischecked = isChecked
 
-    
+    this.ListOfId = this.PermitList.filter(a=>a.Ischecked == true ).map(a=>a.Id);
+  }
+  OnSingleChange(event: any, Id: number): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    this.PermitList.filter(a => a.Id == Id)[0].Ischecked = isChecked;
+    let idx = this.ListOfId.findIndex(x=>x ==Id);
+    if (isChecked) {
+      this.ListOfId.push(Id);
+    }
+    else if(idx != -1)
+    {
+     
+      this.ListOfId.splice(idx,1)
+    }
   }
   InitializedTypeAhead()
   {
@@ -162,6 +170,10 @@ paginatorevt(evt: any) {
     this.httpService.httpGetCall(Constants.GetPermitByLocation ,param, true).subscribe((res: any)=>{
       if (res["Success"]) {
         this.PermitList = res['Data'];
+        this.PermitList.forEach(element => {
+          let isItemExist = this.ListOfId.find(a => a == element.Id) ? true : false;
+          element.Ischecked = isItemExist
+        });
         this.dataCount = res['Count'];
       }
     })
@@ -228,6 +240,7 @@ paginatorevt(evt: any) {
     this.isCityLoading = true;
     this.CityList =[];
     this.PermitList =[];
+    this.ListOfId = [];
     if (this.City) {
       this.HttpService.httpGetCall(`${Constants.GetCityBySearchText}?City=${this.City ?? "".toLowerCase()}&State=${this.State ?? "".toLowerCase()}`, false, false).subscribe((res: any) => {
         if (res["Success"]) {
