@@ -1,6 +1,6 @@
 
 
-<div class="col-md-12 rounded PageLayout" style="height:700px;">
+<div class="col-md-12 rounded PageLayout" style="min-height:300px;">
   <div class="d-flex mt-2" [formGroup]="SearchForm" style="border-bottom: 1px solid #e1dbdba6;">
     <div class="col-lg-4 col-md-4 col-sm-12 p-1">
       <div class="form-group">
@@ -68,11 +68,22 @@
               </tr>
             </tbody>
           </table>
-
-
         </div>
       </div>
 
+    <div class="row">
+    <div class="col-md-12 d-flex justify-content-end">
+      <div class="col-lg-1 col-md-2 col-sm-4 p-1 mr-2">
+        <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn" style="margin-top: 0px;"
+          (click)="EditMtrix()">
+          <span style=" margin: 0 1px;"></span>
+            <i class="fas fa-edit"></i>
+          <span class="flex-grow-1 text-start">Edit</span>
+
+        </button>
+      </div>
+    </div>
+  </div>
     </div>
 
   </div>

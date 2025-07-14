@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CreateMatrixComponent } from '../create-matrix/create-matrix.component';
 import * as XLSX from 'xlsx'
 import { SelectedPermitComponent } from '../selected-permit/selected-permit.component';
+import { DatatransferService } from 'src/app/services/datatransfer.service';
 @Component({
   selector: 'app-permit-list',
   templateUrl: './permit-list.component.html',
@@ -42,6 +43,7 @@ export class PermitListComponent {
   isCityLoading : boolean= false;
   ListOfId : Array<any> = [];
   SelectedCount : number = 0 ;
+  NavigatedData  : any;
   constructor(private httpService: HttpService,
     private toastr: ToastrService,
     public router: Router,
@@ -49,6 +51,8 @@ export class PermitListComponent {
     private route: ActivatedRoute,
     private  HttpService : HttpService,
     private dialog: MatDialog,
+    private Router : Router,
+    private datatransferService : DatatransferService
   ) {
   this.State = this.route.snapshot.paramMap.get('state');
   this.City= this.route.snapshot.paramMap.get('city');
@@ -59,11 +63,20 @@ export class PermitListComponent {
       Category: '',
       PermitName: '',
       RegulatoryAgency: ''
-  });
- this.CityList.push({City : this.City});
+    });
+    this.CityList.push({ City: this.City });
+    let res = this.datatransferService.getData();
+    if (res != null) {
+      this.datatransferService.setData(null);
+      this.NavigatedData = res;
+      this.ListOfId = this.NavigatedData?.data;
+      this.SelectedCount = this.NavigatedData?.data?.length;
+    }
+
  this.GetAllPermits();
  this.InitializedTypeAhead();
  this.GetMasterCategory();
+
  }
 
   GetMasterCategory() {
@@ -120,24 +133,24 @@ paginatorevt(evt: any) {
   }
   InitializedTypeAhead()
   {
-  this.SearchForm.controls['PermitName'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
-        this.PermitNameList = [];
-        if (typeof val === 'string' && val.length >= 1) {
-           this.ispermitLoading = true;
-          this.HttpService.httpGetCall(Constants.GetPermitNameBySearchText +  val.toLowerCase(),false , false).subscribe((res :any) => {
-            if (res["Success"]) {
-  
-              this.PermitNameList = res["Data"];
-            }
-            this.ispermitLoading = false;
-          });
-        }
-      });
-      this.SearchForm.controls['RegulatoryAgency'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
-     
+    this.SearchForm.controls['PermitName'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
+      this.PermitNameList = [];
       if (typeof val === 'string' && val.length >= 1) {
-         this.isAgencyLoading = true;
-        this.HttpService.httpGetCall(Constants.GetRegulatoryAgencyBySearchText+  val.toLowerCase(),false , false).subscribe((res :any) => {
+        this.ispermitLoading = true;
+        this.HttpService.httpGetCall(Constants.GetPermitNameBySearchText + val.toLowerCase(), false, false).subscribe((res: any) => {
+          if (res["Success"]) {
+
+            this.PermitNameList = res["Data"];
+          }
+          this.ispermitLoading = false;
+        });
+      }
+    });
+    this.SearchForm.controls['RegulatoryAgency'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
+
+      if (typeof val === 'string' && val.length >= 1) {
+        this.isAgencyLoading = true;
+        this.HttpService.httpGetCall(Constants.GetRegulatoryAgencyBySearchText + val.toLowerCase(), false, false).subscribe((res: any) => {
           if (res["Success"]) {
 
             this.RegagencyList = res["Data"];
@@ -178,14 +191,26 @@ paginatorevt(evt: any) {
       if (res["Success"]) {
         this.PermitList = res['Data'];
         this.PermitList.forEach(element => {
-          let isItemExist = this.ListOfId.find(a => a == element.Id) ? true : false;
-          element.Ischecked = isItemExist
+          let isItemExist = this.ListOfId?.find(a => a == element.Id) ? true : false;
+          element.Ischecked = isItemExist;
         });
         this.dataCount = res['Count'];
       }
     })
   }
   CreateMatrix() {
+    if (this.NavigatedData != null) {
+      let param = {
+        Id: this.NavigatedData.MatrixId,
+        PermitList: this.PermitList.filter(a => a.Ischecked == true).map(a => a.Id).join(',')
+       };
+      this.HttpService.httpPostCall(Constants.SavePermitMatrix, param).subscribe((res: any) => {
+        if (res["Success"]) {
+          this.Router.navigate(["/permits/MatrixList"]);
+        }
+      });
+      return;
+    }
     let dialogRef = this.dialog.open(CreateMatrixComponent, {
       data: this.PermitList.filter(a => a.Ischecked == true).map(a => a.Id)
     });
@@ -237,9 +262,10 @@ paginatorevt(evt: any) {
   }
    CityTypeAheadDisplay(val: any) {
     let res = this.CityList.find(a => a.City == val);
-   
-      this.GetAllPermits();
-      return res.City;
+     if (res != null) {
+       this.GetAllPermits();
+       return res.City;
+     }
    
   }
 

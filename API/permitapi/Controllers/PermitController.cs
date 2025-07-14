@@ -269,6 +269,16 @@ namespace permitapi.Controllers
             try
             {
 
+                if (Request.Id > 0)
+                {
+                    var UpdatePermit = _context.PermitMatrices.Where(a => a.Id == Request.Id).FirstOrDefault();
+                    UpdatePermit.PermitList = Request.PermitList;
+                    _context.PermitMatrices.Update(UpdatePermit);
+                    _context.SaveChanges();
+                    BaseObj.Message = "Matrix Updated";
+                    BaseObj.Success = true;
+                    return BaseObj;
+                }
                 var PermitObj = new PermitMatrix()
                 {
                     TypeOfProject = Request.TypeOfProject,
@@ -279,6 +289,7 @@ namespace permitapi.Controllers
                 };
                 _context.PermitMatrices.Add(PermitObj);
                 _context.SaveChanges();
+
                 BaseObj.Message = "New Matrix Added";
 
 
@@ -401,7 +412,8 @@ namespace permitapi.Controllers
                             PrepTimeMax = detail.PrepTimeMax,
                             AgencyReviewTimeMin = detail.AgencyReviewTimeMin,
                             AgencyReviewTimeMax = detail.AgencyReviewTimeMax,
-                            BasicFees = detail.BasicFees
+                            BasicFees = detail.BasicFees,
+                            Id =permit.Id
                         })
                     .ToList();
 
