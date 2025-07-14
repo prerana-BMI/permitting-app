@@ -64,7 +64,7 @@
           <div>
             <table>
               <tr class="tr">
-                <td style="width: 200px;">Agenct Name</td>
+                <td style="width: 200px;">Agency Name</td>
       
               </tr>
             </table>
@@ -172,6 +172,11 @@
       #paginator>
     </mat-paginator> -->
     <div>
+     
+      <span class="badge px-2 py-1 mr-2 text-white" style="background-color: #1c4876;">
+        Selected Count : {{ SelectedCount}}
+      </span>
+   
       <a class="btn btn-sm rounded-1 mr-2" style="border: 1px solid #1c4876; color: #1c4876;" title="View"
         (click)="ViewDetails()">
         <i class="far fa-eye"></i>

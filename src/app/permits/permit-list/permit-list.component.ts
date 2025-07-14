@@ -41,6 +41,7 @@ export class PermitListComponent {
   CityList : Array<any> = [];
   isCityLoading : boolean= false;
   ListOfId : Array<any> = [];
+  SelectedCount : number = 0 ;
   constructor(private httpService: HttpService,
     private toastr: ToastrService,
     public router: Router,
@@ -91,6 +92,9 @@ paginatorevt(evt: any) {
     this.RegagencyList = [];
     this.GetAllPermits();
   }
+  getSelectedCount(): number {
+    return this.SelectedCount = this.PermitList?.filter(item => item.Ischecked)?.length || 0;
+  }
   SelectAll(event: any) {
      const isChecked = (event.target as HTMLInputElement).checked;
     this.PermitList.forEach(a => {
@@ -98,6 +102,7 @@ paginatorevt(evt: any) {
     });
 
     this.ListOfId = this.PermitList.filter(a=>a.Ischecked == true ).map(a=>a.Id);
+    this.getSelectedCount();
   }
   OnSingleChange(event: any, Id: number): void {
     const isChecked = (event.target as HTMLInputElement).checked;
@@ -111,6 +116,7 @@ paginatorevt(evt: any) {
      
       this.ListOfId.splice(idx,1)
     }
+      this.getSelectedCount();
   }
   InitializedTypeAhead()
   {
