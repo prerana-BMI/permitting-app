@@ -86,39 +86,45 @@
   <div class="row">
     <div class="col-md-12">
       <div class="card-body">
-        <div class="table-responsive-md" style="max-height: 350px; overflow-y: auto;">
-          <table class="table table-hover">
-            <thead style="position: sticky; top: 0; z-index: 0;">
+        <div style="overflow-x: auto; padding-right: 14px;">
+          <table class="table table-hover m-0" style="table-layout: fixed; width: 100%;">
+            <thead>
               <tr style="background-color: #bbbbbb4d; border: 1px solid #e1dbdba6;">
-               
+        
                 <th style="width: 80px;">Matrix Name</th>
                 <th style="width: 150px;">Client Name</th>
                 <th style="width: 60px;">Type Of Project</th>
                 <th style="width: 80px;">Permit Count</th>
-                 <th style="width: 60px;">Action</th>
-
+                <th style="width: 60px;">Action</th>
+        
               </tr>
             </thead>
+          </table>
+        </div>
+        <div style="max-height: 300px; overflow-y: auto; overflow-x: hidden;">
+          <table class="table table-hover m-0" style="table-layout: fixed; width: 100%;">
             <tbody class="">
               <tr *ngFor="let item of MatrixList; let i = index">
-              
+        
                 <td>{{item.MatrixName}}</td>
                 <td>{{item.ClientName}}</td>
                 <td>{{item.TypeOfProject}}</td>
-
+        
                 <td>{{item.PermitCount}}</td>
                 <td>
-                  <a class="btn btn-sm rounded-1" style="border: 1px solid #1c4876; color: #1c4876;" title="View" (click)="ViewDetails(item.Id)">
+                  <a class="btn btn-sm rounded-1" style="border: 1px solid #1c4876; color: #1c4876;" title="View"
+                    (click)="ViewDetails(item.Id)">
                     <i class="far fa-eye"></i>
                   </a>
                 </td>
               </tr>
-
+        
             </tbody>
           </table>
-
-
         </div>
+
+
+        
       </div>
 
     </div>
