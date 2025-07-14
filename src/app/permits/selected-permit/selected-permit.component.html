@@ -10,10 +10,10 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <span class="badge px-2 py-1 mr-2 text-white" style="background-color: #1c4876;">
-                            {{ category.name }}
+                            {{ category[0] }}
                         </span>
-                        <a href="#" class="text-muted small ml-1">
-                            ({{ category.count }} permits)
+                        <a  class="text-muted small ml-1">
+                            ({{ category[1].length }} permits)
                         </a>
                     </div>
                     <i class="fa" [ngClass]="category.expanded ? 'fa-chevron-up' : 'fa-chevron-down'"
@@ -30,9 +30,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let permit of category.permits">
-                                <td>{{ permit.name }}</td>
-                                <td>{{ permit.level }}</td>
+                            <tr *ngFor="let permit of category[1]">
+                                <td>{{ permit.PermitName }}</td>
+                                <td>{{ permit.Level }}</td>
                             </tr>
                         </tbody>
                     </table>

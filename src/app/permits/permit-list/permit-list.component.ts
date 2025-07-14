@@ -68,7 +68,7 @@ export class PermitListComponent {
   GetMasterCategory() {
     this.HttpService.httpGetCall(Constants.CategoryList, false, false).subscribe((res: any) => {
       if (res["Success"]) {
-        this.CategoryList = res["Data"]
+        this.CategoryList = res["Data"];
       }
     })
   }
@@ -127,7 +127,7 @@ paginatorevt(evt: any) {
           });
         }
       });
-         this.SearchForm.controls['RegulatoryAgency'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
+      this.SearchForm.controls['RegulatoryAgency'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
      
       if (typeof val === 'string' && val.length >= 1) {
          this.isAgencyLoading = true;
@@ -183,7 +183,7 @@ paginatorevt(evt: any) {
     let dialogRef = this.dialog.open(CreateMatrixComponent, {
       data: this.PermitList.filter(a => a.Ischecked == true).map(a => a.Id)
     });
-    dialogRef.afterClosed().subscribe(res => {
+    dialogRef.afterClosed().subscribe(res=> {
       if (res != null) {
         this.GetAllPermits();
       }
@@ -257,7 +257,7 @@ paginatorevt(evt: any) {
   ViewDetails()
   {
     let dialogRef = this.dialog.open(SelectedPermitComponent, {
-      data: ''
+      data: this.PermitList.filter(a=>a.Ischecked == true),
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res != null) {

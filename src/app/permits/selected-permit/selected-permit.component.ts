@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-selected-permit',
@@ -7,63 +7,30 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./selected-permit.component.scss']
 })
 export class SelectedPermitComponent {
-  constructor(public dialogRef: MatDialogRef<SelectedPermitComponent>,)
+  permitCategories : Array<any> = [];
+  constructor(public dialogRef: MatDialogRef<SelectedPermitComponent>,
+     @Inject(MAT_DIALOG_DATA) public data: any,
+  )
   {
-
+   let permitCategories = data.reduce((acc: any, item: any) => {
+      const key = item.Category || 'Uncategorized';
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(item);
+      return acc;
+    }, {} as { [key: string]: typeof data });
+    this.permitCategories = Object.entries(permitCategories);
+    this.permitCategories.forEach(a=>a.expanded = false);
+  }
+  ngOnInit()
+  {
+    
+    this.permitCategories;
   }
 searchTerm = '';
 
-  permitCategories = [
-    {
-      name: 'Air Quality Permits',
-      count: 2,
-      colorClass: 'bg-secondary text-white',
-      expanded: false,
-      permits: [
-        { name: 'Air Permit A', level: 'State' },
-        { name: 'Air Permit B', level: 'Federal' }
-      ]
-    },
-    {
-      name: 'Coastal Zone Permits',
-      count: 1,
-      colorClass: 'bg-secondary text-white',
-      expanded: false,
-      permits: [
-        { name: 'Coastal Permit C', level: 'County' }
-      ]
-    },
-    {
-      name: 'Solid and Hazardous Waste Permits',
-      count: 1,
-      colorClass: 'bg-secondary text-white',
-      expanded: false,
-      permits: [
-        { name: 'Hazardous Permit D', level: 'State' }
-      ]
-    },
-    {
-      name: 'Wastewater and Stormwater Permits',
-      count: 2,
-      colorClass: 'bg-secondary text-white',
-      expanded: false,
-      permits: [
-        { name: 'Stormwater Permit E', level: 'Federal' },
-        { name: 'Stormwater Permit F', level: 'State' }
-      ]
-    },
-    {
-      name: 'Wetlands/Surface Water Permits',
-      count: 3,
-      colorClass: 'bg-secondary text-white',
-      expanded: false,
-      permits: [
-        { name: 'Wetland Permit G', level: 'County' },
-        { name: 'Wetland Permit H', level: 'State' },
-        { name: 'Wetland Permit I', level: 'Federal' }
-      ]
-    }
-  ];
+ 
 
   toggleCategory(index: number): void {
   this.permitCategories.forEach((cat, i) => {
