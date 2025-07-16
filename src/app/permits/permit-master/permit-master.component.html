@@ -126,37 +126,39 @@
  <div class="row">
     <div class="col-md-12">
       <div class="card-body">
-        <div class="table-responsive-md" style="max-height: 350px; overflow-y: auto;">
-          <table class="table table-hover">
+        <div style="overflow-x: auto; padding-right: 14px;">
+          <table class="table table-hover m-0" style="table-layout: fixed; width: 100%;">
             <thead style="position: sticky; top: 0; z-index: 0;">
               <tr style="background-color: #bbbbbb4d; border: 1px solid #e1dbdba6;">
-              
-                <th style="width: 80px;">Permit</th>
+                <th style="width: 120px;">Permit</th>
                 <th style="width: 150px;">Regulatory Agency</th>
                 <th style="width: 60px;">Category</th>
                 <th style="width: 60px;">Level</th>
                 <th style="width: 80px;">State</th>
-                <th style="width: 80px;">City</th>
+                <th style="width: 50px;">City</th>
                 <th style="width: 10px;">Action</th>
 
               </tr>
             </thead>
+            </table>
+            </div>
+            <div style="max-height: 300px; overflow-y: auto; overflow-x: hidden;">
+            <table  class="table table-hover m-0" style="table-layout: fixed; width: 100%;">
             <tbody class="">
-                <tr *ngFor="let item of PermitList; let i = index">
-                
-                <td>{{item.PermitName}}</td>
-                <td>{{item.RegulatoryAgencyName}}</td>
-                <td>{{item.Category}}</td>
-                <td>{{item.Level== null || item.Level=='' ? '--' : item.Level}}</td>
-                <td>{{item.State == null || item.State =="" ? '--' : item.State}}</td>
-                <td>{{item.City == null || item.City == '' ? '--' : item.City }}</td>
-                <td>
-                      <a class="btn btn-sm rounded-1" style="border: 1px solid #1c4876;" (click)="EditPermit(item.Id)">
-                        <i class="far fa-edit"></i>
-                      </a>
+              <tr *ngFor="let item of PermitList; let i = index">
+            
+                <td style="width: 120px;">{{item.PermitName}}</td>
+                <td style="width: 150px;">{{item.RegulatoryAgencyName}}</td>
+                <td style="width: 60px;">{{item.Category}}</td>
+                <td style="width: 60px;">{{item.Level== null || item.Level=='' ? '--' : item.Level}}</td>
+                <td style="width: 80px;">{{item.State == null || item.State =="" ? '--' : item.State}}</td>
+                <td style="width: 50px;">{{item.City == null || item.City == '' ? '--' : item.City }}</td>
+                <td style="width: 10px;">
+                  <a class="btn btn-sm rounded-1" style="border: 1px solid #1c4876;" (click)="EditPermit(item.Id)">
+                    <i class="far fa-edit"></i>
+                  </a>
                 </td>
-                </tr>
-              
+              </tr>
             </tbody>
           </table>
 

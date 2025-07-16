@@ -35,8 +35,8 @@
       </div>
     <div class="col-md-12 p-0">
       <div class="card-body">
-        <div class="table-responsive-md">
-          <table class="table table-hover">
+        <div style="overflow-x: auto; padding-right: 14px;">
+          <table class="table table-hover m-0" style="table-layout: fixed; width: 100%;">
             <thead>
             <tr style="background-color: #bbbbbb4d; border: 1px solid #e1dbdba6;">
               <th style="width: 80px;">Permit Name</th>
@@ -44,31 +44,35 @@
               <th style="width: 10px;">Level</th>
               <th style="width: 30px;">State</th>
               <th style="width: 30px;">City</th>
-              <th style="width: 50px;">Regulatory Agency</th>
-              <th style="width: 90px;">Prep Time (days)</th>
-              <th style="width: 90px;">Agency Req Time (days)</th>
+              <th style="width: 70px;">Regulatory Agency</th>
+              <th style="width: 70px;">Prep Time (days)</th>
+              <th style="width: 70px;">Agency Req Time (days)</th>
               <th style="width: 20px;">Basic Fees ($)</th>
             </tr>
             </thead>
-            <tbody class="">
-              <tr *ngFor="let i of PermitList;">
-                <td>{{i.PermitName}}</td>
-                <td>{{i.Category}}</td>
-                <td>{{i.Level}}</td>
-                <td>{{i.State}}</td>
-                <td>{{i.City}}</td>
-                <td>{{i.RegulatoryAgencyName}}</td>
-                <td>
-                {{i.PrepTimeMin }} {{ i.PrepTimeMax == null ? ' and above' : ' - ' + i.PrepTimeMax }} 
-                </td>
-                <td>
-                  {{ i.AgencyReviewTimeMin }} {{ i.AgencyReviewTimeMax == null ? ' and above' : ' - ' + i.AgencyReviewTimeMax }}
-                </td>
-                <td>{{i.BasicFees}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+            </table>
+            </div>
+            <div style="max-height: 300px; overflow-y: auto; overflow-x: hidden;">
+              <table class="table table-hover m-0" style="table-layout: fixed; width: 100%;">
+                <tbody class="">
+                  <tr *ngFor="let i of PermitList;">
+                    <td style="width: 80px;">{{i.PermitName}}</td>
+                    <td style="width: 50px;">{{i.Category}}</td>
+                    <td style="width: 10px;">{{i.Level}}</td>
+                    <td style="width: 30px;">{{i.State}}</td>
+                    <td style="width: 30px;">{{i.City}}</td>
+                    <td style="width: 70px;">{{i.RegulatoryAgencyName}}</td>
+                    <td style="width: 70px;">
+                      {{i.PrepTimeMin }} {{ i.PrepTimeMax == null ? ' and above' : ' - ' + i.PrepTimeMax }}
+                    </td>
+                    <td style="width: 70px;">
+                      {{ i.AgencyReviewTimeMin }} {{ i.AgencyReviewTimeMax == null ? ' and above' : ' - ' + i.AgencyReviewTimeMax }}
+                    </td>
+                    <td style="width: 20px;">{{i.BasicFees}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
       </div>
 
     <div class="row">
