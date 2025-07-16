@@ -17,43 +17,6 @@
   height: calc(3rem + 2px) !important;
   border-radius: 12;
 }
-
-.table td {
-  padding: 0.75rem;
-  vertical-align: center;
-  border-bottom: 1px solid #e1dbdba6 !important;
-  border-left: 1px solid #e1dbdba6;
-  border-right: 1px solid #e1dbdba6;
-
-}
-
-
-
-.big-checkbox {
-  transform: scale(1.5);
-  accent-color: #1c4876
-}
-
-.checkbox-cell {
-  width: 10px;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.mat-paginator {
-  background-color: #a7a7a7;
-
-  .mat-paginator-page-size {
-    align-items: center;
-
-    .mat-select-trigger {
-      transform: translateY(-8px);
-    }
-  }
-
-
-}
-
 .labelClass {
   display: block;
   border-bottom: 1px solid rgb(165 163 163 / 20%);
@@ -69,7 +32,7 @@
 }
 
 .FlterButton {
-  margin-top: 42px;
+  margin-top: 45px;
   font-size: 16px;
   width: 120px;
   font-family: Open Sans, sans-serif;
@@ -78,10 +41,6 @@
   line-height: 1.5rem;
 }
 
-.table th {
-  border-left: 1px solid rgb(225 219 219);
-  border-right: 1px solid rgb(225 219 219)
-}
 
 
 .custom-outline-btn {
@@ -107,28 +66,42 @@ border-radius: 12px;
 background: white;
 box-shadow: 1px 1px 2px rgb(91 101 130 / 18%);
 }
-.mat-opt {
-  display: flex;
-  justify-content: space-between;
-  padding: 4px 8px;
-  border-bottom:  1px solid #e1dbdba6 !important;
-  align-items: center;
-}
- .mat-opt1 {
-  display: flex;
-  justify-content: space-between;
-  padding: 4px 8px;
-  border-bottom: 1px solid #e1dbdba6 !important;
-  align-items: center;
+
+
+
+.table-container {
+  max-height: 300px;
+  overflow-y: auto;
+ 
 }
 
-.autocomplete-header {
-  font-weight: bold;
-  background-color: #f5f5f5;
-  border-bottom: 2px solid #ccc;
+/* Ensure exact match between header and body columns */
+.fixed-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
 }
 
-.autocomplete-cell {
-  width: 50%;
-  text-align: left;
+/* Sticky header styling */
+.fixed-table thead th {
+ 
+  top: 0;
+  background-color: #bbbbbb4d;
+  z-index: 2;
+  border-right: 1px solid #e1dbdba6;
+  font-family: Open Sans, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem;
+  box-sizing: border-box; /* ✅ Ensures width includes padding + border */
 }
+
+/* Data cell styling */
+.fixed-table td {
+  border: 1px solid #e1dbdba6;
+  font-size: 0.85rem;
+  padding: 0.5rem;
+  font-family: Open Sans, sans-serif;
+  box-sizing: border-box; /* ✅ Prevents overflow */
+}
+
