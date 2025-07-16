@@ -15,7 +15,7 @@
          Client Name
         </label>
         <input type="text" class="form-control custom-input" formControlName="RegulatoryAgency" [matAutocomplete]="agencyLst">
-                        <mat-autocomplete #agencyLst="matAutocomplete" [displayWith]="AgencyTypeAheadDisplay.bind(this)">
+                      <mat-autocomplete #agencyLst="matAutocomplete" [displayWith]="AgencyTypeAheadDisplay.bind(this)">
                         <mat-option *ngIf="isAgencyLoading">
                             <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
                             </mat-spinner>
@@ -106,12 +106,12 @@
             <tbody class="">
               <tr *ngFor="let item of MatrixList; let i = index">
         
-                <td>{{item.MatrixName}}</td>
-                <td>{{item.ClientName}}</td>
-                <td>{{item.TypeOfProject}}</td>
+                <td style="width: 80px;">{{item.MatrixName}}</td>
+                <td style="width: 150px;">{{item.ClientName}}</td>
+                <td style="width: 60px;">{{item.TypeOfProject}}</td>
         
-                <td>{{item.PermitCount}}</td>
-                <td>
+                <td style="width: 80px;">{{item.PermitCount}}</td>
+                <td style="width: 60px;">
                   <a class="btn btn-sm rounded-1" style="border: 1px solid #1c4876; color: #1c4876;" title="View"
                     (click)="ViewDetails(item.Id)">
                     <i class="far fa-eye"></i>
