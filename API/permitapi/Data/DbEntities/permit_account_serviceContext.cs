@@ -113,7 +113,7 @@ namespace Data.DbEntities
 
             modelBuilder.Entity<PermitMasterDetail>(entity =>
             {
-                entity.ToTable("permit_master_details");
+                entity.ToTable("permit_details");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
