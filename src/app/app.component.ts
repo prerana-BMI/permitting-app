@@ -19,7 +19,7 @@ showLoader : boolean = false;
   }
 
 async ngOnInit(): Promise<void> {
-    // 👇 Await redirect completion (this is critical)
+    // Await redirect completion (this is critical)
     const result = await this.msalService.instance.handleRedirectPromise();
 
     if (result?.account) {

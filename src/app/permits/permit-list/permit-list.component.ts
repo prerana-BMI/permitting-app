@@ -52,7 +52,8 @@ export class PermitListComponent {
     private  HttpService : HttpService,
     private dialog: MatDialog,
     private Router : Router,
-    private datatransferService : DatatransferService
+    private datatransferService : DatatransferService,
+     
   ) {
   this.State = this.route.snapshot.paramMap.get('state');
   this.City= this.route.snapshot.paramMap.get('city');
@@ -198,28 +199,35 @@ paginatorevt(evt: any) {
       }
     })
   }
-  CreateMatrix() {
-    if (this.NavigatedData != null) {
-      let param = {
-        Id: this.NavigatedData.MatrixId,
-        PermitList: this.PermitList.filter(a => a.Ischecked == true).map(a => a.Id).join(',')
-       };
-      this.HttpService.httpPostCall(Constants.SavePermitMatrix, param).subscribe((res: any) => {
-        if (res["Success"]) {
-          this.Router.navigate(["/permits/MatrixList"]);
-        }
-      });
-      return;
-    }
-    let dialogRef = this.dialog.open(CreateMatrixComponent, {
-      data: this.PermitList.filter(a => a.Ischecked == true).map(a => a.Id)
-    });
-    dialogRef.afterClosed().subscribe(res=> {
-      if (res != null) {
-        this.GetAllPermits();
+CreateMatrix(): void {
+  if (this.SelectedCount == 0) {
+    this.toastr.error("Please Select Applicable Permits");
+    return;
+  }
+
+  if (this.NavigatedData != null) {
+    let param = {
+      Id: this.NavigatedData.MatrixId,
+      PermitList: this.PermitList.filter(a => a.Ischecked == true).map(a => a.Id).join(',')
+    };
+    this.HttpService.httpPostCall(Constants.SavePermitMatrix, param).subscribe((res: any) => {
+      if (res["Success"]) {
+        this.Router.navigate(["/permits/MatrixList"]);
       }
     });
+    return;
   }
+
+  let dialogRef = this.dialog.open(CreateMatrixComponent, {
+    data: this.PermitList.filter(a => a.Ischecked == true).map(a => a.Id)
+  });
+
+  dialogRef.afterClosed().subscribe(res => {
+    if (res != null) {
+      this.GetAllPermits();
+    }
+  });
+}
   DownloadExcel()
   {
     let ExportData : Array<any> = [];
@@ -274,6 +282,7 @@ paginatorevt(evt: any) {
     this.CityList =[];
     this.PermitList =[];
     this.ListOfId = [];
+    this.SelectedCount = 0;
     if (this.City) {
       this.HttpService.httpGetCall(`${Constants.GetCityBySearchText}?City=${this.City ?? "".toLowerCase()}&State=${this.State ?? "".toLowerCase()}`, false, false).subscribe((res: any) => {
         if (res["Success"]) {

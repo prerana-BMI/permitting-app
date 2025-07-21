@@ -88,8 +88,9 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
     return ''
   }
   Search() {
-
-    this.router.navigate(["permits/permitlist", this.SearchForm.controls['state'].value,this.SearchForm.controls['city'].value]);
+let city = this.SearchForm.controls['city'].value =="Unknown"  || this.SearchForm.controls['city'].value ==null ? ""  :  this.SearchForm.controls['city'].value;
+let state  = this.SearchForm.controls['state'].value == "Unknown"  || this.SearchForm.controls['state'].value == null ? "" : this.SearchForm.controls['state'].value;
+this.router.navigate(["permits/permitlist",state ,city]);
   }
   handleCitySelected(Event: any) {
     this.CityList = [{ City: Event.City }];
