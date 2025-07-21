@@ -15,10 +15,6 @@ export class activeauthGuard implements CanActivate {
   ) {}
 
   canActivate(): boolean {
-    // return this.broadcastService.inProgress$.pipe(
-    //   filter(status => status === InteractionStatus.None),
-    //   take(1),
-    //   map(() => {
         const account = this.authService.instance.getActiveAccount();
         if (account) {
           return true;
@@ -26,31 +22,6 @@ export class activeauthGuard implements CanActivate {
           this.router.navigate(['/account/login']);
           return false;
         }
-    //   })
-    // );
+  
   }
 }
-
-// activeauth.guard.ts
-// import { inject } from '@angular/core';
-// import { CanActivateFn, Router } from '@angular/router';
-// import { MsalService } from '@azure/msal-angular';
-
-// export const activeauthGuard: CanActivateFn = () => {
-//   const msalService = inject(MsalService);
-//   const router = inject(Router);
-
-//   const activeAccount = msalService.instance.getActiveAccount();
-//   const allAccounts = msalService.instance.getAllAccounts();
-
-//   if (activeAccount || allAccounts.length > 0) {
-//     // If no activeAccount, set the first one
-//     if (!activeAccount && allAccounts.length > 0) {
-//       msalService.instance.setActiveAccount(allAccounts[0]);
-//     }
-//     return true;
-//   } else {
-//     router.navigate(['/account/login']); // change path if needed
-//     return false;
-//   }
-// };

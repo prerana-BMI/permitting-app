@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace permitapi.Controllers
 {
 
-    [Authorize]
+   
     [Route("api/[controller]")]
 
    public class AccountController : ControllerBase
@@ -92,7 +92,7 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
-                BaseObj.Message = ex.Message;
+               
                 BaseObj.Success = false;
             }
             finally

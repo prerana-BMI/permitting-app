@@ -31,12 +31,12 @@ public class CurrentUserService : ICurrentUserService
             {
                 User = new ApplicationUser
                 {
-                    Email = user.FindFirst(System.Security.Claims.ClaimTypes.Upn)?.Value ?? "",
+                    Email = user?.FindFirst(System.Security.Claims.ClaimTypes.Upn)?.Value ?? "",
 
                 };
                 var DbUser = context.Users.AsNoTracking().Where(a => a.UserName == User.Email).FirstOrDefault();
-                User.Role = DbUser.UserRole;
-                User.UserId = DbUser.Id;
+                User.Role = DbUser?.UserRole;
+                User.UserId = DbUser == null ? 0: DbUser.Id;
                 
             }
     }

@@ -31,49 +31,6 @@ export class AuthService {
      private toastr: ToastrService,
     private HttpService : HttpService) {}
 
-//  async loginSilently() {
-//  console.log('[MSAL] Init: Starting login flow...');
-
-//   // Step 0: Handle redirect if returning from Microsoft login
-//   const redirectResult = await this.msalService.instance.handleRedirectPromise();
-//   if (redirectResult !== null && redirectResult.account) {
-//     console.log('[MSAL] Redirect result: Setting active account:', redirectResult.account);
-//     this.msalService.instance.setActiveAccount(redirectResult.account);
-//   }
-//   let dataCountacc = this.msalService.instance.getActiveAccount();
-//   if (!dataCountacc) {
-//     const accounts = this.msalService.instance.getAllAccounts();
-//     if (accounts.length > 0) {
-//       console.log('[MSAL] Setting first available account as active.');
-//       this.msalService.instance.setActiveAccount(accounts[0]);
-//     }
-//   }
-
-//   // Step 1: Listen to MSAL login success
-//   this.msalBroadcastService.msalSubject$
-//   .pipe(
-//   filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS)
-//   ).subscribe((message: EventMessage) => {
-//     if (message.eventType === EventType.LOGIN_SUCCESS && message.payload) {
-//       const result = message.payload as AuthenticationResult;
-//       console.log('[MSAL] LOGIN_SUCCESS event received. Account:', result.account);
-//       this.msalService.instance.setActiveAccount(result.account);
-//       this.getAccessToken(result.account?.username || '');
-//     }
-//   });
-
-//   // Step 3: Check if there's an active account
-//       let account = this.msalService.instance.getActiveAccount();
-//       if (account) {
-//         //console.log('[MSAL] Existing session found. Using account:', account.username);
-//         this.getAccessToken(account.username);
-//       } else {
-//         console.log('[MSAL] No session found. Redirecting for login...');
-//         this.msalService.loginRedirect({ scopes: ['user.read'] });
-//       }
-    
- 
-// }
 
 
   // Step 6: Acquire and log access token
@@ -94,15 +51,22 @@ export class AuthService {
        console.log('Access Token:', response.accessToken); // ✅ Log token
 
       })
-      .catch(error => {
+     .catch(error => {
+  console.error("Silent token acquisition failed", error);
          localStorage.removeItem('user');
         localStorage.removeItem('token');
-        this.msalService.loginRedirect({
-          scopes: ['user.read']
-        });
-        // Fallback to redirect if needed
-        //this.msalService.loginRedirect();
+
+  if (error instanceof InteractionRequiredAuthError) {
+    // 👇 Prevent duplicate redirects
+    if (!this.msalService.instance.getActiveAccount()) {
+      this.msalService.loginRedirect({
+        scopes: ['user.read']
       });
+    }
+  } else {
+    console.error("Unexpected error", error);
+  }
+});
     
   }
   GetLoggedInUser() {
@@ -129,6 +93,8 @@ export class AuthService {
       }
       else{
         this.toastr.error('You are an unauthorized user,Please contact your help tesk team!');
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
         this.router.navigate(['/account/login']);
       }
       })
