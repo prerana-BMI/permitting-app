@@ -81,27 +81,67 @@
   </div>
 
 </div>
-<div class="row d-flex mt-5">
+<div class="row d-flex mt-5" >
     <div class="col-12 col-xl-8 mb-4">
-        <div class="map-container">
-          <app-map (citySelected)="handleCitySelected($event)" [StateName]="SelectedStateName"></app-map>
+      <div class="map-container">
+        <app-map [selectedLocationsFromParent]="selectedLocations" (citySelected)="handleCitySelected($event)"></app-map>
+      </div>
+    </div>
+      <div class="col-12 col-xl-2">
+        <div class="container">
+          <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+              Selected States
+            </div>
+            <div class="card-body p-0">
+              <table class="table table-bordered table-hover mb-0">
+                <tbody>
+                  <tr *ngFor="let state of selectedStates; let i = index">
+                    <td>
+                      <span class="badge bg-light text-dark px-2 py-1 rounded-pill">
+                        {{ state.State }}
+                        <span class="text-danger ms-2 fw-bold cursor-pointer"  (click)="removeState(state)">
+                          &times;
+                        </span>
+                      </span>
+                    </td>
+                  </tr>
+      
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-12 col-xl-4 mb-4">
-        <div class="card border-10 rounded-0">
-          <div class="card-title mb-1 p-3 d-flex">
-            <h5>Join Us</h5>
-            <a class="btn ml-auto p-0 text-lightning"> <i class="fas fa-ellipsis"></i> </a>
-          </div>
-          <div class="card-body">
-            <p>Be a part of something big. Find your next job and build your story at Burns & McDonnell
-              <a target="_blank" href="https://www.burnsmcd.com/careers">
-                <i class="fa fa-arrow-circle-right"></i>
-              </a>
-              <br>
-            </p>
+
+         <div class="col-12 col-xl-2">
+        <div class="container">
+          <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+              Selected Cities
+            </div>
+            <div class="card-body p-0">
+              <table class="table table-bordered table-hover mb-0">
+                <tbody>
+                  <tr *ngFor="let state of selectedCities; let i = index">
+                    <td>
+                      <span class="badge bg-light text-dark px-2 py-1 rounded-pill">
+                        {{ state.City }}
+                        <span class="text-danger ms-2 fw-bold cursor-pointer" (click)="removeCity(state)">
+                          &times;
+                        </span>
+                      </span>
+                    </td>
+                  </tr>
+      
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
+    
+
+
   </div>
 

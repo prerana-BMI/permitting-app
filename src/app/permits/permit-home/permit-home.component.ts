@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs';
@@ -18,7 +18,9 @@ export class PermitHomeComponent {
   typeaheadDebounce : number = 500;
   StateList : Array<any> = [];
   SelectedStateName : string = '';
- 
+  selectedLocations: { City: string; State: string }[] = [];
+  selectedStates:  Array<any> = [];
+  selectedCities:  Array<any> = [];
   constructor(private Formbuilder : FormBuilder,
     private HttpService : HttpService,
     private router : Router
@@ -30,6 +32,7 @@ ngOnInit()
 {
   this.InitForm();
   this.initializeTyopeAhead();
+   
 }
 
 
@@ -87,17 +90,52 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
     }
     return ''
   }
+  
   Search() {
-let city = this.SearchForm.controls['city'].value =="Unknown"  || this.SearchForm.controls['city'].value ==null ? ""  :  this.SearchForm.controls['city'].value;
-let state  = this.SearchForm.controls['state'].value == "Unknown"  || this.SearchForm.controls['state'].value == null ? "" : this.SearchForm.controls['state'].value;
-this.router.navigate(["permits/permitlist",state ,city]);
+    let city = this.SearchForm.controls['city'].value == "Unknown" || this.SearchForm.controls['city'].value == null ? "" : this.SearchForm.controls['city'].value;
+    let state = this.SearchForm.controls['state'].value == "Unknown" || this.SearchForm.controls['state'].value == null ? "" : this.SearchForm.controls['state'].value;
+    this.router.navigate(["permits/permitlist", state, city]);
   }
-  handleCitySelected(Event: any) {
-    this.CityList = [{ City: Event.City }];
-    this.StateList = [{ State: Event.State }];
-    this.SearchForm.patchValue({
-      city: Event.City,
-      state: Event.State
-    })
+
+  handleCitySelected(Event : any) {
+   const existing = this.selectedLocations.find(loc => loc.City === Event.City && loc.State === Event.State);
+    const result = {
+      City: Event.City,
+      State: Event.State
+    };
+    if (!existing) {
+      this.selectedLocations.push(result);
+    }
+    else if(Event.Selected == "N") {
+     let idx = this.selectedLocations.findIndex(loc => loc.City === Event.City && loc.State === Event.State);
+     if(idx == -1)
+     {
+      let idx1 = this.selectedLocations.findIndex(loc =>  loc.State === Event.State);
+      this.selectedLocations.splice(idx1,1);
+     }
+      this.selectedLocations.splice(idx,1);
+    }
+    
+    this.selectedStates = this.selectedLocations.filter(a => a.State && a.State != 'Unknown').filter((item, index, self) =>index === self.findIndex(t => t.State === item.State));
+    this.selectedCities = this.selectedLocations.filter(a=>a.City != null && a.City != undefined && a.City != '' && a.City != 'Unknown');
+
   }
+
+ removeState(state : any): void {
+  let statelistIndex = this.selectedStates.findIndex(a=>a.State == state.State );
+  let stateobjindex = this.selectedLocations.findIndex(a=>a.State == state.State );
+  const updated = [...this.selectedLocations];
+  updated.splice(stateobjindex, 1);
+  this.selectedStates.splice(statelistIndex,1);
+  this.selectedLocations = updated; 
+}
+removeCity(state : any)
+{
+ let citylistIndex = this.selectedCities.findIndex(a=>a.State == state.State  && a.City == state.City);
+let cityobjindex = this.selectedLocations.findIndex(a=>a.State == state.State && a.City == state.City );
+const updated = [...this.selectedLocations];
+  updated.splice(cityobjindex, 1);
+  this.selectedCities.splice(citylistIndex,1);
+  this.selectedLocations = updated; 
+}
 }
