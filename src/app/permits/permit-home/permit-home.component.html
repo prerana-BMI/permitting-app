@@ -70,10 +70,10 @@
         </mat-autocomplete>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-12 p-1">
-        <button type="button" class="btn btn-outline form-control d-flex align-items-center custom-outline-btn FlterButton" (click)="Search()">
+        <button type="button" class="btn btn-outline form-control d-flex align-items-center custom-outline-btn FlterButton" (click)="AddToList()">
           <span style=" margin: 0 1px;"></span>
-          <i class="fas fa-search"></i>
-          <span class="flex-grow-1 text-start">Search</span>
+          <i class="fas fa-plus"></i>
+          <span class="flex-grow-1 text-start">Add </span>
         </button>
 
     
@@ -84,64 +84,52 @@
 <div class="row d-flex mt-5" >
     <div class="col-12 col-xl-8 mb-4">
       <div class="map-container">
-        <app-map [selectedLocationsFromParent]="selectedLocations" (citySelected)="handleCitySelected($event)"></app-map>
+        <app-map [selectedLocationsFromParent]="RemovedLocation" (citySelected)="handleCitySelected($event)"></app-map>
       </div>
     </div>
-      <div class="col-12 col-xl-2">
-        <div class="container">
-          <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-              Selected States
-            </div>
-            <div class="card-body p-0">
-              <table class="table table-bordered table-hover mb-0">
-                <tbody>
-                  <tr *ngFor="let state of selectedStates; let i = index">
-                    <td>
-                      <span class="badge bg-light text-dark px-2 py-1 rounded-pill">
-                        {{ state.State }}
-                        <span class="text-danger ms-2 fw-bold cursor-pointer"  (click)="removeState(state)">
-                          &times;
-                        </span>
-                      </span>
-                    </td>
-                  </tr>
-      
-                </tbody>
-              </table>
-            </div>
-          </div>
+ <!-- 🧩 Wrap the whole card in *ngIf -->
+ <div class="col-12 col-xl-4 mb-4">
+  <div class="card shadow" *ngIf="groupedLocationsByStates.length > 0">
+    <div class="card-header text-white panel-header">
+      Selected Locations
+    </div>
+  
+    <div class="card-body" style="overflow-y: auto; width: 500px;">
+      <div *ngFor="let group of groupedLocationsByStates" class="mb-4 p-3 border rounded bg-light">
+  
+        <!-- State Title and Remove Button -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6 class="mb-0 text-primary fw-bold">
+            {{ group.state }}
+          </h6>
+          <button class="btn btn-sm btn-outline-danger py-0 px-2" (click)="removeState({ State: group.state ,  Selected : 'N' })"
+            title="Remove entire state">
+            &times;
+          </button>
         </div>
-      </div>
+  
+        <!-- City Badges -->
+        <div class="d-flex flex-wrap" style="gap: 0.5rem;" *ngIf="group.cities.length > 0">
+          <span *ngFor="let city of group.cities"
+            class="badge bg-secondary text-white px-3 py-2 rounded-pill d-flex align-items-center"
+            style="font-size: 0.85rem;">
+            {{ city }}
 
-         <div class="col-12 col-xl-2">
-        <div class="container">
-          <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-              Selected Cities
-            </div>
-            <div class="card-body p-0">
-              <table class="table table-bordered table-hover mb-0">
-                <tbody>
-                  <tr *ngFor="let state of selectedCities; let i = index">
-                    <td>
-                      <span class="badge bg-light text-dark px-2 py-1 rounded-pill">
-                        {{ state.City }}
-                        <span class="text-danger ms-2 fw-bold cursor-pointer" (click)="removeCity(state)">
-                          &times;
-                        </span>
-                      </span>
-                    </td>
-                  </tr>
-      
-                </tbody>
-              </table>
-            </div>
-          </div>
+
+              <button type="button" class="btn btn-link p-0 m-0 text-danger" (click)="removeCity({ City: city, State: group.state , Selected : 'N'})"
+                title="Remove City">
+                <i class="fas fa-times"></i>
+              </button>
+          </span>
         </div>
+  
       </div>
-    
-
-
+    </div>
   </div>
+</div>
+
+
+
+
+</div>
 

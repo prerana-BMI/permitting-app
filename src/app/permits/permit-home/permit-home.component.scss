@@ -107,10 +107,7 @@ h5
   background-color: #fff;  /* Custom background color */
         /* Optional: show "not allowed" cursor */
 }
-.map-container{
-    border: 1px solid #1c4876; // Add a border around the map
-     border-radius: 2px;
-}
+
 .PageLayout
 {
 height:500px;
@@ -126,7 +123,55 @@ box-shadow: 1px 1px 2px rgb(91 101 130 / 18%);
   font-weight: 600;
   line-height: 1.5rem;
 }
+ .panel-header {
+    background:#1c4876;
+    border-radius: 5px 5px 0px 0px;
+    padding: 15px 20px;
 
+    h5 {
+      font-weight: 600;
+      font-size: 17px;
+      line-height: 30px;
+      color: #ffffff;
+      margin: 0;
+    }
+  }
+  .card-body {
+  max-height: 400px;
+  // overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #c0c0c0 transparent;
+}
+
+.card-body::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.card-body::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 4px;
+}
+
+.badge i {
+  pointer-events: auto;
+}
+.fas.fa-times {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.map-container {
+  z-index: 1;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #1c4876; // Add a border around the map
+  border-radius: 2px;
+}
+.card {
+  position: relative;
+  z-index: 1000;
+  pointer-events: auto;
+}
  
  
 

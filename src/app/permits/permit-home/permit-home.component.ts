@@ -21,6 +21,8 @@ export class PermitHomeComponent {
   selectedLocations: { City: string; State: string }[] = [];
   selectedStates:  Array<any> = [];
   selectedCities:  Array<any> = [];
+   groupedLocationsByStates: { state: string, cities: string[] }[] = [];
+RemovedLocation: any = {};
   constructor(private Formbuilder : FormBuilder,
     private HttpService : HttpService,
     private router : Router
@@ -98,6 +100,7 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
   }
 
   handleCitySelected(Event : any) {
+    debugger
    const existing = this.selectedLocations.find(loc => loc.City === Event.City && loc.State === Event.State);
     const result = {
       City: Event.City,
@@ -106,36 +109,107 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
     if (!existing) {
       this.selectedLocations.push(result);
     }
-    else if(Event.Selected == "N") {
-     let idx = this.selectedLocations.findIndex(loc => loc.City === Event.City && loc.State === Event.State);
-     if(idx == -1)
-     {
-      let idx1 = this.selectedLocations.findIndex(loc =>  loc.State === Event.State);
-      this.selectedLocations.splice(idx1,1);
-     }
-      this.selectedLocations.splice(idx,1);
-    }
+    else if(Event.Selected =="N"){
     
-    this.selectedStates = this.selectedLocations.filter(a => a.State && a.State != 'Unknown').filter((item, index, self) =>index === self.findIndex(t => t.State === item.State));
-    this.selectedCities = this.selectedLocations.filter(a=>a.City != null && a.City != undefined && a.City != '' && a.City != 'Unknown');
+       if(Event.City == "Unknown")
+       {
 
+    this.selectedLocations = this.selectedLocations.filter(loc => loc.State !== Event.State);
+     }
+    
+    else{
+      var selectedLocations = this.selectedLocations.findIndex(loc => loc.State == Event.State && loc.City == Event.City );
+     this.selectedLocations.splice(selectedLocations,1);
+    }
+     
+  }
+  this.updateGroupedLocations()
+ 
   }
 
- removeState(state : any): void {
-  let statelistIndex = this.selectedStates.findIndex(a=>a.State == state.State );
-  let stateobjindex = this.selectedLocations.findIndex(a=>a.State == state.State );
-  const updated = [...this.selectedLocations];
-  updated.splice(stateobjindex, 1);
-  this.selectedStates.splice(statelistIndex,1);
-  this.selectedLocations = updated; 
+
+  AddToList() {
+    debugger
+    const result = {
+      City: this.SearchForm.controls['city'].value,
+      State: this.SearchForm.controls['state'].value,
+      Selected : 'Y'
+    };
+     const existingloc = this.selectedLocations.find(loc => loc.State === this.SearchForm.controls['state'].value  && loc.City == this.SearchForm.controls['city'].value );
+      if (!existingloc) {
+         this.RemovedLocation = result;
+        this.selectedLocations.push(result);
+        this.selectedLocations = [...this.selectedLocations]; // 👈 Force reference update
+        this.updateGroupedLocations();
+      }
+    
+   this.SearchForm.reset();
+    
+  }
+
+ 
+updateGroupedLocations() {
+  const map = new Map<string, Set<string>>();
+
+  for (const item of this.selectedLocations) {
+    if (!item.State) continue;
+
+    if (!map.has(item.State)) {
+      map.set(item.State, new Set());
+    }
+
+    if (item.City && item.City !== 'Unknown') {
+      map.get(item.State)!.add(item.City);
+    }
+  }
+
+  this.groupedLocationsByStates = Array.from(map.entries()).map(([state, cities]) => ({
+    state,
+    cities: Array.from(cities)
+  }));
 }
-removeCity(state : any)
-{
- let citylistIndex = this.selectedCities.findIndex(a=>a.State == state.State  && a.City == state.City);
-let cityobjindex = this.selectedLocations.findIndex(a=>a.State == state.State && a.City == state.City );
-const updated = [...this.selectedLocations];
-  updated.splice(cityobjindex, 1);
-  this.selectedCities.splice(citylistIndex,1);
-  this.selectedLocations = updated; 
+// removeCity(item: {City : string ,State : string}) {
+//   debugger
+//   const idx = this.selectedLocations.findIndex(
+//     loc => loc.City === item.City && loc.State === item.State
+//   );
+//   if (idx !== -1) {
+//     this.selectedLocations.splice(idx, 1);
+//     this.updateGroupedLocations()
+//   }
+// }
+
+//   removeState(item: { State: string }) {
+
+//     const updated = [...this.selectedLocations];
+//     updated.filter(loc => loc.State !== item.State);
+//     this.selectedLocations.filter(loc => loc.State !== item.State);
+//     this.selectedLocations = updated;
+//     this.updateGroupedLocations()
+//   }
+
+
+removeCity(item: { City: string, State: string , Selected : string }) {
+  
+  const idx = this.selectedLocations.findIndex(
+    loc => loc.City === item.City && loc.State === item.State
+  );
+  this.RemovedLocation = item;
+  if (idx !== -1) {
+    this.selectedLocations.splice(idx, 1);
+    this.selectedLocations = [...this.selectedLocations]; 
+    this.updateGroupedLocations();
+  }
 }
+
+removeState(item: { State: string ,  Selected : string }) {
+  this.RemovedLocation = item;;
+  this.selectedLocations = this.selectedLocations.filter(loc => loc.State !== item.State);
+  this.selectedLocations = [...this.selectedLocations]; // 👈 Force reference update
+  this.updateGroupedLocations();
+}
+
+
+
+
 }
