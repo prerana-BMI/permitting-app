@@ -90,7 +90,7 @@
  <!-- 🧩 Wrap the whole card in *ngIf -->
  <div class="col-12 col-xl-4 mb-4">
   <div class="card shadow" *ngIf="groupedLocationsByStates.length > 0">
-    <div class="card-header text-white panel-header">
+    <div class="card-header text-white fw-bold panel-header">
       Selected Locations
     </div>
   
@@ -125,6 +125,14 @@
   
       </div>
     </div>
+    <!-- Centered button outside card-body but still inside card -->
+<div class="text-center pb-3">
+  <button type="button" class="btn btn-outline custom-outline-btn FlterButton" style="min-width: 200px;"
+    (click)="Search()">
+    <i class="fas fa-search me-2"></i> Search
+  </button>
+</div>
+
   </div>
 </div>
 

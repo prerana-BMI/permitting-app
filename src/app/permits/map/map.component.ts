@@ -52,7 +52,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
 private async setMarker(latlng: L.LatLng): Promise<void> {
-  debugger
+ 
   if (this.isProcessing) {
     console.log("Still processing...");
     return;
@@ -154,7 +154,7 @@ private async setMarker(latlng: L.LatLng): Promise<void> {
 
   // 🔹 Example: use this from an input binding or a button
   ngOnChanges(changes: SimpleChanges): void {
-    debugger
+    
   const current = changes['selectedLocationsFromParent'].currentValue;
 if(current.Selected =='N')
 {
@@ -196,7 +196,7 @@ this.addMarkerByCityState(current.City, current.State)
 //   }
 // }
 private removeMarkerForLocation(location: { City: string; State: string }) {
-  debugger;
+  
 
   const isStateLevelRemove = !location.City || location.City === 'Unknown';
 
@@ -233,7 +233,6 @@ private removeMarkerForLocation(location: { City: string; State: string }) {
   }
 
   private async addMarkerByCityState(city: string, state: string): Promise<void> {
-    debugger
   if (this.isProcessing) return;
  const latlng = await this.getCoordinatesFromCityState(city, state);
 
@@ -295,7 +294,7 @@ private async getCoordinatesFromCityState(city: string, state: string): Promise<
 
 private attachClickHandlerToMarker(marker: L.Marker, city: string, state: string, key: string): void {
   marker.on('click', async () => {
-    debugger;
+
     if (city === "Unknown" && state) {
       // Remove all markers with matching state
       const entriesToRemove = Array.from(this.markerMap.entries()).filter(([markerKey]) => {

@@ -57,7 +57,7 @@ export class MatrixDetailsComponent {
       'MatrixId' :  this.SearchForm.controls['MatrixId'].value,
       'NavigatedFrom': 'Matrix'
     });
-    this.router.navigate(["permits/permitlist", this.PermitList[0]?.State, this.PermitList[0]?.City ?? ""]);
+    this.router.navigate(["permits/permitlist"]);
   }
 
 

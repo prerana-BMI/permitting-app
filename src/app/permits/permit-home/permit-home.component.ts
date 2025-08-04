@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs';
 import { Constants } from 'src/app/Models/Constants';
+import { DatatransferService } from 'src/app/services/datatransfer.service';
 import { HttpService } from 'src/app/services/http.service';
 
 @Component({
@@ -25,7 +26,8 @@ export class PermitHomeComponent {
 RemovedLocation: any = {};
   constructor(private Formbuilder : FormBuilder,
     private HttpService : HttpService,
-    private router : Router
+    private router : Router,
+    private datatransferService : DatatransferService
   )
   {
 
@@ -96,11 +98,14 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
   Search() {
     let city = this.SearchForm.controls['city'].value == "Unknown" || this.SearchForm.controls['city'].value == null ? "" : this.SearchForm.controls['city'].value;
     let state = this.SearchForm.controls['state'].value == "Unknown" || this.SearchForm.controls['state'].value == null ? "" : this.SearchForm.controls['state'].value;
-    this.router.navigate(["permits/permitlist", state, city]);
+    this.datatransferService.setData({
+      'data' : this.groupedLocationsByStates,
+      'NavigatedFrom': 'Home'
+    });
+    this.router.navigate(["permits/permitlist"]);
   }
 
   handleCitySelected(Event : any) {
-    debugger
    const existing = this.selectedLocations.find(loc => loc.City === Event.City && loc.State === Event.State);
     const result = {
       City: Event.City,
@@ -129,7 +134,6 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
 
 
   AddToList() {
-    debugger
     const result = {
       City: this.SearchForm.controls['city'].value,
       State: this.SearchForm.controls['state'].value,
@@ -168,25 +172,7 @@ updateGroupedLocations() {
     cities: Array.from(cities)
   }));
 }
-// removeCity(item: {City : string ,State : string}) {
-//   debugger
-//   const idx = this.selectedLocations.findIndex(
-//     loc => loc.City === item.City && loc.State === item.State
-//   );
-//   if (idx !== -1) {
-//     this.selectedLocations.splice(idx, 1);
-//     this.updateGroupedLocations()
-//   }
-// }
 
-//   removeState(item: { State: string }) {
-
-//     const updated = [...this.selectedLocations];
-//     updated.filter(loc => loc.State !== item.State);
-//     this.selectedLocations.filter(loc => loc.State !== item.State);
-//     this.selectedLocations = updated;
-//     this.updateGroupedLocations()
-//   }
 
 
 removeCity(item: { City: string, State: string , Selected : string }) {

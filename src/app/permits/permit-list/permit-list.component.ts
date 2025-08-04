@@ -17,8 +17,10 @@ import { DatatransferService } from 'src/app/services/datatransfer.service';
   styleUrls: ['./permit-list.component.scss']
 })
 export class PermitListComponent {
-  City :string | null;
-  State :string | null;
+  City : string  = '' ;
+  Level : string = 'All';
+  LevelList : string[] = ["All","Federal","State","City"];
+  State : string = '';
   PermitList : Array<any> = [];
   pageSize: number = 10;
   SelecAll : boolean= false;
@@ -42,8 +44,11 @@ export class PermitListComponent {
   CityList : Array<any> = [];
   isCityLoading : boolean= false;
   ListOfId : Array<any> = [];
+  StateList : Array<any> = [];
+ 
   SelectedCount : number = 0 ;
   NavigatedData  : any;
+  StateCityMapping : {State : string , City : string}[]= [];
   constructor(private httpService: HttpService,
     private toastr: ToastrService,
     public router: Router,
@@ -55,26 +60,36 @@ export class PermitListComponent {
     private datatransferService : DatatransferService,
      
   ) {
-  this.State = this.route.snapshot.paramMap.get('state');
-  this.City= this.route.snapshot.paramMap.get('city');
+  
 
   }
   ngOnInit() {
+    debugger;
     this.SearchForm = this.fb.group({
       Category: '',
       PermitName: '',
       RegulatoryAgency: ''
     });
-    this.CityList.push({ City: this.City });
     let res = this.datatransferService.getData();
-    if (res != null) {
+    if (res != null && res['NavigatedFrom'] == 'Matrix') {
       this.datatransferService.setData(null);
       this.NavigatedData = res;
       this.ListOfId = this.NavigatedData?.data;
       this.SelectedCount = this.NavigatedData?.data?.length;
     }
+    if(res != null && res.NavigatedFrom == 'Home')
+    {
+      this.datatransferService.setData(null);
+      res.data.forEach((item: any) => {
+        item.cities.forEach((element: any) => {
+          this.StateCityMapping.push({ State: item.state, City: element });
+        });
+      });
+      this.StateList =  [...new Set(this.StateCityMapping.map(a => a.State))];
+    }
 
  this.GetAllPermits();
+ //this.GetAllFederalPermits();
  this.InitializedTypeAhead();
  this.GetMasterCategory();
 
@@ -93,8 +108,6 @@ paginatorevt(evt: any) {
     this.pageSize = evt.pageSize;
    
   }
-
-
   Search()
   {
    
@@ -112,7 +125,7 @@ paginatorevt(evt: any) {
   SelectAll(event: any) {
      const isChecked = (event.target as HTMLInputElement).checked;
     this.PermitList.forEach(a => {
-      a.Ischecked =isChecked ?  true : false
+      a.Ischecked = isChecked ?  true : false
     });
 
     this.ListOfId = this.PermitList.filter(a=>a.Ischecked == true ).map(a=>a.Id);
@@ -182,13 +195,34 @@ paginatorevt(evt: any) {
   GetAllPermits()
   {
     let param= {
-      'State' : this.State,
-      'City' : this.City,
+      'Level' : this.Level,
+      'State' :  (this.Level == 'State' || this.Level == 'City') && this.State != '' ? [this.State] : [...new Set(this.StateCityMapping.map(a => a.State))],
+      'City' :   this.City != '' ? [this.City] : [...new Set(this.StateCityMapping.map(a => a.City))],
+      'Category' : this.SearchForm.controls['Category'].value == null ? '': this.SearchForm.controls['Category'].value,
+      'PermitName': this.SearchForm.controls['PermitName'].value == null ? '': this.SearchForm.controls['PermitName'].value,
+      'RegulatoryAgencyName': this.SearchForm.controls['RegulatoryAgency'].value == null ? '': this.SearchForm.controls['RegulatoryAgency'].value,
+
+    }
+    this.httpService.httpGetCall(Constants.GetPermitByLocation ,param, true).subscribe((res: any)=>{
+      if (res["Success"]) {
+        this.PermitList = res['Data'];
+        this.PermitList.forEach(element => 
+          {
+          let isItemExist = this.ListOfId?.find(a => a == element.Id) ? true : false;
+          element.Ischecked = isItemExist;
+        });
+        this.dataCount = res['Count'];
+      }
+    })
+  }
+  GetAllFederalPermits()
+  {
+    let param= {
       'Category' : this.SearchForm.controls['Category'].value == null ? '': this.SearchForm.controls['Category'].value,
       'PermitName': this.SearchForm.controls['PermitName'].value == null ? '': this.SearchForm.controls['PermitName'].value,
       'RegulatoryAgencyName': this.SearchForm.controls['RegulatoryAgency'].value == null ? '': this.SearchForm.controls['RegulatoryAgency'].value,
     }
-    this.httpService.httpGetCall(Constants.GetPermitByLocation ,param, true).subscribe((res: any)=>{
+    this.httpService.httpGetCall(Constants.GetAllFederalPermits ,param, true).subscribe((res: any)=>{
       if (res["Success"]) {
         this.PermitList = res['Data'];
         this.PermitList.forEach(element => {
@@ -270,11 +304,18 @@ CreateMatrix(): void {
   }
    CityTypeAheadDisplay(val: any) {
     let res = this.CityList.find(a => a.City == val);
-     if (res != null) {
+     if (res.City != null) {
        this.GetAllPermits();
        return res.City;
      }
    
+  }
+  LevelTypeAheadDisplay(val: any) {
+    let res = this.LevelList.find(a => a == val);
+     if (res != null) {
+       return res;
+     }
+   return'';
   }
 
   OnValueChanges() {
@@ -305,6 +346,28 @@ CreateMatrix(): void {
        
       }
     });
+  }
+  StateTypeAheadDisplay(val : string)
+  {
+     let res = this.StateList.find(a => a == val);
+     if (res != null) {
+       this.CityList = this.StateCityMapping.filter(c=>c.State == val)
+        return res;
+     }
+   return'';
+  }
+  OnLevelChanges(event : string)
+  {
+  if(event == "City")
+  {
+    
+  }
+  else
+  {
+    this.City = "";
+  }
+  this.GetAllPermits();
+
   }
 }
 
