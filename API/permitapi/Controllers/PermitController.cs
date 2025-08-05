@@ -87,11 +87,12 @@ namespace permitapi.Controllers
                 {
                     Result = _context.PermitMasters.Where(a =>
                     Request.State.Contains(a.State) &&
-                   (Request.Level != "City" ? true : Request.City.Contains(a.City)) &&
+                    a.Level == Request.Level &&
+                   (Request.City == null ? true : Request.City.Contains(a.City)) &&
                    (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
                    (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
-                   (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName)
-                                                           ).Select(a => new EPermitMaster
+                   (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName))
+                                        .Select(a => new EPermitMaster
                                                            {
                                                                Category = a.Category,
                                                                PermitName = a.PermitName,
@@ -102,15 +103,15 @@ namespace permitapi.Controllers
                                                                RegulatoryAgencyName = a.RegulatoryAgencyName,
                                                                Id = a.Id
                                                            })
-                           .OrderByDescending(a => a.Id)
-                           .ToList();
+                                        .OrderByDescending(a => a.Id)
+                                        .ToList();
 
                 }
                 else if (Request.Level == "All")
                 {
 
                     Result = _context.PermitMasters.Where(a =>
-                    Request.State.Contains(a.State) || Request.City.Contains(a.City) || a.Level == "Federal" &&
+                   Request.State.Contains(a.State) || Request.City.Contains(a.City) || a.Level == "Federal" &&
                    (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
                    (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
                    (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName)

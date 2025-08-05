@@ -19,6 +19,11 @@ showLoader : boolean = false;
   }
 
 async ngOnInit(): Promise<void> {
+   this.LoaerService.status.subscribe((val: boolean) => {
+      setTimeout(() => {
+        this.showLoader = val;
+      },0);
+    });
     // Await redirect completion (this is critical)
     const result = await this.msalService.instance.handleRedirectPromise();
 

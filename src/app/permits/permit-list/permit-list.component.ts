@@ -64,7 +64,6 @@ export class PermitListComponent {
 
   }
   ngOnInit() {
-    debugger;
     this.SearchForm = this.fb.group({
       Category: '',
       PermitName: '',
@@ -96,7 +95,7 @@ export class PermitListComponent {
  }
 
   GetMasterCategory() {
-    this.HttpService.httpGetCall(Constants.CategoryList, false, false).subscribe((res: any) => {
+    this.HttpService.httpGetCall(Constants.CategoryList, false, true).subscribe((res: any) => {
       if (res["Success"]) {
         this.CategoryList = res["Data"];
       }
@@ -197,7 +196,7 @@ paginatorevt(evt: any) {
     let param= {
       'Level' : this.Level,
       'State' :  (this.Level == 'State' || this.Level == 'City') && this.State != '' ? [this.State] : [...new Set(this.StateCityMapping.map(a => a.State))],
-      'City' :   this.City != '' ? [this.City] : [...new Set(this.StateCityMapping.map(a => a.City))],
+      'City' :   this.Level == "State" && this.City == "" ? [] : this.City != '' ? [this.City] : [...new Set(this.StateCityMapping.map(a => a.City))],
       'Category' : this.SearchForm.controls['Category'].value == null ? '': this.SearchForm.controls['Category'].value,
       'PermitName': this.SearchForm.controls['PermitName'].value == null ? '': this.SearchForm.controls['PermitName'].value,
       'RegulatoryAgencyName': this.SearchForm.controls['RegulatoryAgency'].value == null ? '': this.SearchForm.controls['RegulatoryAgency'].value,
@@ -303,10 +302,9 @@ CreateMatrix(): void {
     
   }
    CityTypeAheadDisplay(val: any) {
-    let res = this.CityList.find(a => a.City == val);
-     if (res.City != null) {
-       this.GetAllPermits();
-       return res.City;
+    let res = this.CityList.find(a => a == val);
+     if (res != null) {
+       return res;
      }
    
   }
@@ -351,22 +349,16 @@ CreateMatrix(): void {
   {
      let res = this.StateList.find(a => a == val);
      if (res != null) {
-       this.CityList = this.StateCityMapping.filter(c=>c.State == val)
+       this.CityList = this.StateCityMapping.filter(c=>c.State == val).map(a=>a.City);
+       this.City = '';
         return res;
      }
    return'';
   }
-  OnLevelChanges(event : string)
-  {
-  if(event == "City")
-  {
-    
-  }
-  else
-  {
+  OnLevelChanges(event: string) {
     this.City = "";
-  }
-  this.GetAllPermits();
+    this.State = "";
+    this.GetAllPermits();
 
   }
 }
