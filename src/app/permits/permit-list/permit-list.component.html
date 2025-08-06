@@ -210,11 +210,11 @@
 <div class="row">
   <div class="col-md-12">
     <div class="card-body">
-      <div style="overflow-x: auto; padding-right: 14px;">
-        <div class="table-wrapper" style="max-height: 300px; overflow-y: auto;">
-          <table class="table table-hover m-0" style="table-layout: fixed; width: 100%;">
-            <thead style="display: table; width: 100%; table-layout: fixed;">
-              <tr style="background-color: #bbbbbb4d; border: 1px solid #e1dbdba6;">
+     
+        <div class="table-header">
+          <table class="table fixed-table mb-0">
+            <thead style="background-color: #bbbbbb4d;">
+              <tr> 
                 <th class="checkbox-cell" style="width: 5px;">
                   <input type="checkbox" class="big-checkbox" [(ngModel)]="SelecAll" (click)="SelectAll($event)">
                 </th>
@@ -225,8 +225,10 @@
               </tr>
             </thead>
           </table>
-          <table class="table table-hover m-0" style="table-layout: fixed; width: 100%;">
-            <tbody style="display: block; max-height: 300px; overflow-y: auto; width: 100%;">
+          </div>
+          <div class="table-body">
+          <table class="table fixed-table">
+            <tbody>
               <tr *ngFor="let item of PermitList; let i = index"
                 style="display: table; table-layout: fixed; width: 100%;">
                 <td class="checkbox-cell" style="width: 5px;">
@@ -240,8 +242,8 @@
               </tr>
             </tbody>
           </table>
-        </div>
-      </div>
+          </div>
+     
 
     </div>
 

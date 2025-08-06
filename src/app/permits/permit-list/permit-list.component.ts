@@ -76,7 +76,7 @@ export class PermitListComponent {
       this.ListOfId = this.NavigatedData?.data;
       this.SelectedCount = this.NavigatedData?.data?.length;
     }
-    if(res != null && res.NavigatedFrom == 'Home')
+    else if(res != null && res.NavigatedFrom == 'Home')
     {
       this.datatransferService.setData(null);
       res.data.forEach((item: any) => {
@@ -85,6 +85,9 @@ export class PermitListComponent {
         });
       });
       this.StateList =  [...new Set(this.StateCityMapping.map(a => a.State))];
+    }
+    else{
+       this.router.navigate(['/permits/permithome']);
     }
 
  this.GetAllPermits();
@@ -205,7 +208,7 @@ paginatorevt(evt: any) {
     this.httpService.httpGetCall(Constants.GetPermitByLocation ,param, true).subscribe((res: any)=>{
       if (res["Success"]) {
         this.PermitList = res['Data'];
-      this.PermitList.forEach((a: any)=>{
+        this.PermitList.forEach((a: any)=>{
         this.ListOfId.find(Element=> Element.Id == a.Id) != null ? a.Ischecked = true : a.Ischecked
       })
         this.dataCount = res['Count'];

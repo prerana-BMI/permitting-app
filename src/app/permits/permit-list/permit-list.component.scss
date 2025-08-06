@@ -164,3 +164,45 @@ box-shadow: 1px 1px 2px rgb(91 101 130 / 18%);
   --mdc-outlined-text-field-focus-outline-color: #1c4876 !important;
 
 }
+.table-wrapper {
+  width: 100%;
+  border: 1px solid #e1dbdba6;
+}
+
+.fixed-table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.fixed-table th,
+.fixed-table td {
+  padding: 8px;
+  text-align: left;
+  vertical-align: middle;
+  border: 1px solid #e1dbdba6;
+}
+
+
+.table-header {
+  overflow: hidden;
+  padding-right: 0px;
+}
+
+
+.table-body {
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+.table-header .fixed-table th,
+.table-body .fixed-table td {
+  width: 20%; 
+}
+
+
+.table-body::-webkit-scrollbar {
+  width: 1px;
+}
