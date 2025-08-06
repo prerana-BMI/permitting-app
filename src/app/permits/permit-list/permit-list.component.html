@@ -230,7 +230,7 @@
               <tr *ngFor="let item of PermitList; let i = index"
                 style="display: table; table-layout: fixed; width: 100%;">
                 <td class="checkbox-cell" style="width: 5px;">
-                  <input type="checkbox" class="big-checkbox" (change)="OnSingleChange($event, item.Id)"
+                  <input type="checkbox" class="big-checkbox" (change)="OnSingleChange($event, item)"
                     [(ngModel)]="item.Ischecked">
                 </td>
                 <td style="width: 80px;">{{item.PermitName}}</td>

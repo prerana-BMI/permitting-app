@@ -119,7 +119,7 @@ paginatorevt(evt: any) {
     this.GetAllPermits();
   }
   getSelectedCount(): number {
-    return this.SelectedCount = this.PermitList?.filter(item => item.Ischecked)?.length || 0;
+    return this.SelectedCount = this.ListOfId?.length|| 0;
   }
   SelectAll(event: any) {
      const isChecked = (event.target as HTMLInputElement).checked;
@@ -127,15 +127,15 @@ paginatorevt(evt: any) {
       a.Ischecked = isChecked ?  true : false
     });
 
-    this.ListOfId = this.PermitList.filter(a=>a.Ischecked == true ).map(a=>a.Id);
+    this.ListOfId = this.PermitList.filter(a=>a.Ischecked == true );
     this.getSelectedCount();
   }
-  OnSingleChange(event: any, Id: number): void {
+  OnSingleChange(event: any, Item: any): void {
     const isChecked = (event.target as HTMLInputElement).checked;
-    this.PermitList.filter(a => a.Id == Id)[0].Ischecked = isChecked;
-    let idx = this.ListOfId.findIndex(x=>x ==Id);
+    this.PermitList.filter(a => a.Id == Item.Id)[0].Ischecked = isChecked;
+    let idx = this.ListOfId.findIndex(x=>x.Id ==Item.Id);
     if (isChecked) {
-      this.ListOfId.push(Id);
+      this.ListOfId.push(Item);
     }
     else if(idx != -1)
     {
@@ -205,7 +205,9 @@ paginatorevt(evt: any) {
     this.httpService.httpGetCall(Constants.GetPermitByLocation ,param, true).subscribe((res: any)=>{
       if (res["Success"]) {
         this.PermitList = res['Data'];
-      
+      this.PermitList.forEach((a: any)=>{
+        this.ListOfId.find(Element=> Element.Id == a.Id) != null ? a.Ischecked = true : a.Ischecked
+      })
         this.dataCount = res['Count'];
       }
     })
@@ -333,16 +335,17 @@ CreateMatrix(): void {
   ViewDetails()
   {
     let dialogRef = this.dialog.open(SelectedPermitComponent, {
-      data: this.PermitList.filter(a=>a.Ischecked == true),
+      data: this.ListOfId,
       disableClose: true 
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res != null) {
-       this.PermitList.forEach(a=>{
-        a.Ischecked = res.find((b : any)=> b ==a.Id) ? false : a.Ischecked
+      res.forEach((element: any) => {
+        this.PermitList.filter(a=>a.Id == element)[0].Ischecked = false;
+       this.ListOfId = this.ListOfId.filter(b=> b.Id != element)
        });
-       this.SelectedCount = this.PermitList?.filter(item => item.Ischecked)?.length
       }
+      this.getSelectedCount();
     });
   }
   StateTypeAheadDisplay(val : string)
@@ -357,9 +360,7 @@ CreateMatrix(): void {
   }
 
   OnLevelChanges(event: string) {
-    this.City = "";
-    this.State = "";
-    this.GetAllPermits();
+  this.GetAllPermits();
 
   }
 }
