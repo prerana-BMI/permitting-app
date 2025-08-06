@@ -25,14 +25,20 @@
                     <table class="table table-bordered table-sm">
                         <thead class="thead-light">
                             <tr>
+                                 <th></th>
                                 <th>Permit Name</th>
                                 <th>Level</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let permit of category[1]">
+                                <td class="checkbox-cell" style="width: 5px;">
+                                    <input type="checkbox" class="big-checkbox"  [(ngModel)]="permit.Ischecked"
+                                    (change)="OnSingleChange($event, category[0] , permit.Id)">
+                                </td>
                                 <td>{{ permit.PermitName }}</td>
                                 <td>{{ permit.Level }}</td>
+
                             </tr>
                         </tbody>
                     </table>

@@ -205,11 +205,7 @@ paginatorevt(evt: any) {
     this.httpService.httpGetCall(Constants.GetPermitByLocation ,param, true).subscribe((res: any)=>{
       if (res["Success"]) {
         this.PermitList = res['Data'];
-        this.PermitList.forEach(element => 
-          {
-          let isItemExist = this.ListOfId?.find(a => a == element.Id) ? true : false;
-          element.Ischecked = isItemExist;
-        });
+      
         this.dataCount = res['Count'];
       }
     })
@@ -338,10 +334,14 @@ CreateMatrix(): void {
   {
     let dialogRef = this.dialog.open(SelectedPermitComponent, {
       data: this.PermitList.filter(a=>a.Ischecked == true),
+      disableClose: true 
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res != null) {
-       
+       this.PermitList.forEach(a=>{
+        a.Ischecked = res.find((b : any)=> b ==a.Id) ? false : a.Ischecked
+       });
+       this.SelectedCount = this.PermitList?.filter(item => item.Ischecked)?.length
       }
     });
   }
@@ -355,6 +355,7 @@ CreateMatrix(): void {
      }
    return'';
   }
+
   OnLevelChanges(event: string) {
     this.City = "";
     this.State = "";

@@ -8,6 +8,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class SelectedPermitComponent {
   permitCategories : Array<any> = [];
+  DeselectedItem : Array<number> = [];
   constructor(public dialogRef: MatDialogRef<SelectedPermitComponent>,
      @Inject(MAT_DIALOG_DATA) public data: any,
   )
@@ -21,7 +22,10 @@ export class SelectedPermitComponent {
       return acc;
     }, {} as { [key: string]: typeof data });
     this.permitCategories = Object.entries(permitCategories);
-    this.permitCategories.forEach(a=>a.expanded = false);
+    this.permitCategories.forEach(a=>{a.expanded = false
+    
+
+    });
   }
   ngOnInit()
   {
@@ -38,6 +42,24 @@ searchTerm = '';
   });
 }
 clear() {
-    this.dialogRef.close()
+  
+    this.dialogRef.close(this.DeselectedItem)
   }
+  OnSingleChange(event: any, category: string, Id: number): void {
+  this.permitCategories.forEach((categoryGroup, index) => {
+    const [categoryName, items] = categoryGroup;
+
+    if (categoryName === category) {
+     const updatedItems = items.filter((item: any) => item.Id !== Id);
+    if (updatedItems.length === 0) {
+        this.permitCategories.splice(index, 1); // remove the entire group
+      } else {
+        this.permitCategories[index][1] = updatedItems;
+      }
+      
+    }
+  });
+  this.DeselectedItem.push(Id);
+}
+
 }

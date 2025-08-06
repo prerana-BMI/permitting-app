@@ -111,7 +111,7 @@ namespace permitapi.Controllers
                 {
 
                     Result = _context.PermitMasters.Where(a =>
-                   Request.State.Contains(a.State) || Request.City.Contains(a.City) || a.Level == "Federal" &&
+                   (Request.State.Contains(a.State) || Request.City.Contains(a.City) || a.Level == "Federal" ) &&
                    (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
                    (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
                    (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName)
@@ -137,7 +137,7 @@ namespace permitapi.Controllers
                 {
 
                     Result = _context.PermitMasters.Where(a =>
-                   a.Level == "Federal" &&
+                    a.Level == "Federal" &&
                    (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
                    (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
                    (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName)
