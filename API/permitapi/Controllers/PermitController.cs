@@ -103,7 +103,7 @@ namespace permitapi.Controllers
                                                                RegulatoryAgencyName = a.RegulatoryAgencyName,
                                                                Id = a.Id
                                                            })
-                                        .OrderByDescending(a => a.Id)
+                                        .OrderByDescending(a => a.Level)
                                         .ToList();
 
                 }
@@ -126,7 +126,7 @@ namespace permitapi.Controllers
                                                                RegulatoryAgencyName = a.RegulatoryAgencyName,
                                                                Id = a.Id
                                                            })
-                           .OrderByDescending(a => a.Id)
+                           .OrderByDescending(a => a.Level)
                            .ToList();
 
 
@@ -152,7 +152,7 @@ namespace permitapi.Controllers
                                                                RegulatoryAgencyName = a.RegulatoryAgencyName,
                                                                Id = a.Id
                                                            })
-                           .OrderByDescending(a => a.Id)
+                           .OrderByDescending(a => a.Level)
                            .ToList();
 
 

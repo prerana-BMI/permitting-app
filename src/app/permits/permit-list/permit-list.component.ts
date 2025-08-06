@@ -78,13 +78,15 @@ export class PermitListComponent {
     }
     else if(res != null && res.NavigatedFrom == 'Home')
     {
+      
       this.datatransferService.setData(null);
       res.data.forEach((item: any) => {
         item.cities.forEach((element: any) => {
           this.StateCityMapping.push({ State: item.state, City: element });
         });
+         
       });
-      this.StateList =  [...new Set(this.StateCityMapping.map(a => a.State))];
+      this.StateList =  res.data.map((obj : any)=>obj.state);
     }
     else{
        this.router.navigate(['/permits/permithome']);
@@ -198,7 +200,7 @@ paginatorevt(evt: any) {
   {
     let param= {
       'Level' : this.Level,
-      'State' :  (this.Level == 'State' || this.Level == 'City') && this.State != '' ? [this.State] : [...new Set(this.StateCityMapping.map(a => a.State))],
+      'State' :  (this.Level == 'State' || this.Level == 'City') && this.State != '' ? [this.State] : this.StateList,
       'City' :   this.Level == "State" && this.City == "" ? [] : this.City != '' ? [this.City] : [...new Set(this.StateCityMapping.map(a => a.City))],
       'Category' : this.SearchForm.controls['Category'].value == null ? '': this.SearchForm.controls['Category'].value,
       'PermitName': this.SearchForm.controls['PermitName'].value == null ? '': this.SearchForm.controls['PermitName'].value,
