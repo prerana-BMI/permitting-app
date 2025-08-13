@@ -92,7 +92,8 @@ table th {
   line-height: 1.5rem;
 }
 
-.table td {
+.table td,
+.table h6 {
   padding: 0.75rem;
   vertical-align: center;
   border-bottom: 1px solid #e1dbdba6 !important;

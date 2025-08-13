@@ -102,7 +102,7 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
       'data' : this.groupedLocationsByStates,
       'NavigatedFrom': 'Home'
     });
-    this.router.navigate(["permits/permitlist"]);
+    this.router.navigate(["permits/PermitList"]);
   }
 
   handleCitySelected(Event : any) {

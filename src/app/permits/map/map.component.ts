@@ -16,6 +16,23 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() selectedLocationsFromParent: { City: string; State: string }[] = [];
   markerMap = new Map<string, L.Marker>();
   stateLayer: L.GeoJSON | null = null;
+  cityIcon = L.icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+ stateIcon = L.icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
   constructor(private LoaderserviceService: LoaderService) {
 
   }
@@ -70,7 +87,9 @@ private async setMarker(latlng: L.LatLng): Promise<void> {
     }
 
     
-    const marker = L.marker(latlng)
+const iconToUse = (location.City === 'Unknown') ? this.stateIcon : this.cityIcon;
+
+const marker = L.marker(latlng, { icon: iconToUse })
   .addTo(this.map)
   .bindTooltip(`${location.City}, ${location.State}`, {
     permanent: false,
@@ -78,6 +97,7 @@ private async setMarker(latlng: L.LatLng): Promise<void> {
     opacity: 0.9,
   });
 
+  
    this.attachClickHandlerToMarker(marker, location.City, location.State, key);
 
      this.selectedMarker.push(marker);
@@ -245,13 +265,17 @@ private removeMarkerForLocation(location: { City: string; State: string }) {
       this.isProcessing = false;
       return;
     }
-const marker = L.marker(latlng)
+
+    const iconToUse = (city === 'Unknown') ? this.stateIcon : this.cityIcon;
+
+    const marker = L.marker(latlng, { icon: iconToUse })
   .addTo(this.map)
   .bindTooltip(`${city}, ${state}`, {
     permanent: false,
     direction: 'top',
     opacity: 0.9,
   });
+
   this.attachClickHandlerToMarker(marker, city, state, key);
  const result = {
         City: city,

@@ -87,7 +87,7 @@
       </div>
     </div>
 
-    <div class="col-lg-1 col-md-1 col-sm-12 mr-2">
+    <div class="col-lg-1 col-md-1 col-sm-12 ml-2">
       <!-- <div class="form-group"> -->
 
       <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
@@ -99,7 +99,7 @@
       </button>
       <!-- </div> -->
     </div>
-    <div class="col-lg-1 col-md-1 col-sm-12">
+    <div class="col-lg-1 col-md-1 col-sm-12 ml-4">
       <button type="button" class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
         (click)="Clear()">
         <span style=" margin: 0 1px;"></span>
@@ -242,7 +242,10 @@
                 <td style="width: 60px;">{{item.Category}}</td>
                 <td style="width: 60px;">{{item.State == null || item.State =="" ? "--" : item.State }}</td>
                 <td style="width: 60px;">{{item.City== null || item.City == "" ? "--" : item.City }}</td>
-                <td style="width: 60px;">{{item.Level}}</td>
+                <td style="width: 60px;">
+                <h6 [ngClass]="item.Level === 'Federal' ? 'badge rounded-pill bg-success' : item.Level === 'State' ? 'badge rounded-pill bg-primary' : 
+                              item.Level === 'City' ? 'badge rounded-pill bg-secondary' : ''"> {{item.Level}}</h6>
+                </td>
               </tr>
             </tbody>
           </table>

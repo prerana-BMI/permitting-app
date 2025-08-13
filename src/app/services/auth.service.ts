@@ -89,7 +89,7 @@ export class AuthService {
       this.HttpService.httpGetCall(Constants.IsUserExist+ UserName, {},true).subscribe((res:any)=>{
       if(res['Success'])
       {
-        this.router.navigate(['/permits/permithome']);
+        this.router.navigate(['/permits/PermitHome']);
       }
       else{
         this.toastr.error('You are an unauthorized user,Please contact your help tesk team!');

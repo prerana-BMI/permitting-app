@@ -19,8 +19,8 @@ const routes: Routes = [{
   path: '',
   component: PagesComponent,
   children: [
-    {path: 'permitlist', component: PermitListComponent },
-     { path: 'permithome', component: PermitHomeComponent },
+    {path: 'PermitList', component: PermitListComponent },
+     { path: 'PermitHome', component: PermitHomeComponent },
      {path : 'MatrixList' , component : MyPermitsComponent},
      {path : 'PermitMasterList', component: PermitMasterComponent},
      {path : 'MatrixDetails/:id', component: MatrixDetailsComponent},

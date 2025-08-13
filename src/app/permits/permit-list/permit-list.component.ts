@@ -89,7 +89,7 @@ export class PermitListComponent {
       this.StateList =  res.data.map((obj : any)=>obj.state);
     }
     else{
-       this.router.navigate(['/permits/permithome']);
+       this.router.navigate(['/permits/PermitHome']);
     }
 
  this.GetAllPermits();
@@ -210,6 +210,8 @@ paginatorevt(evt: any) {
     this.httpService.httpGetCall(Constants.GetPermitByLocation ,param, true).subscribe((res: any)=>{
       if (res["Success"]) {
         this.PermitList = res['Data'];
+      const order: { [key: string]: number } = { 'Federal': 1, 'State': 2, 'City': 3 };
+      this.PermitList.sort((a: any, b: any) => order[a.Level] - order[b.Level]);
         this.PermitList.forEach((a: any)=>{
         this.ListOfId.find(Element=> Element.Id == a.Id) != null ? a.Ischecked = true : a.Ischecked
       })

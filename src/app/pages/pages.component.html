@@ -12,9 +12,32 @@
             <router-outlet></router-outlet>
       </app-layout> -->
 
-       <nb-layout-column style="background-color: #fcfcfd;">
-         <router-outlet></router-outlet>
-      </nb-layout-column>
+  <nb-layout-column style="background-color: #fcfcfd;">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb custom-breadcrumb" style="background-color: transparent;">
+      <!-- <li class="breadcrumb-item">
+            <a href="#"><i class="fa fa-home"></i> Home</a>
+      </li> -->
+      <li *ngFor="let crumb of breadcrumbItems; let last = last"
+          class="breadcrumb-item"
+          [class.active]="last"
+          [attr.aria-current]="last ? 'page' : null">
+        <ng-container *ngIf="!last">
+          <a [routerLink]="crumb.link">
+            <i class="fa" ></i> {{ crumb }}
+          </a>
+        </ng-container>
+        <ng-container *ngIf="last">
+          {{ crumb }}
+        </ng-container>
+      </li>
+    </ol>
+  </nav>
+
+  <router-outlet></router-outlet>
+</nb-layout-column>
+
+
 
 
       <nb-layout-footer fixed>

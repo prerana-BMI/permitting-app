@@ -88,7 +88,7 @@ namespace permitapi.Controllers
                     Result = _context.PermitMasters.Where(a =>
                     Request.State.Contains(a.State) &&
                     a.Level == Request.Level &&
-                   (Request.City == null ? true : Request.City.Contains(a.City)) &&
+                   (Request.City == null || Request.City.Count == 0 ? true : Request.City.Contains(a.City)) &&
                    (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
                    (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
                    (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName))
@@ -111,7 +111,7 @@ namespace permitapi.Controllers
                 {
 
                     Result = _context.PermitMasters.Where(a =>
-                   (Request.State.Contains(a.State) || Request.City.Contains(a.City) || a.Level == "Federal" ) &&
+                   (Request.State.Contains(a.State) || Request.City.Contains(a.City) || a.Level == "Federal") &&
                    (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
                    (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
                    (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName)
@@ -140,8 +140,8 @@ namespace permitapi.Controllers
                     a.Level == "Federal" &&
                    (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
                    (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
-                   (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName)
-                                                           ).Select(a => new EPermitMaster
+                   (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName))
+                                                         .Select(a => new EPermitMaster
                                                            {
                                                                Category = a.Category,
                                                                PermitName = a.PermitName,

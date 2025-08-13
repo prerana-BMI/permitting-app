@@ -1,6 +1,8 @@
 @import '../@theme/styles/themes';
 @import 'bootstrap/scss/mixins/breakpoints';
 @import '@nebular/theme/styles/global/breakpoints';
+@import 'bootstrap/scss/bootstrap';
+
 
 @include nb-install-component() {
   ::ng-deep router-outlet + * {
@@ -35,3 +37,9 @@
   }
 }
 
+.breadcrumb {
+  --bs-breadcrumb-divider: ">" !important;
+}
+.breadcrumb-item a .fa-home {
+  margin-right: 5px;
+}

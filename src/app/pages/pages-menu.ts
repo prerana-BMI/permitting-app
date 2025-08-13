@@ -4,23 +4,23 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Home',
     icon: 'home-outline',
-    link: '/permits/permithome',
+    link: '/permits/PermitHome',
  
   },
-   {
-    title: 'Matrix',
+  {
+    title: 'Matrix List',
     icon: 'bookmark-outline',
     link: '/permits/MatrixList',
     
   },
   {
-    title: 'Admin',
+    title: 'Users',
     icon: 'person-outline',
     link: '/account/UsersList',
     
   },
   {
-    title: 'Permit Master',
+    title: 'Permit Register',
     icon: 'book-open-outline',
     link: '/permits/PermitMasterList',
     
