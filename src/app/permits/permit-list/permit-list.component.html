@@ -138,9 +138,9 @@
     </mat-autocomplete>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="mr-2" style="height: 75px;">
+  <mat-form-field appearance="outline" class="mr-2" style="height: 75px;" >
     <mat-label style="color: black;">State</mat-label>
-    <input matInput placeholder="Placeholder"  [(ngModel)]="State" (ngModelChange)="GetAllPermits()" [matAutocomplete]="stlist">
+    <input matInput placeholder="Placeholder"  [(ngModel)]="State" (ngModelChange)="GetAllPermits()" [matAutocomplete]="stlist" [disabled]="Level == 'All' || Level == 'Federal' ? true : false" >
      <mat-autocomplete #stlist="matAutocomplete" [displayWith]="StateTypeAheadDisplay.bind(this)">
       <mat-option *ngFor="let l of StateList | slice:0:30" [value]="l" class="mat-opt">
         <div>
@@ -156,9 +156,9 @@
     </mat-autocomplete>
  </mat-form-field>
 
- <mat-form-field appearance="outline" class="mr-2"   style="height: 75px;">
+ <mat-form-field appearance="outline" class="mr-2"   style="height: 75px;"  >
     <mat-label style="color: black;">City</mat-label>
-    <input matInput placeholder="Enter City" [(ngModel)]="City" (ngModelChange)="GetAllPermits()"  [matAutocomplete]="ctlist">
+    <input matInput placeholder="Enter City" [(ngModel)]="City" (ngModelChange)="GetAllPermits()"  [matAutocomplete]="ctlist" [disabled]="Level != 'City'  ? true : false">
      <mat-autocomplete #ctlist="matAutocomplete"
                       [displayWith]="CityTypeAheadDisplay.bind(this)">
                       <mat-option *ngFor="let l of CityList | slice:0:30" [value]="l"  class ="mat-opt" >
@@ -242,9 +242,9 @@
                 <td style="width: 60px;">{{item.Category}}</td>
                 <td style="width: 60px;">{{item.State == null || item.State =="" ? "--" : item.State }}</td>
                 <td style="width: 60px;">{{item.City== null || item.City == "" ? "--" : item.City }}</td>
-                <td style="width: 60px;">
-                <h6 [ngClass]="item.Level === 'Federal' ? 'badge rounded-pill bg-success' : item.Level === 'State' ? 'badge rounded-pill bg-primary' : 
-                              item.Level === 'City' ? 'badge rounded-pill bg-secondary' : ''"> {{item.Level}}</h6>
+                <td style="width: 60px;">{{item.Level}}
+                <!-- <h6 [ngClass]="item.Level === 'Federal' ? 'badge rounded-pill bg-success' : item.Level === 'State' ? 'badge rounded-pill bg-primary' : 
+                              item.Level === 'City' ? 'badge rounded-pill bg-secondary' : ''"> {{item.Level}}</h6> -->
                 </td>
               </tr>
             </tbody>

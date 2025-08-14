@@ -546,43 +546,80 @@ namespace permitapi.Controllers
             List<EPermitMasterDetail> Result = new List<EPermitMasterDetail>();
             try
             {
-
-                Result = _context.PermitMasters.Where(a =>
-                                                Request.State.Contains(a.State) &&
-                                                Request.City.Contains(a.City) && 
-                                                (a.Category == Request.Category || string.IsNullOrEmpty(Request.Category)) &&
-                                                (a.PermitName == Request.PermitName || string.IsNullOrEmpty(Request.PermitName)) &&
-                                                (a.RegulatoryAgencyName == Request.RegulatoryAgencyName || string.IsNullOrEmpty(Request.RegulatoryAgencyName)))
-                                                .ToList()
-                                                .Join(_context.PermitMasterDetails,
-                                                permit => permit.Id,
-                                                detail => detail.PermitId,
-                                                (permit, detail) => new { permit, detail })
-                                                
-                .Select(a => new EPermitMasterDetail
+                if (Request.Level != "All")
                 {
-                    Category = a.permit.Category,
-                    PermitName = a.permit.PermitName,
-                    State = a.permit.State,
-                    City = a.permit.City,
-                  
-                    Level = a.permit.Level,
-                    RegulatoryAgencyName = a.permit.RegulatoryAgencyName,
-                    Description = a.detail.Description,
-                    Threshold = a.detail.Threshold,
-                    PrepTimeMin = a.detail.PrepTimeMin,
-                    PrepTimeMax = a.detail.PrepTimeMax,
-                    AgencyReviewTimeMin = a.detail.AgencyReviewTimeMin,
-                    AgencyReviewTimeMax = a.detail.AgencyReviewTimeMax,
-                    BasicFees = a.detail.BasicFees,
-                    Id = a.permit.Id
-                })
-                .OrderByDescending(a => a.Id)
-                .ToList();
-                BaseObj.Count = Result.Count;
-                BaseObj.Data = Result;
-                BaseObj.Success = true;
+                    Result = _context.PermitMasters.Where(a =>
+                       (Request.Level == "Federal" ? true : Request.State.Contains(a.State)) &&
+                       (Request.City == null || Request.City.Count == 0 || Request.Level != "City" ? true : Request.City.Contains(a.City)) &&
+                       (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
+                       (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
+                       (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName)
+                                                   ).ToList()
+                                                    .Join(_context.PermitMasterDetails,
+                                                    permit => permit.Id,
+                                                    detail => detail.PermitId,
+                                                    (permit, detail) => new { permit, detail })
 
+                    .Select(a => new EPermitMasterDetail
+                    {
+                        Category = a.permit.Category,
+                        PermitName = a.permit.PermitName,
+                        State = a.permit.State,
+                        City = a.permit.City,
+
+                        Level = a.permit.Level,
+                        RegulatoryAgencyName = a.permit.RegulatoryAgencyName,
+                        Description = a.detail.Description,
+                        Threshold = a.detail.Threshold,
+                        PrepTimeMin = a.detail.PrepTimeMin,
+                        PrepTimeMax = a.detail.PrepTimeMax,
+                        AgencyReviewTimeMin = a.detail.AgencyReviewTimeMin,
+                        AgencyReviewTimeMax = a.detail.AgencyReviewTimeMax,
+                        BasicFees = a.detail.BasicFees,
+                        Id = a.permit.Id
+                    })
+                    .OrderByDescending(a => a.Id)
+                    .ToList();
+
+                }
+                else
+                {
+
+                    Result = _context.PermitMasters.Where(a =>
+                       (Request.State.Contains(a.State) || Request.City.Contains(a.City) || a.Level == "Federal") &&
+                       (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
+                       (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
+                       (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName)
+                                                   ).ToList()
+                                                    .Join(_context.PermitMasterDetails,
+                                                    permit => permit.Id,
+                                                    detail => detail.PermitId,
+                                                    (permit, detail) => new { permit, detail })
+
+                    .Select(a => new EPermitMasterDetail
+                    {
+                        Category = a.permit.Category,
+                        PermitName = a.permit.PermitName,
+                        State = a.permit.State,
+                        City = a.permit.City,
+
+                        Level = a.permit.Level,
+                        RegulatoryAgencyName = a.permit.RegulatoryAgencyName,
+                        Description = a.detail.Description,
+                        Threshold = a.detail.Threshold,
+                        PrepTimeMin = a.detail.PrepTimeMin,
+                        PrepTimeMax = a.detail.PrepTimeMax,
+                        AgencyReviewTimeMin = a.detail.AgencyReviewTimeMin,
+                        AgencyReviewTimeMax = a.detail.AgencyReviewTimeMax,
+                        BasicFees = a.detail.BasicFees,
+                        Id = a.permit.Id
+                    })
+                    .OrderByDescending(a => a.Id)
+                    .ToList();
+                }
+                    BaseObj.Count = Result.Count;
+                    BaseObj.Data = Result;
+                    BaseObj.Success = true;
             }
             catch (Exception ex)
             {
