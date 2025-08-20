@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using contract;
 using contract.Entities;
 using Data.DbEntities;
@@ -19,10 +20,12 @@ namespace permitapi.Controllers
     {
         private readonly permit_account_serviceContext _context;
         private readonly ICurrentUserService _currentUserService;
-        public AccountController(permit_account_serviceContext context, ICurrentUserService currentUserService)
+        private readonly IMapper _mapper;
+        public AccountController(permit_account_serviceContext context, IMapper mapper, ICurrentUserService currentUserService)
         {
             _context = context;
             _currentUserService = currentUserService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -69,9 +72,9 @@ namespace permitapi.Controllers
 
         [HttpGet]
         [Route("IsUserExist")]
-        public BaseReturn<bool> IsUserExisit(string UserName)
+        public BaseReturn<EUsers> IsUserExisit(string UserName)
         {
-            var BaseObj = new BaseReturn<bool>();
+            var BaseObj = new BaseReturn<EUsers>();
 
             try
             {
@@ -87,7 +90,8 @@ namespace permitapi.Controllers
                     _context.Users.Add(UserObj);
                     _context.SaveChanges();
                 }
-                BaseObj.Data = Result != null && Result.IsActive == true ? true : false;
+                
+                BaseObj.Data = _mapper.Map<EUsers>(Result);
                 BaseObj.Success = Result != null && Result.IsActive == true ? true : false;
             }
             catch (Exception ex)

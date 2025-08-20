@@ -24,6 +24,13 @@ export class HttpService {
     });
     return this.http.get<T>(this.baseUrl + method, { headers: headers, params: data });
   }
+  httpGetCallWithPromise(method: string, params: any, autoLoader: boolean): Observable<any> {
+     let headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Loader', autoLoader.toString());
+
+  return this.http.get<any>(this.baseUrl + method, { headers: headers, params: params });
+}
 
   httpPostCall<T>(method: string, data: any, autoLoader: boolean = true): Observable<T[]> {
     const config = {

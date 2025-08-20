@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { MENU_ITEMS } from './pages-menu';
+import { AuthService } from '../services/auth.service';
+import { Constants } from '../Models/Constants';
 
 @Component({
   selector: 'ngx-pages',
@@ -11,14 +13,20 @@ import { MENU_ITEMS } from './pages-menu';
 export class PagesComponent {
   menu = MENU_ITEMS;
   breadcrumbItems: any[] = [];
+  user : any = {};
+  RoleList :  Array<{"Role"  : string , "Value" : Array<string>}> = Constants.RoleAssignment;
+  MenuList : Array<string>  = [];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router , private Auth : AuthService) {}
 
   ngOnInit() {
-    // Initial breadcrumb load
+    this.user = this.Auth.GetLoggedInUser();
+    this.MenuList = this.RoleList.find(a=>a.Role == this.user.Role)?.Value?? [];
     this.updateBreadcrumb(this.router.url);
-
-    // Update breadcrumb when route changes
+    this.menu = this.menu.filter(a=>{
+    this.MenuList.includes(a.title) 
+  });
+    
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {
@@ -27,7 +35,7 @@ export class PagesComponent {
   }
 
   updateBreadcrumb(url: string) {
-    let str = url.split("/")[2] ?? ''; // Adjust if 'pages' is always at index 1
+    let str = url.split("/")[2] ?? ''; 
     this.breadcrumbItems = this.splitPascalCasePath(str);
   }
 

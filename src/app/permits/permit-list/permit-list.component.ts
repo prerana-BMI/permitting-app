@@ -3,12 +3,14 @@ import { HttpService } from 'src/app/services/http.service';
 import { Constants } from 'src/app/Models/Constants';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { BehaviorSubject, debounceTime } from 'rxjs';
+import { BehaviorSubject, debounceTime, lastValueFrom } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateMatrixComponent } from '../create-matrix/create-matrix.component';
-import * as XLSX from 'xlsx'
+import * as ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
+
 import { SelectedPermitComponent } from '../selected-permit/selected-permit.component';
 import { DatatransferService } from 'src/app/services/datatransfer.service';
 @Component({
@@ -45,7 +47,7 @@ export class PermitListComponent {
   isCityLoading : boolean= false;
   ListOfId : Array<any> = [];
   StateList : Array<any> = [];
- 
+  res : any;
   SelectedCount : number = 0 ;
   NavigatedData  : any;
   StateCityMapping : {State : string , City : string}[]= [];
@@ -266,46 +268,76 @@ CreateMatrix(): void {
     }
   });
 }
-  DownloadExcel()
-  {
-    let ExportData : Array<any> = [];
-     let param = {
-      'Level' : this.Level,
-      'State' :  (this.Level == 'State' || this.Level == 'City') && this.State != '' ? [this.State] : this.StateList,
-      'City' :   this.Level == "State" && this.City == "" ? [] : this.City != '' ? [this.City] : [...new Set(this.StateCityMapping.map(a => a.City))],
-      'Category' : this.SearchForm.controls['Category'].value == null ? '': this.SearchForm.controls['Category'].value,
-      'PermitName': this.SearchForm.controls['PermitName'].value == null ? '': this.SearchForm.controls['PermitName'].value,
-      'RegulatoryAgencyName': this.SearchForm.controls['RegulatoryAgency'].value == null ? '': this.SearchForm.controls['RegulatoryAgency'].value,
+  async DownloadExcel() {
+    let workbook = new ExcelJS.Workbook();
+    let worksheet = workbook.addWorksheet("Permits");
+    let param = {
+      'Level': this.Level,
+      'State': (this.Level == 'State' || this.Level == 'City') && this.State != '' ? [this.State] : this.StateList,
+      'City': this.Level == "State" && this.City == "" ? [] : this.City != '' ? [this.City] : [...new Set(this.StateCityMapping.map(a => a.City))],
+      'Category': this.SearchForm.controls['Category'].value == null ? '' : this.SearchForm.controls['Category'].value,
+      'PermitName': this.SearchForm.controls['PermitName'].value == null ? '' : this.SearchForm.controls['PermitName'].value,
+      'RegulatoryAgencyName': this.SearchForm.controls['RegulatoryAgency'].value == null ? '' : this.SearchForm.controls['RegulatoryAgency'].value,
     }
-      this.httpService.httpGetCall(Constants.ExportPermitsToExcel ,param, true).subscribe((res: any)=>{
-        if(res["Success"])
-        {
-         // this.ExportPermitList = res["Data"];
-          res["Data"].forEach((a:any)=>
-            ExportData.push({
-              Category : a.Category,
-                Permit_Name : a.PermitName,
-                State : a.State,
-                City : a.City,
-                Level : a.Level,
-                Regulatory_Agency_Name : a.RegulatoryAgencyName,
-                Description : a.Description,
-                Threshold : a.Threshold,
-                Minimum_Preparation_Time : a.PrepTimeMin,
-                Maximum_Preparation_Time: a.PrepTimeMax,
-                Minimum_Agency_Review_Time : a.AgencyReviewTimeMin,
-                Maximum_Agency_Review_Time : a.AgencyReviewTimeMax,
-                Basic_Fees : a.BasicFees,
-                   
-        })
-        );
-        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(ExportData);
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
-        XLSX.writeFile(wb, 'Permits.xlsx');
-        }
-      })
-    
+    let res = await lastValueFrom(this.httpService.httpGetCallWithPromise(Constants.ExportPermitsToExcel, param, true));
+
+    // Add header row
+    let headerRow = worksheet.addRow([
+      "Category", "Permit Name", "State", "City", "Level",
+      "Regulatory Agency Name", "Description", "Threshold",
+      "Min Prep Time", "Max Prep Time", "Min Review Time",
+      "Max Review Time", "Basic Fees"
+    ]);
+
+    // Style header
+    headerRow.eachCell((cell) => {
+      cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: "4F81BD" }
+      };
+      cell.alignment = { horizontal: 'center', vertical: 'middle' };
+    });
+
+    // Add data
+    res["Data"].forEach((d: any) => {
+      worksheet.addRow([
+        d.Category ?? '',
+        d.PermitName ?? '',
+        d.State ?? '',
+        d.City ?? '',
+        d.Level ?? '',
+        d.RegulatoryAgencyName ?? '',
+        d.Description ?? '',
+        d.Threshold ?? '',
+        d.MinPrepTime ?? '',
+        d.MaxPrepTime ?? '',
+        d.MinReviewTime ?? '',
+        d.MaxReviewTime ?? '',
+        d.BasicFees ?? ''
+      ]);
+    });
+
+    // Auto width
+    worksheet.columns.forEach((col: any) => {
+      col.width = Math.max(...col.values.map((v: string) => v?.toString().length || 10)) + 2;
+    });
+
+    worksheet.columns.forEach((col: any) => {
+      let maxLength = 10;
+      col.eachCell({ includeEmpty: true }, (cell: any) => {
+        const len = cell.value ? cell.value.toString().length : 0;
+        if (len > maxLength) maxLength = len;
+      });
+      col.width = maxLength + 2;
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    saveAs(blob, "Permits.xlsx");
+
+
   }
    CityTypeAheadDisplay(val: any) {
     let res = this.CityList.find(a => a == val);

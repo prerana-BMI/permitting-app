@@ -55,6 +55,7 @@ export class AuthService {
   console.error("Silent token acquisition failed", error);
          localStorage.removeItem('user');
         localStorage.removeItem('token');
+        localStorage.removeItem('userDbDetails');
 
   if (error instanceof InteractionRequiredAuthError) {
     // 👇 Prevent duplicate redirects
@@ -71,8 +72,10 @@ export class AuthService {
   }
   GetLoggedInUser() {
     let user = localStorage.getItem('user');
+    let role = localStorage.getItem('userDbDetails') ?? "";
     if (user != null && user != undefined) {
       this.User = JSON.parse(user);
+      this.User['Role'] = JSON.parse(role)?.UserRole; 
       return this.User;
 
     }
@@ -88,11 +91,16 @@ export class AuthService {
   IsUserAuthorized(UserName : string ) {
       this.HttpService.httpGetCall(Constants.IsUserExist+ UserName, {},true).subscribe((res:any)=>{
       if(res['Success'])
-      {
+      { 
+        let data = {
+          'UserRole': res["Data"].UserRole,
+        }
+        localStorage.setItem('userDbDetails', JSON.stringify(data));
         this.router.navigate(['/permits/PermitHome']);
       }
       else{
         this.toastr.error('You are an unauthorized user,Please contact your help tesk team!');
+        localStorage.removeItem('userDbDetails');
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         this.router.navigate(['/account/login']);

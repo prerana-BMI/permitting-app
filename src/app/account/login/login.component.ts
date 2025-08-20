@@ -23,6 +23,7 @@ constructor(private authService : AuthService,
 ngOnInit(){
 localStorage.removeItem('user');
 localStorage.removeItem('token');
+localStorage.removeItem('userDbDetails');
 
 }
 Login() {
