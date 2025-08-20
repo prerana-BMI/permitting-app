@@ -100,7 +100,8 @@
   <div class="d-flex align-items-center">
     <!-- <p class="lableSyle mb-0 me-2 ml-2">Permit Count:</p>
     <p class="lableSyle mb-0">2</p> -->
-    <button type="button" class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn  ml-2" (click)="AddPermit()"
+    <button type="button" class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn  ml-2"
+    [disabled]="user.Role != 'Admin'" (click)="AddPermit()"
       style="margin-top: 0px !important;" >
       <span style=" margin: 0 1px;"></span>
       <i class="fa fa-plus"></i>

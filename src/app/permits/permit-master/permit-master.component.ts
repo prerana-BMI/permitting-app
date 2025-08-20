@@ -36,11 +36,13 @@ export class PermitMasterComponent {
   PermitNameList : Array<any> = []; 
   ispermitLoading : boolean =false;
   typeaheadDebounce : number = 500;
+  user : any = {};
   constructor(private httpService: HttpService,
     public router: Router,
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private HttpService : HttpService
+    private HttpService : HttpService,
+    private Auth : AuthService
   ) {
 
   }
@@ -49,6 +51,7 @@ export class PermitMasterComponent {
       Category: '',
       PermitName: ''
     });
+    this.user = this.Auth.GetLoggedInUser();
     this.GetAllPermits();
     this.InitializedTypeAhead();
     this.GetMasterCategory();

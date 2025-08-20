@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { debounceTime } from 'rxjs';
 import { Constants } from 'src/app/Models/Constants';
+import { AuthService } from 'src/app/services/auth.service';
 import { HttpService } from 'src/app/services/http.service';
 
 @Component({
@@ -22,16 +23,20 @@ RegagencyList : Array<any> = [];
 isCityLoading : boolean= false;
  PermitData : any; 
 CategoryList : Array<string> = [];
+user : any = {};
  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddPermitsComponent>,
     private HttpService : HttpService,
+    private Auth : AuthService,
     private fb: FormBuilder) {
     this.PermitData = data;
+    
 
   }
 ngOnInit()
 {
 this.GetMasterCategory();
+this.user = this.Auth.GetLoggedInUser();
 this.AddPermitForm= this.fb.group({
       Category: [''],
       TypeOfProject: [''],
