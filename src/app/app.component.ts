@@ -29,7 +29,7 @@ async ngOnInit(): Promise<void> {
 
     if (result?.account) {
       this.msalService.instance.setActiveAccount(result.account);
-      this.auth.getAccessToken('');
+      // this.auth.getAccessToken('');
       this.auth.IsUserAuthorized(result.account.username);
     } else {
       // fallback in case activeAccount is not set
