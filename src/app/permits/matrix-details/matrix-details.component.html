@@ -35,21 +35,29 @@
         <p class="lableSyle ml-2 mb-0">Selected Permits : </p>
       </div>
       <div class="d-flex align-items-center mr-4">
-         <a class="btn btn-sm rounded-1 ms-2" style="border: 1px solid #1c4876;color: #1c4876;">
-            <i class="fa-solid fa-download"></i>
-         </a>
+         <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn mr-4"
+            style="margin-top: 0px;" (click)="EditMtrix()">
+            <span style=" margin: 0 1px;"></span>
+            <i class="fas fa-edit"></i>
+            <span class="flex-grow-1 text-start">Edit</span>
+        
+          </button>
+       
+        <a class="btn btn-sm rounded-1 ms-2" style="border: 1px solid #1c4876;color: #1c4876;" (click)="DownloadExcel()">
+          <i class="fa-solid fa-download"></i>
+        </a>
       </div>
       </div>
     <div class="col-md-12 p-0">
       <div class="card-body">
       
- <div class="table-container">
+<div class="table-container">
   <table class="table table-hover fixed-table">
     <thead>
       <tr>
         <th style="width: 80px;">Permit Name</th>
         <th style="width: 50px;">Category</th>
-        <th style="width: 10px;">Level</th>
+        <th style="width: 30px;">Level</th>
         <th style="width: 30px;">State</th>
         <th style="width: 30px;">City</th>
         <th style="width: 70px;">Regulatory Agency</th>
@@ -59,42 +67,27 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let i of PermitList">
-        <td style="width: 80px;">{{i.PermitName}}</td>
-        <td style="width: 50px;">{{i.Category}}</td>
-        <td style="width: 10px;">{{i.Level}}</td>
-        <td style="width: 30px;">{{i.State}}</td>
-        <td style="width: 30px;">{{i.City}}</td>
-        <td style="width: 70px;">{{i.RegulatoryAgencyName}}</td>
-        <td style="width: 70px;">
-          {{i.PrepTimeMin}} {{ i.PrepTimeMax == null ? ' and above' : ' - ' + i.PrepTimeMax }}
-        </td>
-        <td style="width: 70px;">
-          {{i.AgencyReviewTimeMin}} {{ i.AgencyReviewTimeMax == null ? ' and above' : ' - ' + i.AgencyReviewTimeMax }}
-        </td>
-        <td style="width: 20px;">{{i.BasicFees}}</td>
-      </tr>
+      <!-- Group Slot -->
+      <ng-container *ngFor="let group of groupedPermits">
+        <tr class="level-row">
+          <td colspan="9">{{ group.level }}</td>
+        </tr>
+        <tr *ngFor="let i of group.items">
+          <td>{{i.PermitName}}</td>
+          <td>{{i.Category}}</td>
+          <td>{{i.Level}}</td>
+          <td>{{i.State}}</td>
+          <td>{{i.City}}</td>
+          <td>{{i.RegulatoryAgencyName}}</td>
+          <td>{{i.PrepTimeMin}} {{ i.PrepTimeMax == null ? ' and above' : ' - ' + i.PrepTimeMax }}</td>
+          <td>{{i.AgencyReviewTimeMin}} {{ i.AgencyReviewTimeMax == null ? ' and above' : ' - ' + i.AgencyReviewTimeMax }}</td>
+          <td>{{i.BasicFees}}</td>
+        </tr>
+      </ng-container>
     </tbody>
   </table>
 </div>
-
-
-      </div>
-
-    <div class="row">
-    <div class="col-md-12 d-flex justify-content-end">
-      <div class="col-lg-1 col-md-2 col-sm-4 p-1 mr-4">
-        <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn" style="margin-top: 0px;"
-          (click)="EditMtrix()">
-          <span style=" margin: 0 1px;"></span>
-            <i class="fas fa-edit"></i>
-          <span class="flex-grow-1 text-start">Edit</span>
-
-        </button>
-      </div>
-    </div>
-  </div>
-    </div>
-
-  </div>
+ </div>
+</div>
+</div>
 </div>

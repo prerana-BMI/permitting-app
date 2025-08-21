@@ -508,7 +508,9 @@ namespace permitapi.Controllers
                             AgencyReviewTimeMin = detail.AgencyReviewTimeMin,
                             AgencyReviewTimeMax = detail.AgencyReviewTimeMax,
                             BasicFees = detail.BasicFees,
-                            Id =permit.Id
+                            Id =permit.Id,
+                            Description = detail.Description,
+                            Threshold = detail.Threshold
                         })
                     .ToList();
 
