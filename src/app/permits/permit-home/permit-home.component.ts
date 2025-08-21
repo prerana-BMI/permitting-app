@@ -166,7 +166,6 @@ updateGroupedLocations() {
       map.get(item.State)!.add(item.City);
     }
   }
-
   this.groupedLocationsByStates = Array.from(map.entries()).map(([state, cities]) => ({
     state,
     cities: Array.from(cities)
@@ -189,7 +188,7 @@ removeCity(item: { City: string, State: string , Selected : string }) {
 }
 
 removeState(item: { State: string ,  Selected : string }) {
-  this.RemovedLocation = item;;
+  this.RemovedLocation = item;
   this.selectedLocations = this.selectedLocations.filter(loc => loc.State !== item.State);
   this.selectedLocations = [...this.selectedLocations]; // 👈 Force reference update
   this.updateGroupedLocations();

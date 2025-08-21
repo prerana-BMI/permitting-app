@@ -26,6 +26,8 @@ export class MatrixDetailsComponent {
   PermitList : Array<any> = [];
   MatrixId : number = 0;
   groupedPermits: { level: string, items: any[] }[] = [];
+  groupedLocationsByStates: { state: string, cities: string[] }[] = [];
+  selectedLocations :  { City: string; State: string }[] = [];
   ngOnInit()
   {
     this.SearchForm = this.fb.group({
@@ -37,6 +39,26 @@ export class MatrixDetailsComponent {
     this.SearchForm.disable();
     this.GetMatrixDetailById();
   }
+  updateGroupedLocations() {
+    const map = new Map<string, Set<string>>();
+
+    for (const item of this.selectedLocations) {
+      if (!item.State) continue;
+
+      if (!map.has(item.State)) {
+        map.set(item.State, new Set());
+      }
+
+      if (item.City && item.City !== 'Unknown') {
+        map.get(item.State)!.add(item.City);
+      }
+    }
+    this.groupedLocationsByStates = Array.from(map.entries()).map(([state, cities]) => ({
+      state,
+      cities: Array.from(cities)
+    }));
+  }
+
   GetMatrixDetailById()
   {
     this.HttpService.httpGetCall(Constants.GetMatrixDetailsById + this.MatrixId, false, true).subscribe((res:any)=>{
@@ -62,12 +84,21 @@ export class MatrixDetailsComponent {
           level,
           items: grouped[level]
         }));
+        this.PermitList.forEach((a : any)=>{
+          let obj = {
+            City : a.City,
+            State : a.State
+          }
+          this.selectedLocations.push(obj);
+        });
+        this.updateGroupedLocations();
       }
     });  
   }
   EditMtrix() {
     this.datatransferService.setData({
       'data': this.PermitList.map(a => a.Id),
+      'SelectedLocation' : this.groupedLocationsByStates,
       'MatrixId' :  this.SearchForm.controls['MatrixId'].value,
       'NavigatedFrom': 'Matrix'
     });

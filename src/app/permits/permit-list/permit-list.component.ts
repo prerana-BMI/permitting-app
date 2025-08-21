@@ -47,7 +47,6 @@ export class PermitListComponent {
   isCityLoading : boolean= false;
   ListOfId : Array<any> = [];
   StateList : Array<any> = [];
-  res : any;
   SelectedCount : number = 0 ;
   NavigatedData  : any;
   StateCityMapping : {State : string , City : string}[]= [];
@@ -75,7 +74,14 @@ export class PermitListComponent {
     if (res != null && res['NavigatedFrom'] == 'Matrix') {
       this.datatransferService.setData(null);
       this.NavigatedData = res;
-      this.ListOfId = this.NavigatedData?.data;
+      res.SelectedLocation.forEach((item: any) => {
+        item.cities.forEach((element: any) => {
+          this.StateCityMapping.push({ State: item.state, City: element });
+        });
+         
+      });
+      this.StateList =  res.SelectedLocation.map((obj : any)=>obj.state);
+      this.ListOfId = this.NavigatedData?.data.map((num :number) => ({ Id: num }));
       this.SelectedCount = this.NavigatedData?.data?.length;
     }
     else if(res != null && res.NavigatedFrom == 'Home')
