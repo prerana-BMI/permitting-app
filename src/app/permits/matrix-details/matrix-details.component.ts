@@ -97,7 +97,7 @@ export class MatrixDetailsComponent {
   }
   EditMtrix() {
     this.datatransferService.setData({
-      'data': this.PermitList.map(a => a.Id),
+      'data': this.PermitList,
       'SelectedLocation' : this.groupedLocationsByStates,
       'MatrixId' :  this.SearchForm.controls['MatrixId'].value,
       'NavigatedFrom': 'Matrix'

@@ -90,7 +90,7 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
     let res = this.StateList.find(a => a.State == val);
     if (res != null) {
       this.SelectedStateName = res.State;
-      return res.State
+      return res.State;
     }
     return ''
   }

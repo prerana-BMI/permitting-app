@@ -81,12 +81,11 @@ export class PermitListComponent {
          
       });
       this.StateList =  res.SelectedLocation.map((obj : any)=>obj.state);
-      this.ListOfId = this.NavigatedData?.data.map((num :number) => ({ Id: num }));
+      this.ListOfId = this.NavigatedData?.data.map((item: any) => ({...item,Ischecked: true}));
       this.SelectedCount = this.NavigatedData?.data?.length;
     }
     else if(res != null && res.NavigatedFrom == 'Home')
     {
-      
       this.datatransferService.setData(null);
       res.data.forEach((item: any) => {
         item.cities.forEach((element: any) => {
