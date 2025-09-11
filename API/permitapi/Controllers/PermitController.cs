@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace permitapi.Controllers
 {
 
-    [Authorize]
+   
     [Route("api/[controller]")]
     public class PermitController : ControllerBase
     {
@@ -272,6 +272,7 @@ namespace permitapi.Controllers
             }
             return BaseObj;
         }
+
         [HttpPost]
         [Route("SavePermits")]
         public BaseReturn<int> SavePermits([FromBody] EPermitMasterDetail Request)

@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/API/permitapi/bin/Debug/net6.0/permitapi.dll",
+            "program": "${workspaceFolder}/API/permitapi/bin/Debug/net8.0/permitapi.dll",
             "args": [],
             "cwd": "${workspaceFolder}/API/permitapi",
             "stopAtEntry": false,

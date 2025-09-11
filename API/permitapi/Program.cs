@@ -35,8 +35,8 @@ var mappingConfig = new MapperConfiguration(mc =>
             builder.Services.AddSingleton(mapper);
 
 
-builder.Services.AddAuthentication("Bearer")
-.AddJwtBearer("Bearer", options =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
 {
     // 1️⃣ Authority (used to discover signing keys and issuer config)
     options.Authority = "https://login.microsoftonline.com/bfbb9a2b-6d99-4e78-b3c7-95005d555c8b";
@@ -84,6 +84,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 
+builder.Services.AddAuthorization();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -97,7 +98,6 @@ if (app.Environment.IsDevelopment())
                                 .AllowAnyHeader());
 }
 
-builder.Services.AddAuthorization();
 
 
 app.UseHttpsRedirection();
