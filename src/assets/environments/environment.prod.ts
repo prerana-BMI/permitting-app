@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://api.yourdomain.com/api' // live API URL
+    apiUrl: 'permitappapiservice-h5egcsewe3djcgan.southcentralus-01.azurewebsites.net' // live API URL
   };
