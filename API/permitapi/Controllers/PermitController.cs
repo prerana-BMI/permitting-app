@@ -16,11 +16,11 @@ namespace permitapi.Controllers
     [Route("api/[controller]")]
     public class PermitController : ControllerBase
     {
-        private readonly permit_account_serviceContext _context;
+        private readonly PermitAccountDbContext _context;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
 
-        public PermitController(permit_account_serviceContext context, IMapper mapper, ICurrentUserService currentUserService)
+        public PermitController(PermitAccountDbContext context, IMapper mapper, ICurrentUserService currentUserService)
         {
             _context = context;
             _mapper = mapper;
@@ -232,7 +232,7 @@ namespace permitapi.Controllers
             {
                 BaseObj.Data = _context.PermitMasters
                   .Where(master => master.Id == PermitId)
-                  .Join(_context.PermitMasterDetails.Where(a => a.PermitId == PermitId),
+                  .Join(_context.PermitDetails.Where(a => a.PermitId == PermitId),
                           master => master.Id,
                           detail => detail.PermitId,
                           (master, detail) => new EPermitMasterDetail
@@ -284,7 +284,7 @@ namespace permitapi.Controllers
                 if (Request.Id > 0)
                 {
                     var permitObj = _context.PermitMasters.FirstOrDefault(a => a.Id == Request.Id);
-                    var PermitDetailsObj = _context.PermitMasterDetails.FirstOrDefault(a => a.PermitId == Request.PermitId);
+                    var PermitDetailsObj = _context.PermitDetails.FirstOrDefault(a => a.PermitId == Request.PermitId);
 
                     if (permitObj != null && PermitDetailsObj != null)
                     {
@@ -305,7 +305,7 @@ namespace permitapi.Controllers
                         PermitDetailsObj.BasicFees = Request.BasicFees;
                         PermitDetailsObj.AdditionalBasic = Request.AdditionalBasic;
                         _context.PermitMasters.Update(permitObj);
-                        _context.PermitMasterDetails.Update(PermitDetailsObj);
+                        _context.PermitDetails.Update(PermitDetailsObj);
 
                         BaseObj.Message = "Permit Detils Updated";
                     }
@@ -324,7 +324,7 @@ namespace permitapi.Controllers
                     };
                     _context.PermitMasters.Add(PermitObj);
                     _context.SaveChanges();
-                    _context.PermitMasterDetails.Add(new PermitMasterDetail()
+                    _context.PermitDetails.Add(new PermitDetail()
                     {
                         Description = Request.Description,
                         Threshold = Request.Threshold,
@@ -492,7 +492,7 @@ namespace permitapi.Controllers
 
                 var data = _context.PermitMasters
                     .Where(pm => permitData.Contains(pm.Id))
-                    .Join(_context.PermitMasterDetails.Where(pmd => permitData.Contains(pmd.PermitId ?? 0)),
+                    .Join(_context.PermitDetails.Where(pmd => permitData.Contains(pmd.PermitId ?? 0)),
                         permit => permit.Id,
                         detail => detail.PermitId,
                         (permit, detail) => new EPermitMasterDetail
@@ -558,7 +558,7 @@ namespace permitapi.Controllers
                        (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
                        (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName)
                                                    ).ToList()
-                                                    .Join(_context.PermitMasterDetails,
+                                                    .Join(_context.PermitDetails,
                                                     permit => permit.Id,
                                                     detail => detail.PermitId,
                                                     (permit, detail) => new { permit, detail })
@@ -594,7 +594,7 @@ namespace permitapi.Controllers
                        (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
                        (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName)
                                                    ).ToList()
-                                                    .Join(_context.PermitMasterDetails,
+                                                    .Join(_context.PermitDetails,
                                                     permit => permit.Id,
                                                     detail => detail.PermitId,
                                                     (permit, detail) => new { permit, detail })

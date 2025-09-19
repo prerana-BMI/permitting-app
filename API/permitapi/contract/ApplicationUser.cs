@@ -23,7 +23,7 @@ public class CurrentUserService : ICurrentUserService
 {
     public ApplicationUser User { get; }
 
-    public CurrentUserService(IHttpContextAccessor httpContextAccessor , permit_account_serviceContext context)
+    public CurrentUserService(IHttpContextAccessor httpContextAccessor ,  PermitAccountDbContext context)
     {
         var user = httpContextAccessor.HttpContext?.User;
 

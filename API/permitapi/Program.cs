@@ -24,8 +24,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<permit_account_serviceContext>(options =>
-options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+builder.Services.AddDbContext<PermitAccountDbContext>(options =>
+options.UseSqlServer(connectionString));
 var mappingConfig = new MapperConfiguration(mc =>
                                 {
                                     mc.AddProfile(new MappingProfile());

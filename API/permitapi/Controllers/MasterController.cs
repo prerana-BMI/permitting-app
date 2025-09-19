@@ -9,8 +9,8 @@ namespace permitapi.Controllers
     [Route("api/[controller]")]
     public class MasterController : ControllerBase
     {
-        private readonly permit_account_serviceContext _context;
-        public MasterController(permit_account_serviceContext context)
+        private readonly PermitAccountDbContext _context;
+        public MasterController(PermitAccountDbContext context)
         {
             _context = context;
         }

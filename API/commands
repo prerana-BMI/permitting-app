@@ -1,2 +1,6 @@
 
-dotnet ef dbcontext scaffold "server=localhost;port=3306;user=root;password=Pass@123;database=permit_account_service;TreatTinyAsBoolean=false" Pomelo.EntityFrameworkCore.MySql -o DbEntities -f
+dotnet ef dbcontext scaffold "Server=B731765;Database=permit_account_db;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -o DbEntities -f
+
+dotnet ef dbcontext scaffold "Server=B731765;Database=permit_account_db;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -o DbEntities -f
+
+dotnet ef dbcontext scaffold "Server=B731765;Database=permit_account_db;User Id=sa;Password=Pass@123;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -o DbEntities -f

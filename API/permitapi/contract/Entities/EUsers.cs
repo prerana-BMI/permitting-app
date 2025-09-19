@@ -7,7 +7,7 @@ public class EUsers : EPaginationReq
 {
     public string? UserName { get; set; }
     public string? UserRole { get; set; }
-    public bool? IsActive { get; set; }
+    public bool IsActive { get; set; }
     public int? CreatedBy { get; set; }
     public DateTime? CreatedOn { get; set; }
     public int Id { get; set; }

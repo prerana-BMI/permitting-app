@@ -18,10 +18,10 @@ namespace permitapi.Controllers
 
    public class AccountController : ControllerBase
     {
-        private readonly permit_account_serviceContext _context;
+        private readonly PermitAccountDbContext _context;
         private readonly ICurrentUserService _currentUserService;
         private readonly IMapper _mapper;
-        public AccountController(permit_account_serviceContext context, IMapper mapper, ICurrentUserService currentUserService)
+        public AccountController(PermitAccountDbContext context, IMapper mapper, ICurrentUserService currentUserService)
         {
             _context = context;
             _currentUserService = currentUserService;
