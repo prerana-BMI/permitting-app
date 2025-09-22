@@ -92,7 +92,7 @@ namespace permitapi.Controllers
                 }
                 
                 BaseObj.Data = _mapper.Map<EUsers>(Result);
-                BaseObj.Success = Result != null && Result.IsActive == true ? true : false;
+                BaseObj.Success = true ;
             }
             catch (Exception ex)
             {
