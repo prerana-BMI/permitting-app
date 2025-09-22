@@ -27,7 +27,8 @@
                 "glob": "**/*",
                 "input": "./node_modules/leaflet/dist/images/",
                 "output": "/assets/leaflet/images"
-              }
+              },
+               "src/web.config"
             ],
             "styles": [
               "node_modules/leaflet/dist/leaflet.css",
@@ -43,6 +44,12 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/assets/environments/environment.ts",
+                  "with": "src/assets/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -56,6 +63,7 @@
                 }
               ],
               "outputHashing": "all"
+
             },
             "development": {
               "buildOptimizer": false,
@@ -72,7 +80,13 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "permitting-app:build:production"
+              "browserTarget": "permitting-app:build:production",
+              "fileReplacements": [
+                {
+                  "replace": "src/assets/environments/environment.ts",
+                  "with": "src/assets/environments/environment.prod.ts"
+                }
+              ]
             },
             "development": {
               "browserTarget": "permitting-app:build:development"
@@ -101,7 +115,8 @@
                 "glob": "**/*",
                 "input": "./node_modules/leaflet/dist/images/",
                  "output": "/assets/leaflet/images"
-              }
+              },
+               "src/web.config"
             ],
             "styles": [
               "src/styles.scss",
