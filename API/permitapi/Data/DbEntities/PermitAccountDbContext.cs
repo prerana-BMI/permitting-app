@@ -28,9 +28,13 @@ public partial class PermitAccountDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=B731765;Database=permit_account_db;User Id=sa;Password=Pass@123;Trusted_Connection=True;TrustServerCertificate=True;");
 
+    {
+      if (!optionsBuilder.IsConfigured)
+    {
+        // Do nothing → will use DI connection string
+    }
+} 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<CityMaster>(entity =>
