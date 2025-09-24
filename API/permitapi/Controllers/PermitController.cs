@@ -13,6 +13,7 @@ namespace permitapi.Controllers
 {
 
    
+     [Authorize]
     [Route("api/[controller]")]
     public class PermitController : ControllerBase
     {
