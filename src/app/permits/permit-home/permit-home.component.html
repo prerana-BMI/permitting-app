@@ -94,7 +94,7 @@
       Selected Locations
     </div>
   
-    <div class="card-body" style="overflow-y: auto; width: 500px;">
+    <div class="card-body" style="overflow-y: auto;">
       <div *ngFor="let group of groupedLocationsByStates" class="mb-4 p-3 border rounded bg-light">
   
         <!-- State Title and Remove Button -->
@@ -116,7 +116,7 @@
             {{ city }}
 
 
-              <button type="button" class="btn btn-link p-0 m-0 text-danger" (click)="removeCity({ City: city, State: group.state , Selected : 'N'})"
+              <button type="button" class="btn btn-link p-0 m-0 text-danger" (click)="removeCity({ City: city, State: group.state , Selected : 'N' })"
                 title="Remove City">
                 <i class="fas fa-times"></i>
               </button>
@@ -140,4 +140,3 @@
 
 
 </div>
-

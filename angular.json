@@ -119,6 +119,7 @@
                "src/web.config"
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.scss",
               "src/styles.scss",
               "node_modules/nebular-icons/scss/nebular-icons.scss",

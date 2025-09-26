@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { MENU_ITEMS } from './pages-menu';
+import { NbMenuItem } from '@nebular/theme';
 import { AuthService } from '../services/auth.service';
 import { Constants } from '../Models/Constants';
 
@@ -11,39 +12,40 @@ import { Constants } from '../Models/Constants';
   templateUrl: 'pages.component.html',
 })
 export class PagesComponent {
-  menu = MENU_ITEMS;
+
+  menu: NbMenuItem[] = MENU_ITEMS;
   breadcrumbItems: any[] = [];
-  user : any = {};
-  RoleList :  Array<{"Role"  : string , "Value" : Array<string>}> = Constants.RoleAssignment;
-  MenuList : Array<string>  = [];
+  user: any = {};
+  RoleList: Array<{ Role: string, Value: Array<string> }> = Constants.RoleAssignment;
+  MenuList: Array<string> = [];
 
-  constructor(private router: Router , private Auth : AuthService) {}
+  constructor(private router: Router, private Auth: AuthService) {}
 
-ngOnInit(): void {
+  ngOnInit(): void {
     this.Auth.getAccessToken().subscribe({
-    next: (token: string) => {
-      console.log("Access Token in ngOnInit:", token);
-      this.user = this.Auth.GetLoggedInUser();
-      this.MenuList = this.RoleList.find(a => a.Role == this.user.Role)?.Value ?? [];
-      this.updateBreadcrumb(this.router.url);
-      this.menu = this.menu.filter(a => this.MenuList.includes(a.title));
-       this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: any) => {
-        this.updateBreadcrumb(event.urlAfterRedirects);
-      });
-    },
-    error: (err) => {
-      console.error("Failed to acquire token in ngOnInit", err);
-    }
-  });
-}
+      next: (token: string) => {
+        console.log("Access Token in ngOnInit:", token);
+        this.user = this.Auth.GetLoggedInUser();
+        this.MenuList = this.RoleList.find(a => a.Role == this.user.Role)?.Value ?? [];
+        this.updateBreadcrumb(this.router.url);
 
-    
-   
+        // Filter the menu items based on user roles
+        this.menu = this.menu.filter(a => this.MenuList.includes(a.title));
+
+        this.router.events
+          .pipe(filter(event => event instanceof NavigationEnd))
+          .subscribe((event: any) => {
+            this.updateBreadcrumb(event.urlAfterRedirects);
+          });
+      },
+      error: (err) => {
+        console.error("Failed to acquire token in ngOnInit", err);
+      }
+    });
+  }
 
   updateBreadcrumb(url: string) {
-    let str = url.split("/")[2] ?? ''; 
+    let str = url.split("/")[2] ?? '';
     this.breadcrumbItems = this.splitPascalCasePath(str);
   }
 

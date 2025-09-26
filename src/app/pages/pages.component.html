@@ -1,4 +1,4 @@
-<nb-layout windowMode>
+<nb-layout>
       <nb-layout-header fixed>
             <ngx-header></ngx-header>
       </nb-layout-header>
@@ -8,16 +8,9 @@
             <ng-content select="nb-menu"></ng-content>
       </nb-sidebar>
 
-      <!-- <app-layout>
-            <router-outlet></router-outlet>
-      </app-layout> -->
-
   <nb-layout-column style="background-color: #fcfcfd;">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb custom-breadcrumb" style="background-color: transparent;">
-      <!-- <li class="breadcrumb-item">
-            <a href="#"><i class="fa fa-home"></i> Home</a>
-      </li> -->
       <li *ngFor="let crumb of breadcrumbItems; let last = last"
           class="breadcrumb-item"
           [class.active]="last"
@@ -36,9 +29,6 @@
 
   <router-outlet></router-outlet>
 </nb-layout-column>
-
-
-
 
       <nb-layout-footer fixed>
             <ngx-footer></ngx-footer>
