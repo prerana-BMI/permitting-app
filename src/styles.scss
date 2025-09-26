@@ -6,6 +6,25 @@
 
 // material theme
 @use '@angular/material' as mat;
+  @include mat.core();
+
+// Define gray-based theme
+$honeycomb-primary: mat.define-palette(mat.$grey-palette, 600);
+$honeycomb-accent: mat.define-palette(mat.$blue-grey-palette, 300);
+$honeycomb-warn: mat.define-palette(mat.$red-palette);
+
+$honeycomb-theme: mat.define-light-theme((
+  color: (
+    primary: $honeycomb-primary,
+    accent: $honeycomb-accent,
+    warn: $honeycomb-warn,
+  ),
+));
+
+// Apply to components
+@include mat.all-component-typographies();
+@include mat.all-component-themes($honeycomb-theme);
+
 
 // themes - our custom or/and out of the box themes
 @import 'app/@theme/styles/themes';
@@ -14,7 +33,7 @@
 @import '@nebular/theme/styles/globals';
 
 // material core styles
-@include mat.core();
+
 
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
