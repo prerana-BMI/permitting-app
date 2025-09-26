@@ -45,6 +45,7 @@ $honeycomb-theme: mat.define-light-theme((
 
 @import 'app/@theme/styles/layout';
 @import 'app/@theme/styles/overrides';
+@import 'app/@theme/styles/common';
 
 // install the framework and custom global styles
 @include nb-install() {

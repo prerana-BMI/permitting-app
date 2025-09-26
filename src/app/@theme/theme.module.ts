@@ -16,10 +16,6 @@ import {
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import {DEFAULT_THEME } from './styles/theme.default';
 
-// import { COSMIC_THEME } from './styles/theme.cosmic';
-// import { CORPORATE_THEME } from './styles/theme.corporate';
-// import { DARK_THEME } from './styles/theme.dark';
-
 const NB_MODULES = [
   NbLayoutModule,
   NbMenuModule,
@@ -33,14 +29,6 @@ const NB_MODULES = [
   NbIconModule,
   NbEvaIconsModule,
 ];
-
-// const PIPES = [
-//   CapitalizePipe,
-//   PluralPipe,
-//   RoundPipe,
-//   TimingPipe,
-//   NumberWithCommasPipe,
-// ];
 
 @NgModule({
   imports: [CommonModule, ...NB_MODULES],
@@ -56,8 +44,7 @@ export class ThemeModule {
           {
             name: 'default',
           },
-          [DEFAULT_THEME,
-            // COSMIC_THEME, CORPORATE_THEME, DARK_THEME
+          [DEFAULT_THEME
           ],
         ).providers ?? []),
       ],

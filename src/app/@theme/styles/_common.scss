@@ -1,0 +1,19 @@
+.panel-header {
+  background-color: #dee2e6;
+  color: #000;
+  padding: 1rem;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h5 {
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+}
