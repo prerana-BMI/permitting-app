@@ -69,5 +69,39 @@ CREATE SCHEMA `permit_repository_service` ;
   PRIMARY KEY (`id`));
 
 
+ALTER TABLE [guest].[permit_matrix]
+ADD client_name VARCHAR(100);
+
+ALTER TABLE [guest].[permit_matrix]
+drop column [client_id] 
+
+ALTER TABLE  [guest].[permit_master]
+ALTER COLUMN [regulatory_agency_name] NVARCHAR(250);
+
+ALTER TABLE  [guest].[permit_master]
+ALTER COLUMN [category] NVARCHAR(100);
+
+ALTER TABLE  [guest].[permit_details]
+ALTER COLUMN [description] NVARCHAR(3000)
+
+ALTER TABLE  [guest].[permit_details]
+ALTER COLUMN [threshold] VARCHAR(500)
+
+ALTER TABLE  [guest].[permit_details]
+ALTER COLUMN [additional_basic] VARCHAR(1000)
+
+ALTER TABLE  [guest].[permit_master]
+ALTER COLUMN [permit_name] NVARCHAR(200)
+
+
+CREATE TABLE [guest].[client_master](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [nvarchar](100) NULL,
+ CONSTRAINT [PK_client_master] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
 
 
