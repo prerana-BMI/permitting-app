@@ -66,10 +66,22 @@ $state-badge-text: #1c4876;
     color: $white-background;
     padding: 1rem 1.5rem;
     font-size: 1.2rem;
-    font-weight: 500;
+    font-weight: 600;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
+
   }
+
+  // .panel-header1 {
+  //  background-color: transparent;
+  //   color: #1c4876;
+  //   padding: 1rem 1.5rem;
+  //   font-size: 1.2rem;
+  //   font-weight: 600;
+  //   border-top-left-radius: 12px;
+  //   border-top-right-radius: 12px;
+  //   border-bottom: 3px solid #1c4876;
+  // }
 
   .card-body {
     display: flex;
@@ -104,7 +116,7 @@ $state-badge-text: #1c4876;
     overflow-y: auto;
     gap: 0.75rem;
     min-height: 150px; /* Start at a minimum height */
-    max-height: 43vh;  /* Grow up to this height, then scroll */
+    max-height: 51vh;  /* Grow up to this height, then scroll */
   }
 
   .state-card {
@@ -206,6 +218,8 @@ $state-badge-text: #1c4876;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
 
+
+    
     .search-btn {
       width: 100%;
       padding: 0.85rem;
