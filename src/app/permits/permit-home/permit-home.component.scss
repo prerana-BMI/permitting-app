@@ -1,177 +1,237 @@
-@import 'bootstrap/scss/bootstrap';
-.search-sec {
-  padding: 5rem;
-  background: transparent; // Add background for visibility
-  border-radius: 5px;
-}
+/*---
+Permit Home Component - Enhanced Selected Locations Panel Styles
+--*/
 
-.search-slt {
-  display: block;
-  width: 100%;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: #55595c;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  height: calc(3rem + 2px) !important;
-  border-radius: 0;
-}
+$primary-brand-color: #1c4876;
+$light-gray-background: #f8f9fa;
+$card-border-color: #dee2e6;
+$white-background: #ffffff;
+$text-color: #212529;
+$danger-color: #dc3545;
+$city-tag-background: #e9ecef;
+$city-tag-text: #495057;
+$interactive-red: #e53935;
+$state-badge-bg: #d4e3ff;
+$state-badge-text: #1c4876;
 
-.wrn-btn {
-  font-size: 16px;
-  font-weight: 400;
-  text-transform: capitalize;
-  height: calc(3rem + 2px) !important;
-  border-radius: 0;
-}
-
-@media (min-width: 992px) {
-  .search-sec {
-    background: rgba(26, 70, 104, 0.6);
-  }
-}
-
-@media (max-width: 992px) {
-  .search-sec {
-    background: transparent;
-  }
-}
-
-  .card-title{
-   background: #0e3b64
-}
-h5
-{
-   color: white;
-}
-.card-body{
-   background-color: transparent;
-}
- .mat-opt {
+:host {
   display: flex;
-  justify-content: space-between;
-  padding: 4px 8px;
-  border-bottom:  1px solid #e1dbdba6 !important;
-  align-items: center;
+  flex-direction: column;
+  height: 100%;
 }
- .mat-opt1 {
+
+.page-container {
   display: flex;
-  justify-content: space-between;
-  padding: 4px 8px;
- 
-  border-bottom: 1px solid #e1dbdba6 !important;
-  align-items: center;
+  flex-grow: 1;
+  gap: 2rem;
+  box-sizing: border-box;
+  min-height: 0;
 }
 
-.autocomplete-header {
-  font-weight: bold;
-  background-color: #f5f5f5;
-  border-bottom: 2px solid #ccc;
-}
-
-.autocomplete-cell {
-  width: 50%;
-  text-align: left;
-}
-.custom-input {
-  box-shadow: none !important;
-  border-color: #a1aebb !important;
-  height: 120%;
-}
-.FlterButton {
-  font-size: 16px !important;
-  font-family: Open Sans, sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  line-height: 1.5rem;
-}
-
-.custom-outline-btn {
-  border: 1px solid #1c4876;
-  color: #1c4876;
-  height: 120%;
-  background-color: white;
-  width: 40%;
-}
-
-.custom-outline-btn:hover {
-  background-color: #1c4876;
-  color: white;
-  height: 120%;
-  width: 40%;
-  box-shadow: none !important;
-}
-.custom-input:disabled {
-            
-  background-color: #fff;  /* Custom background color */
-        /* Optional: show "not allowed" cursor */
-}
-
-.PageLayout
-{
-height:500px;
-border: 1px solid #d7d0d08f; 
-border-radius: 12px;
-background: white;
-box-shadow: 1px 1px 2px rgb(91 101 130 / 18%);
-}
-
-.lableSyle {
-  font-family: Open Sans, sans-serif;
-  font-size: 16px !important;
-  font-weight: 600;
-  line-height: 1.5rem;
-}
-  .card-body {
-  max-height: 400px;
-  // overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #c0c0c0 transparent;
-}
-
-.card-body::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
-}
-
-.card-body::-webkit-scrollbar-thumb {
-  background: #c0c0c0;
-  border-radius: 4px;
-}
-
-.badge i {
-  pointer-events: auto;
-}
-.fas.fa-times {
-  pointer-events: auto;
-  cursor: pointer;
-}
-.map-container {
-  z-index: 1;
-  position: relative;
+/* --- Left Column: Rich Map Styling --- */
+.map-section {
+  flex-grow: 1; /* Keep flex-grow for width */
+  height: 80vh; /* Set an explicit height for the map */
+  border-radius: 10px;
   overflow: hidden;
-  border: 1px solid #1c4876; // Add a border around the map
-  border-radius: 2px;
-}
-.card {
-  position: relative;
-  z-index: 1000;
-  pointer-events: auto;
-}
+  border: 1px solid $card-border-color;
 
-.panel-header {
-  background:#1c4876;
-  border-radius: 5px 5px 0px 0px;
-  padding: 15px 20px;
-
-  h5 {
-    font-weight: 600;
-    font-size: 17px;
-    line-height: 30px;
-    color: #ffffff;
-    margin: 0;
+  app-map {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 }
- 
- 
 
+/* --- Right Column: Wider Sidebar (No Changes) --- */
+.sidebar-section {
+  width: 520px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* --- General Sidebar Card Styles (No Changes) --- */
+.sidebar-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  background-color: $white-background;
+
+  .panel-header {
+    background-color: $primary-brand-color;
+    color: $white-background;
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 1.25rem;
+  }
+}
+
+/* --- Search Locations Form (No Changes) --- */
+.add-location-btn {
+  background-color: $white-background;
+  color: $primary-brand-color;
+  border: 2px solid $primary-brand-color;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px !important;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: $primary-brand-color;
+    color: $white-background;
+  }
+}
+
+/* --- Selected Locations Panel (State Badge Design) --- */
+.selected-locations-card {
+  min-height: 0;
+
+  .card-body {
+    overflow-y: auto;
+    gap: 0.75rem;
+    min-height: 150px; /* Start at a minimum height */
+    max-height: 43vh;  /* Grow up to this height, then scroll */
+  }
+
+  .state-card {
+    background-color: $light-gray-background;
+    border: 1px solid $card-border-color;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    transition: box-shadow 0.2s ease-in-out;
+
+    hr {
+      margin: 0.75rem 0;
+      border-color: #dbe2e9;
+    }
+  }
+
+  .state-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .state-badge {
+      display: inline-block;
+      background-color: $state-badge-bg;
+      color: $state-badge-text;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .remove-btn {
+      background: transparent;
+      border: 1px solid #e10e21;
+      color: #e10e21;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      font-size: 1.5rem;
+      line-height: 24px;
+      text-align: center;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: $interactive-red;
+        color: $white-background;
+        border-color: $interactive-red;
+      }
+    }
+  }
+
+  .city-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .city-tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: #e0e6ec;
+    color: $text-color;
+    padding: 0.5rem 1rem;
+    border-radius: 18px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .remove-btn {
+      background: transparent;
+      border: none;
+      color: #9aa5b1;
+      font-size: 1.2rem;
+      line-height: 1;
+      cursor: pointer;
+      margin-left: 0.5rem;
+      padding: 0;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: $interactive-red;
+      }
+    }
+  }
+
+  .card-footer {
+    flex-shrink: 0;
+    background-color: $white-background;
+    border-top: 1px solid $card-border-color;
+    padding: 1.25rem;
+    display: flex;
+    justify-content: center;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+
+    .search-btn {
+      width: 100%;
+      padding: 0.85rem;
+      background: $primary-brand-color linear-gradient(180deg, lighten($primary-brand-color, 5%), $primary-brand-color);
+      color: $white-background;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background: darken($primary-brand-color, 5%) linear-gradient(180deg, $primary-brand-color, darken($primary-brand-color, 5%));
+      }
+    }
+  }
+}
+
+/* --- Responsive Design Adjustments --- */
+@media (max-width: 1200px) {
+  .page-container { gap: 1.5rem; }
+  .sidebar-section { width: 440px; }
+}
+
+@media (max-width: 1024px) {
+  .page-container { flex-direction: column; height: auto; gap: 1.5rem; }
+  .map-section { height: 60vh; min-height: 0; } /* Set explicit height for smaller screens */
+  .sidebar-section { width: 100%; height: auto; }
+}
