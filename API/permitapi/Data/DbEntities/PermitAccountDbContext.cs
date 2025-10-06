@@ -17,8 +17,12 @@ public partial class PermitAccountDbContext : DbContext
 
     public virtual DbSet<CityMaster> CityMasters { get; set; }
 
+   
+    public virtual DbSet<ClientMaster> ClientMasters { get; set; }
+
     public virtual DbSet<PermitDetail> PermitDetails { get; set; }
 
+   
     public virtual DbSet<PermitMaster> PermitMasters { get; set; }
 
     public virtual DbSet<PermitMatrix> PermitMatrices { get; set; }
@@ -64,6 +68,16 @@ public partial class PermitAccountDbContext : DbContext
                 .HasMaxLength(45)
                 .IsUnicode(false)
                 .HasColumnName("state");
+        });
+
+        modelBuilder.Entity<ClientMaster>(entity =>
+        {
+            entity.ToTable("client_master", "guest");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .HasColumnName("name");
         });
 
         modelBuilder.Entity<PermitDetail>(entity =>
@@ -149,7 +163,10 @@ public partial class PermitAccountDbContext : DbContext
             entity.ToTable("permit_matrix", "guest");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ClientId).HasColumnName("client_id");
+            entity.Property(e => e.ClientName)
+                  .HasMaxLength(100)
+                  .IsUnicode(false)
+                  .HasColumnName("client_name");
             entity.Property(e => e.CreatedBy).HasColumnName("created_by");
             entity.Property(e => e.CreatedOn)
                 .HasDefaultValueSql("(getdate())")

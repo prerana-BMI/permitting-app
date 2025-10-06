@@ -42,7 +42,7 @@ TypeofPermitList : Array<string>= [];
   Submit() {
     let param = {
       TypeOfProject: this.AddMatrixForm.controls['TypeOfProject'].value,
-      ClientId: this.AddMatrixForm.controls['RegulatoryAgency'].value,
+      ClientName: this.AddMatrixForm.controls['RegulatoryAgency'].value,
       MatrixName: this.AddMatrixForm.controls['MatrixName'].value,
       PermitList: this.SelectedPermit.join(',')
 
@@ -74,7 +74,7 @@ InitializedTypeAhead(){
 this.AddMatrixForm.controls['RegulatoryAgency'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
       if (typeof val === 'string' && val.length >= 1) {
          this.isAgencyLoading = true;
-        this.HttpService.httpGetCall(Constants.GetRegulatoryAgencyBySearchText+  val.toLowerCase(),false , false).subscribe((res :any) => {
+        this.HttpService.httpGetCall(Constants.GetAllClientMaster+  val.toLowerCase(),false , false).subscribe((res :any) => {
           if (res["Success"]) {
 
             this.RegagencyList = res["Data"];
@@ -86,7 +86,7 @@ this.AddMatrixForm.controls['RegulatoryAgency'].valueChanges.pipe(debounceTime(t
   }
 AgencyTypeAheadDisplay(val: any)
   {
-     let res = this.RegagencyList.find(a => a.Id == val);
+     let res = this.RegagencyList.find(a => a.Name == val);
     if (res != null) {
       return res.Name;
     };
