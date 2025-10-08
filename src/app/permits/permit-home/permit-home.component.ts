@@ -134,6 +134,10 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
 
 
   AddToList() {
+    if((this.SearchForm.controls['state'].value == null || this.SearchForm.controls['state'].value == '') && (this.SearchForm.controls['city'].value == null || this.SearchForm.controls['city'].value == '') )
+    {
+      return;
+    }
     const result = {
       City: this.SearchForm.controls['city'].value,
       State: this.SearchForm.controls['state'].value,
