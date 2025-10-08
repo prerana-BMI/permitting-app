@@ -132,6 +132,105 @@ $state-badge-text: #1c4876;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .state-badge {
+      display: inline-block;
+      background-color: $state-badge-bg;
+      color: $state-badge-text;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .remove-btn {
+      background: transparent;
+      border: 1px solid #e10e21;
+      color: #e10e21;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      font-size: 1.5rem;
+      line-height: 24px;
+      text-align: center;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: $interactive-red;
+        color: $white-background;
+        border-color: $interactive-red;
+      }
+    }
+  }
+
+  .city-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .city-tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: #e0e6ec;
+    color: $text-color;
+    padding: 0.5rem 1rem;
+    border-radius: 18px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .remove-btn {
+      background: transparent;
+      border: none;
+      color: #9aa5b1;
+      font-size: 1.2rem;
+      line-height: 1;
+      cursor: pointer;
+      margin-left: 0.5rem;
+      padding: 0;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: $interactive-red;
+      }
+    }
+  }
+
+  .card-footer {
+    flex-shrink: 0;
+    background-color: $white-background;
+    border-top: 1px solid $card-border-color;
+    padding: 1.25rem;
+    display: flex;
+    justify-content: center;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+
+
+    
+    .search-btn {
+      width: 100%;
+      padding: 0.85rem;
+      background: $primary-brand-color linear-gradient(180deg, lighten($primary-brand-color, 5%), $primary-brand-color);
+      color: $white-background;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background: darken($primary-brand-color, 5%) linear-gradient(180deg, $primary-brand-color, darken($primary-brand-color, 5%));
+      }
+    }
   }
 }
 
