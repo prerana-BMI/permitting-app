@@ -1,7 +1,8 @@
 /*---
-Permit Home Component - Enhanced Selected Locations Panel Styles
+Permit Home Component - Enhanced Layout
 --*/
 
+/* --- Brand & Color Variables --- */
 $primary-brand-color: #1c4876;
 $light-gray-background: #f8f9fa;
 $card-border-color: #dee2e6;
@@ -14,27 +15,32 @@ $interactive-red: #e53935;
 $state-badge-bg: #d4e3ff;
 $state-badge-text: #1c4876;
 
+/* --- Component Root --- */
 :host {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.page-container {
-  display: flex;
-  flex-grow: 1;
-  gap: 2rem;
+  display: block;
+  padding: 2rem;
   box-sizing: border-box;
-  min-height: 0;
 }
 
-/* --- Left Column: Rich Map Styling --- */
+/* --- Main Page Layout (CSS GRID) --- */
+.page-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Strict 2:1 ratio */
+  grid-template-rows: 1fr;
+  gap: 2rem;
+  height: 75vh; /* Use a large, explicit viewport height to make the map tall */
+  min-height: 0; /* Allows grid children to shrink and scroll correctly */
+}
+
+/* --- Left Column (Grid Item): Map --- */
 .map-section {
-  flex-grow: 1; /* Keep flex-grow for width */
-  height: 80vh; /* Set an explicit height for the map */
+  min-width: 0;
+  min-height: 0;
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid $card-border-color;
+  position: relative;
+  z-index: 0; /* Ensures map renders behind the footer on zoom */
 
   app-map {
     width: 100%;
@@ -43,16 +49,16 @@ $state-badge-text: #1c4876;
   }
 }
 
-/* --- Right Column: Wider Sidebar (No Changes) --- */
+/* --- Right Column (Grid Item): Sidebar (DEFINITIVE LAYOUT FIX) --- */
 .sidebar-section {
-  width: 520px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr; /* Top row is natural height, bottom row fills space */
   gap: 2rem;
+  min-width: 0;
+  min-height: 0;
 }
 
-/* --- General Sidebar Card Styles (No Changes) --- */
+/* --- General Sidebar Card Styles --- */
 .sidebar-card {
   border: none;
   border-radius: 12px;
@@ -60,44 +66,34 @@ $state-badge-text: #1c4876;
   display: flex;
   flex-direction: column;
   background-color: $white-background;
+  min-width: 0;
+  min-height: 0;
 
   .panel-header {
+    flex-shrink: 0;
     background-color: $primary-brand-color;
     color: $white-background;
     padding: 1rem 1.5rem;
     font-size: 1.2rem;
-    font-weight: 600;
+    font-weight: 500;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
-
   }
-
-  // .panel-header1 {
-  //  background-color: transparent;
-  //   color: #1c4876;
-  //   padding: 1rem 1.5rem;
-  //   font-size: 1.2rem;
-  //   font-weight: 600;
-  //   border-top-left-radius: 12px;
-  //   border-top-right-radius: 12px;
-  //   border-bottom: 3px solid #1c4876;
-  // }
 
   .card-body {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
     padding: 1.25rem;
+    min-height: 0;
   }
 }
 
-/* --- Search Locations Form (No Changes) --- */
 .add-location-btn {
   background-color: $white-background;
   color: $primary-brand-color;
   border: 2px solid $primary-brand-color;
   padding: 0.75rem 1.25rem;
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 500;
   border-radius: 8px !important;
   transition: all 0.3s ease;
@@ -108,15 +104,16 @@ $state-badge-text: #1c4876;
   }
 }
 
-/* --- Selected Locations Panel (State Badge Design) --- */
+/* --- Selected Locations Panel (DYNAMIC HEIGHT) --- */
 .selected-locations-card {
-  min-height: 0;
+  min-height: 200px;     /* Set a minimum height as requested */
+  align-self: start;      /* Prevent the card from stretching to fill the grid row */
+  max-height: 100%;       /* Allows card to grow up to the full height of the grid row */
 
   .card-body {
-    overflow-y: auto;
+    flex-grow: 1;         /* Allow body to fill the card */
+    overflow-y: auto;     /* Add scrollbar only when content exceeds the card's allocated space */
     gap: 0.75rem;
-    min-height: 150px; /* Start at a minimum height */
-    max-height: 51vh;  /* Grow up to this height, then scroll */
   }
 
   .state-card {
@@ -124,7 +121,6 @@ $state-badge-text: #1c4876;
     border: 1px solid $card-border-color;
     border-radius: 10px;
     padding: 0.75rem 1rem;
-    transition: box-shadow 0.2s ease-in-out;
 
     hr {
       margin: 0.75rem 0;
@@ -136,116 +132,22 @@ $state-badge-text: #1c4876;
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    .state-badge {
-      display: inline-block;
-      background-color: $state-badge-bg;
-      color: $state-badge-text;
-      padding: 0.4rem 0.8rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-    }
-
-    .remove-btn {
-      background: transparent;
-      border: 1px solid #e10e21;
-      color: #e10e21;
-      width: 28px;
-      height: 28px;
-      border-radius: 4px;
-      font-size: 1.5rem;
-      line-height: 24px;
-      text-align: center;
-      cursor: pointer;
-      padding: 0;
-      transition: all 0.2s ease;
-
-      &:hover {
-        background-color: $interactive-red;
-        color: $white-background;
-        border-color: $interactive-red;
-      }
-    }
-  }
-
-  .city-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-  }
-
-  .city-tag {
-    display: inline-flex;
-    align-items: center;
-    background-color: #e0e6ec;
-    color: $text-color;
-    padding: 0.5rem 1rem;
-    border-radius: 18px;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .remove-btn {
-      background: transparent;
-      border: none;
-      color: #9aa5b1;
-      font-size: 1.2rem;
-      line-height: 1;
-      cursor: pointer;
-      margin-left: 0.5rem;
-      padding: 0;
-      transition: color 0.2s ease;
-
-      &:hover {
-        color: $interactive-red;
-      }
-    }
-  }
-
-  .card-footer {
-    flex-shrink: 0;
-    background-color: $white-background;
-    border-top: 1px solid $card-border-color;
-    padding: 1.25rem;
-    display: flex;
-    justify-content: center;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-
-
-    
-    .search-btn {
-      width: 100%;
-      padding: 0.85rem;
-      background: $primary-brand-color linear-gradient(180deg, lighten($primary-brand-color, 5%), $primary-brand-color);
-      color: $white-background;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      font-weight: 500;
-      transition: background-color 0.2s ease;
-
-      &:hover {
-        background: darken($primary-brand-color, 5%) linear-gradient(180deg, $primary-brand-color, darken($primary-brand-color, 5%));
-      }
-    }
   }
 }
 
 /* --- Responsive Design Adjustments --- */
-@media (max-width: 1200px) {
-  .page-container { gap: 1.5rem; }
-  .sidebar-section { width: 440px; }
-}
-
 @media (max-width: 1024px) {
-  .page-container { flex-direction: column; height: auto; gap: 1.5rem; }
-  .map-section { height: 60vh; min-height: 0; } /* Set explicit height for smaller screens */
-  .sidebar-section { width: 100%; height: auto; }
+  :host {
+    padding: 1rem;
+  }
+  .page-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    height: auto;
+    gap: 1.5rem;
+  }
+
+  .map-section {
+    height: 60vh;
+  }
 }
