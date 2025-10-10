@@ -2,7 +2,8 @@
 
   <!-- Map Section (Left) -->
   <div class="map-section">
-    <app-map [selectedLocationsFromParent]="RemovedLocation" (citySelected)="handleCitySelected($event)"></app-map>
+  <app-map [selectedLocationsFromParent]="selectedLocations" (citySelected)="handleCitySelected($event)"></app-map>
+
   </div>
 
   <!-- Sidebar Section (Right) -->
