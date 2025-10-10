@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs';
 import { Constants } from 'src/app/Models/Constants';
 import { DatatransferService } from 'src/app/services/datatransfer.service';
 import { HttpService } from 'src/app/services/http.service';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 @Component({
   selector: 'app-permit-home',
@@ -36,6 +37,13 @@ ngOnInit()
 {
   this.InitForm();
   this.initializeTyopeAhead();
+  this.SearchForm.get('state')?.setValidators([
+    this.datatransferService.valueInListValidator(() => this.StateList, 'State')
+  ]);
+
+  this.SearchForm.get('city')?.setValidators([
+    this.datatransferService.valueInListValidator(() => this.CityList, 'City')
+  ]);
    
 }
 
@@ -43,8 +51,8 @@ ngOnInit()
   InitForm()
   {
     this.SearchForm = this.Formbuilder.group({
-      city : [''],
-      state : [''],
+      city : ['' , []],
+      state : ['',[]],
      
     });
     
@@ -132,6 +140,20 @@ handleCitySelected(event: { City: string, State: string, Selected: 'Y' | 'N' }) 
 
 
 AddToList() {
+
+  this.SearchForm.get('state')?.updateValueAndValidity({ onlySelf: true });
+  this.SearchForm.get('city')?.updateValueAndValidity({ onlySelf: true });
+
+  this.SearchForm.markAllAsTouched();
+
+  if (this.SearchForm.invalid) {
+    if (this.SearchForm.get('state')?.hasError('notInList')) {
+      return;
+    }
+    if (this.SearchForm.get('city')?.hasError('notInList')) {
+     return;
+    }
+  }
   const city = this.SearchForm.controls['city'].value;
   let state = this.SearchForm.controls['state'].value;
 
@@ -233,7 +255,6 @@ removeState(item: { State: string ,  Selected : string }) {
   this.selectedLocations = [...this.selectedLocations]; // 👈 Force reference update
   this.updateGroupedLocations();
 }
-
 
 
 

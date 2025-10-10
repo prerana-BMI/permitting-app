@@ -21,6 +21,9 @@
             <mat-option *ngFor="let l of StateList | slice:0:30" [value]="l.State">{{l.State}} - US</mat-option>
             <mat-option *ngIf="!StateList || StateList.length === 0" disabled>No states found</mat-option>
           </mat-autocomplete>
+          <mat-error *ngIf="SearchForm.get('state')?.hasError('notInList')">
+            Please select a valid state from list
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -31,6 +34,9 @@
             <mat-option *ngFor="let l of CityList | slice:0:30" [value]="l.City">{{l.City}}</mat-option>
             <mat-option *ngIf="!CityList || CityList.length === 0" disabled>No cities found</mat-option>
           </mat-autocomplete>
+          <mat-error *ngIf="SearchForm.get('city')?.hasError('notInList')">
+            Please select a valid city from list
+          </mat-error>
         </mat-form-field>
 
         <button class="btn w-100 add-location-btn" (click)="AddToList()">

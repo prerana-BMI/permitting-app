@@ -220,7 +220,7 @@ paginatorevt(evt: any) {
       const order: { [key: string]: number } = { 'Federal': 1, 'State': 2, 'City': 3 };
       this.PermitList.sort((a: any, b: any) => order[a.Level] - order[b.Level]);
         this.PermitList.forEach((a: any)=>{
-        this.ListOfId.find(Element=> Element.Id == a.Id) != null ? a.Ischecked = true : a.Ischecked
+        this.ListOfId.find(Element=> Element.Id == a.Id) != undefined ? a.Ischecked = true : a.Ischecked
       })
         this.dataCount = res['Count'];
       }
