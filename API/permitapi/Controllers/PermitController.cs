@@ -12,7 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace permitapi.Controllers
 {
 
-   
+    [Authorize]
+
     [Route("api/[controller]")]
     public class PermitController : ControllerBase
     {
@@ -379,7 +380,7 @@ namespace permitapi.Controllers
                 {
                     TypeOfProject = Request.TypeOfProject,
                     MatrixName = Request.MatrixName,
-                    ClientId = Request.ClientId,
+                    ClientName = Request.ClientName,
                     PermitList = Request.PermitList,
                     CreatedBy = _currentUserService.User.UserId
                 };
@@ -413,20 +414,14 @@ namespace permitapi.Controllers
             try
             {
                 var Result = _context.PermitMatrices.Where(a => (a.MatrixName == Request.MatrixName || string.IsNullOrEmpty(Request.MatrixName)) &&
-                                                        (a.ClientId == Request.ClientId || Request.ClientId == null))
-                                                        .Select(a => new { a.TypeOfProject, a.MatrixName, a.ClientId, a.PermitList, a.Id })
-                                                        .ToList()
-                                                        .GroupJoin(_context.RegulatoryAgencyMasters,
-                                                        matrix => matrix.ClientId,
-                                                        agency => agency.Id,
-                                                        (matrix, agency) => new { matrix, agency })
-                                                        .Select(a => new EPermitMatrix()
+                                                       (a.ClientName == Request.ClientName || Request.ClientName == null))
+                                                       .Select(a => new EPermitMatrix()
                                                         {
-                                                            TypeOfProject = a.matrix.TypeOfProject,
-                                                            MatrixName = a.matrix.MatrixName,
-                                                            ClientName = a.agency.FirstOrDefault().Name,
-                                                            PermitCount = a.matrix.PermitList.Split(new[] { "," }, StringSplitOptions.None).Length,
-                                                            Id = a.matrix.Id
+                                                            TypeOfProject = a.TypeOfProject,
+                                                            MatrixName = a.MatrixName,
+                                                            ClientName = a.ClientName,
+                                                            PermitCount = a.PermitList.Split(new[] { "," }, StringSplitOptions.None).Length,
+                                                            Id = a.Id
 
                                                         })
                                                         .OrderByDescending(a => a.Id)
@@ -463,18 +458,13 @@ namespace permitapi.Controllers
             try
             {
                 var Result = _context.PermitMatrices.Where(a => a.Id == MatrixId)
-                        .ToList()
-                    .GroupJoin(_context.RegulatoryAgencyMasters,
-                        matrix => matrix.ClientId,
-                        agency => agency.Id,
-                        (matrix, agency) => new { matrix, agency })
-                    .Select(a => new EPermitMatrix()
+                       .Select(a => new EPermitMatrix()
                     {
-                        TypeOfProject = a.matrix.TypeOfProject,
-                        MatrixName = a.matrix.MatrixName,
-                        ClientName = a.agency.FirstOrDefault().Name,
-                        PermitList = a.matrix.PermitList,
-                        Id = a.matrix.Id
+                        TypeOfProject = a.TypeOfProject,
+                        MatrixName = a.MatrixName,
+                        ClientName = a.ClientName,
+                        PermitList = a.PermitList,
+                        Id = a.Id
                     })
                     .FirstOrDefault();
 

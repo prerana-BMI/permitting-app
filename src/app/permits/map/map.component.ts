@@ -1,354 +1,291 @@
-import { Component, OnInit, AfterViewInit, EventEmitter, Output, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, AfterViewInit, EventEmitter, Output, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as L from 'leaflet';
-import { LoaderService } from 'src/app/services/loader.service';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit, AfterViewInit, OnChanges {
+export class MapComponent implements AfterViewInit, OnChanges {
   private map!: L.Map;
-  selectedMarker: L.Marker[] = []
-  MapData: any = {};
-  @Output() citySelected = new EventEmitter<object>();
-  isProcessing: boolean = false;
-  @Input() selectedLocationsFromParent: { City: string; State: string }[] = [];
-  markerMap = new Map<string, L.Marker>();
-  stateLayer: L.GeoJSON | null = null;
-  cityIcon = L.icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
+  private geojson!: L.GeoJSON;
+  private infoDiv!: HTMLElement;
+  private cityLayer!: L.LayerGroup;
+  private markerMap = new Map<string, L.Marker>();
+  private selectedStateLayers = new Map<string, L.Layer>(); // selected states
 
- stateIcon = L.icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
-  constructor(private LoaderserviceService: LoaderService) {
+  @Output() citySelected = new EventEmitter<{ City: string, State: string, Selected: 'Y' | 'N' }>();
+  @Input() selectedLocationsFromParent: { City: string; State: string; Selected?: string }[] = [];
 
-  }
-
-  ngOnInit(): void { }
-
-  ngAfterViewInit(): void {
-    this.initializeMap();
-  }
-
-  private initializeMap(): void {
-    const baseMapUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-
-    const usaBounds = L.latLngBounds(
-      [24.396308, -125.000000],
-      [49.384358, -66.934570]
-    );
-
-    this.map = L.map('map', {
-      maxBounds: usaBounds,
-      maxBoundsViscosity: 1.0,
-      minZoom: 4,
-      maxZoom: 18
-    }).fitBounds(usaBounds);
-
-    L.tileLayer(baseMapUrl, {
-      maxZoom: 18,
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(this.map);
-
-    this.map.on('click', (event: L.LeafletMouseEvent) => {
-      this.setMarker(event.latlng);
-    });
-  }
-
-private async setMarker(latlng: L.LatLng): Promise<void> {
- 
-  if (this.isProcessing) {
-    console.log("Still processing...");
-    return;
-  }
-  this.isProcessing = true;
-  const location = await this.getCityName(latlng.lat, latlng.lng, 'Y');
-  await this.fitMapToState(location.State);
-  if (location?.City && location?.State) {
-    const key = this.createMarkerKey(location.City, location.State);
-
-    // Prevent duplicate marker
-    if (this.markerMap.has(key)) {
-      this.isProcessing = false;
-      return;
-    }
-
-    
-const iconToUse = (location.City === 'Unknown') ? this.stateIcon : this.cityIcon;
-
-const marker = L.marker(latlng, { icon: iconToUse })
-  .addTo(this.map)
-  .bindTooltip(`${location.City}, ${location.State}`, {
-    permanent: false,
-    direction: 'top',
-    opacity: 0.9,
+  private cityIcon = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
   });
 
-  
-   this.attachClickHandlerToMarker(marker, location.City, location.State, key);
-
-     this.selectedMarker.push(marker);
-    this.markerMap.set(key, marker); 
-    
+  ngAfterViewInit(): void {
+    this.initializeUSMap();
   }
 
-  this.isProcessing = false;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedLocationsFromParent'] && this.map) {
+      this.highlightSelectedStates();
+      this.syncMarkersWithParent();
+    }
+  }
+
+  private async initializeUSMap(): Promise<void> {
+    const usaBounds = L.latLngBounds([24.396308, -125.000000], [49.384358, -66.934570]);
+    this.map = L.map('map', {
+      minZoom: 4,
+      maxZoom: 10,
+      zoomControl: true,
+      attributionControl: false,
+      maxBounds: usaBounds,
+      maxBoundsViscosity: 1.0
+    }).fitBounds(usaBounds);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 10,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(this.map);
+
+    this.cityLayer = L.layerGroup().addTo(this.map);
+    this.infoDiv = document.getElementById('info') as HTMLElement;
+    if (this.infoDiv) this.infoDiv.innerHTML = 'Hover over a state';
+
+    const geoData = await fetch('https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json')
+      .then(res => res.json());
+
+    const style = (feature: any) => ({
+      fillColor: '#f9efe6',
+      weight: 3,
+      opacity: 0.6,
+      color: '#838589ff',
+      dashArray: '3',
+      fillOpacity: 0.25
+    });
+
+    const highlightFeature = (e: any) => {
+      const layer = e.target;
+      layer.setStyle({ weight: 3, color: '#1083cfff', fillOpacity: 0.25 });
+      layer.bringToFront();
+      if (this.infoDiv) this.infoDiv.innerHTML = `<b>${layer.feature.properties.name}</b>`;
+    };
+
+    const resetHighlight = (e: any) => {
+      const layer = e.target;
+      const stateName = layer.feature.properties.name;
+      if (this.selectedStateLayers.has(stateName)) {
+        layer.setStyle({ color: '#073a9fff', weight: 3, fillOpacity: 0.25 });
+      } else {
+        layer.setStyle({ color: '#838589ff', weight: 3, fillOpacity: 0.25 });
+      }
+      if (this.infoDiv) this.infoDiv.innerHTML = 'Hover over a state';
+    };
+
+    // const zoomToFeature = (e: any) => {
+    //   const layer = e.target;
+    //   const stateName = layer.feature.properties.name;
+
+    //   // toggle selection of state
+    //   if (this.selectedStateLayers.has(stateName)) {
+    //     layer.setStyle({ color: '#838589ff', weight: 3, fillOpacity: 0.25 });
+    //     this.selectedStateLayers.delete(stateName);
+    //   } else {
+    //     layer.setStyle({ color: '#073a9fff', weight: 3, fillOpacity: 0.25 });
+    //     this.selectedStateLayers.set(stateName, layer);
+    //   }
+
+    //   this.map.fitBounds(layer.getBounds().pad(0.3));
+    //   this.citySelected.emit({ City: 'Unknown', State: stateName, Selected: this.selectedStateLayers.has(stateName) ? 'Y' : 'N' });
+    // };
+
+
+const zoomToFeature = (e: any) => {
+  const layer = e.target;
+  const stateName = layer.feature.properties.name;
+
+  // Toggle selection
+  if (this.selectedStateLayers.has(stateName)) {
+    layer.setStyle({ color: '#838589ff', weight: 3, fillOpacity: 0.25 });
+    this.selectedStateLayers.delete(stateName);
+
+    // Only emit state deselection, no city
+    this.citySelected.emit({ State: stateName, Selected: 'N' , City : '' });
+  } else {
+    layer.setStyle({ color: '#073a9fff', weight: 3, fillOpacity: 0.25 });
+    this.selectedStateLayers.set(stateName, layer);
+
+    // Only emit state selection, no city
+    this.citySelected.emit({ State: stateName, Selected: 'Y' ,City : ''});
+  }
+
+  // Zoom to the state
+  this.map.fitBounds(layer.getBounds().pad(0.3));
+};
+
+
+
+
+    const onEachFeature = (feature: any, layer: L.Layer) => {
+      layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+      });
+    };
+
+    this.geojson = L.geoJson(geoData, { style, onEachFeature }).addTo(this.map);
+    this.map.on('click', (event: L.LeafletMouseEvent) => this.onMapClick(event));
+  }
+
+// private highlightSelectedStates(): void {
+//   const selectedStatesFromParent = new Set(
+//     (this.selectedLocationsFromParent || []).map(loc => loc.State).filter(s => s)
+//   );
+
+//   this.geojson.eachLayer((layer: any) => {
+//     const stateName = layer.feature.properties.name;
+//     if (selectedStatesFromParent.has(stateName)) {
+//       layer.setStyle({ color: '#073a9fff', weight: 3, fillOpacity: 0.25 });
+//       this.selectedStateLayers.set(stateName, layer);
+//     } else {
+//       layer.setStyle({ color: '#838589ff', weight: 3, fillOpacity: 0.25 });
+//       this.selectedStateLayers.delete(stateName);
+//     }
+//   });
+// }
+
+private highlightSelectedStates(): void {
+  const selectedStatesFromParent = new Set(
+    (this.selectedLocationsFromParent || [])
+      .map(loc => loc.State?.toLowerCase())
+      .filter(s => s)
+  );
+
+  this.geojson.eachLayer((layer: any) => {
+    const stateName = layer.feature.properties.name.toLowerCase(); // lowercase
+    if (selectedStatesFromParent.has(stateName)) {
+      layer.setStyle({ color: '#073a9fff', weight: 3, fillOpacity: 0.25 });
+      this.selectedStateLayers.set(layer.feature.properties.name, layer);
+    } else {
+      layer.setStyle({ color: '#838589ff', weight: 3, fillOpacity: 0.25 });
+      this.selectedStateLayers.delete(layer.feature.properties.name);
+    }
+  });
 }
 
 
-  private async getCityName(lat: number, lon: number, selected: string): Promise<{ City: string; State: string }> {
 
-    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
+
+  private async onMapClick(event: L.LeafletMouseEvent): Promise<void> {
+    const lat = event.latlng.lat;
+    const lon = event.latlng.lng;
+    const location = await this.getCityName(lat, lon);
+
+    if (!location.State) return;
+
+    // Use lat/lon to generate unique key for multiple markers
+    const key = `${location.City}|${location.State}|${lat.toFixed(5)}|${lon.toFixed(5)}`;
+
+    if (this.markerMap.has(key)) {
+      // remove marker
+      const marker = this.markerMap.get(key)!;
+      this.map.removeLayer(marker);
+      this.markerMap.delete(key);
+      this.citySelected.emit({ City: location.City, State: location.State, Selected: 'N' });
+      return;
+    }
+
+    // Add marker
+    const marker = L.marker(event.latlng, { icon: this.cityIcon })
+    if(location.City != "" && location.City != null && location.City != 'Unknown')
+    {
+      marker
+      .addTo(this.cityLayer)
+      .bindTooltip(`${location.City}, ${location.State}`, { permanent: false, direction: 'top', opacity: 0.9 });
+    }
+    marker.on('click', () => {
+      this.map.removeLayer(marker);
+      this.markerMap.delete(key);
+      this.citySelected.emit({ City: location.City, State: location.State, Selected: 'N' });
+    });
+
+    this.markerMap.set(key, marker);
+    this.citySelected.emit({ City: location.City, State: location.State, Selected: 'Y' });
+
+    // Keep state #073a9fff
+    this.geojson.eachLayer((layer: any) => {
+      if (layer.feature.properties.name === location.State) {
+        layer.setStyle({ color: '#073a9fff', weight: 3, fillOpacity: 0.25 });
+        this.selectedStateLayers.set(location.State, layer);
+      }
+    });
+  }
+
+  private async getCityName(lat: number, lon: number): Promise<{ City: string; State: string }> {
     try {
-      const res = await fetch(url, {
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`, {
         headers: { 'Accept': 'application/json' }
       });
       const data = await res.json();
       const address = data.address;
-      const result = {
-        City: address.city || address.town || address.village || 'Unknown',
-        State: address.state || 'Unknown',
-        Selected: selected
-      };
-      
-      this.citySelected.emit(result);
-
-      console.log('Selected City:', result);
-      return result;
+      return { City: address.city || address.town || address.village || 'Unknown', State: address.state || 'Unknown' };
     } catch (err) {
       console.error('Reverse geocoding error:', err);
       return { City: 'Unknown', State: 'Unknown' };
     }
   }
 
+  private syncMarkersWithParent(): void {
+    const parentKeys = new Set((this.selectedLocationsFromParent || []).map(loc => `${loc.City}|${loc.State}`));
 
-  // 🔍 Call this method with a state name
-  public async fitMapToState(stateName: string): Promise<void> {
-    const url = `https://nominatim.openstreetmap.org/search.php?q=${encodeURIComponent(stateName + ', USA')}&polygon_geojson=1&format=json`;
-
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-
-      if (data.length > 0) {
-        const result = data[0];
-        const bbox = result.boundingbox;
-        const southWest = L.latLng(parseFloat(bbox[0]), parseFloat(bbox[2]));
-        const northEast = L.latLng(parseFloat(bbox[1]), parseFloat(bbox[3]));
-        const bounds = L.latLngBounds(southWest, northEast);
-
-        this.map.fitBounds(bounds); // 📌 Zoom to state
-
-        if (this.stateLayer) {
-          this.map.removeLayer(this.stateLayer);
-        }
-
-        if (result.geojson) {
-          this.stateLayer = L.geoJSON(result.geojson, {
-            style: {
-              color: 'blue',
-              weight: 2,
-              fillColor: 'rgba(0, 0, 255, 0.2)',
-              fillOpacity: 0.3
-            }
-          }).addTo(this.map);
-        }
+    // Remove markers no longer in parent list
+    for (const [key, marker] of Array.from(this.markerMap.entries())) {
+      const [city, state] = key.split('|');
+      if (!parentKeys.has(`${city}|${state}`)) {
+        this.cityLayer.removeLayer(marker);
+        this.markerMap.delete(key);
       }
-    } catch (err) {
-      console.error('Geocoding error:', err);
-    }
-  }
-
-  // 🔹 Example: use this from an input binding or a button
-  ngOnChanges(changes: SimpleChanges): void {
-    
-  const current = changes['selectedLocationsFromParent'].currentValue;
-if(current.Selected =='N')
-{
- this.removeMarkerForLocation(current);
-}
-else if (current.Selected =='Y'){
-this.addMarkerByCityState(current.City, current.State)
-}
-  
- }
-
-//   private removeMarkerForLocation(location: { City: string; State: string }) {
-//     const key = this.createMarkerKey(location.City, location.State);
-//     const marker = this.markerMap.get(key);
-//     if (marker && location.City == undefined) {
-//        for (const [markerKey, m] of this.markerMap.entries()) {
-         
-//           this.map.removeLayer(m);
-//           this.markerMap.delete(markerKey);
-//           this.selectedMarker = this.selectedMarker.filter(existing => existing !== m);
-//         }
-//     }
-//     else {
-//   const entriesToRemove = Array.from(this.markerMap.entries()).filter(([key, marker]) => {
-//     const [city, state] = key.split('|');
-//     return city === location.City;
-//   });
-
-//   for (const [key, marker] of entriesToRemove) {
-//     this.map.removeLayer(marker);
-//     this.markerMap.delete(key);
-//     this.selectedMarker = this.selectedMarker.filter(m => m !== marker);
-//   }
-//     //   this.map.removeLayer(markersForCity);
-//     //   this.markerMap.delete(key);
-//     //   this.selectedMarker = this.selectedMarker.filter(m => m !== marker);
-//     // }
-
-//   }
-// }
-private removeMarkerForLocation(location: { City: string; State: string }) {
-  
-
-  const isStateLevelRemove = !location.City || location.City === 'Unknown';
-
-  if (isStateLevelRemove && location.State) {
-    // Remove all markers for the specified state
-    const entriesToRemove = Array.from(this.markerMap.entries()).filter(([key]) => {
-      const [, state] = key.split('|');
-      return state === location.State;
-    });
-
-    for (const [key, marker] of entriesToRemove) {
-      this.map.removeLayer(marker);
-      this.selectedMarker = this.selectedMarker.filter(existing => existing !== marker);
-      this.markerMap.delete(key);
-    }
-    return;
-  }
-
-  // Match markers by both City and State (single marker)
-  const keyToRemove = this.createMarkerKey(location.City, location.State);
-  const marker = this.markerMap.get(keyToRemove);
-
-  if (marker) {
-    this.map.removeLayer(marker);
-    this.selectedMarker = this.selectedMarker.filter(existing => existing !== marker);
-    this.markerMap.delete(keyToRemove);
-  }
-}
-
-
-
-  createMarkerKey(city: string, state: string): string {
-    return `${city}|${state}`;
-  }
-
-  private async addMarkerByCityState(city: string, state: string): Promise<void> {
-  if (this.isProcessing) return;
- const latlng = await this.getCoordinatesFromCityState(city, state);
-
-  if(latlng != null)
-  {
-    const key = this.createMarkerKey(city, state);
-
-    // Prevent duplicate marker
-    if (this.markerMap.has(key)) {
-      this.isProcessing = false;
-      return;
     }
 
-    const iconToUse = (city === 'Unknown') ? this.stateIcon : this.cityIcon;
-
-    const marker = L.marker(latlng, { icon: iconToUse })
-  .addTo(this.map)
-  .bindTooltip(`${city}, ${state}`, {
-    permanent: false,
-    direction: 'top',
-    opacity: 0.9,
-  });
-
-  this.attachClickHandlerToMarker(marker, city, state, key);
- const result = {
-        City: city,
-        State: state,
-        Selected: 'Y'
-      };
-       this.selectedMarker.push(marker);
-this.markerMap.set(key, marker); 
-      this.citySelected.emit(result);
-
-
-   }
- 
-}
-
-private async getCoordinatesFromCityState(city: string, state: string): Promise<L.LatLng | null> {
-  try {
-    const query = `${city}, ${state}, USA`;
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
-
-    const res = await fetch(url, {
-      headers: { 'Accept': 'application/json' }
-    });
-
-    const data = await res.json();
-
-    if (data.length > 0 && data[0].lat && data[0].lon) {
-      const lat = parseFloat(data[0].lat);
-      const lon = parseFloat(data[0].lon);
-      return L.latLng(lat, lon);
-    }
-
-    console.warn(`No results found for ${query}`);
-    return null;
-  } catch (error) {
-    console.error("Error fetching coordinates:", error);
-    return null;
-  }
-}
-
-private attachClickHandlerToMarker(marker: L.Marker, city: string, state: string, key: string): void {
-  marker.on('click', async () => {
-
-    if (city === "Unknown" && state) {
-      // Remove all markers with matching state
-      const entriesToRemove = Array.from(this.markerMap.entries()).filter(([markerKey]) => {
-        const [, s] = markerKey.split('|');
-        return s === state;
+    // Add new markers from parent list
+    (this.selectedLocationsFromParent || []).forEach(loc => {
+      const existingMarker = Array.from(this.markerMap.values()).find(m => {
+        const tooltip = m.getTooltip()?.getContent() as string;
+        return tooltip?.includes(`${loc.City}, ${loc.State}`);
       });
-
-      for (const [markerKey, m] of entriesToRemove) {
-        this.map.removeLayer(m);
-        this.markerMap.delete(markerKey);
-        this.selectedMarker = this.selectedMarker.filter(existing => existing !== m);
+      if (!existingMarker && loc.City && loc.City !== 'Unknown') {
+        this.getLatLngFromCityState(loc.City, loc.State).then(latlng => {
+          if (latlng) {
+            const marker = L.marker(latlng, { icon: this.cityIcon })
+              .addTo(this.cityLayer)
+              .bindTooltip(`${loc.City}, ${loc.State}`, { permanent: false, direction: 'top', opacity: 0.9 });
+            marker.on('click', () => {
+              this.cityLayer.removeLayer(marker);
+              this.markerMap.delete(`${loc.City}|${loc.State}|${latlng.lat}|${latlng.lng}`);
+              this.citySelected.emit({ City: loc.City, State: loc.State, Selected: 'N' });
+            });
+            const key = `${loc.City}|${loc.State}|${latlng.lat}|${latlng.lng}`;
+            this.markerMap.set(key, marker);
+          }
+        });
       }
-    } else {
-      // Remove single marker
-      this.map.removeLayer(marker);
-      this.markerMap.delete(key);
-      this.selectedMarker = this.selectedMarker.filter(m => m !== marker);
+    });
+  }
+
+  private async getLatLngFromCityState(city: string, state: string): Promise<L.LatLng | null> {
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}&country=USA&format=json`);
+      const data = await res.json();
+      if (data && data.length > 0) return L.latLng(parseFloat(data[0].lat), parseFloat(data[0].lon));
+      return null;
+    } catch {
+      return null;
     }
-
-    // Notify parent about deselection
-    const result = {
-      City: city,
-      State: state,
-      Selected: 'N'
-    };
-    this.citySelected.emit(result);
-
-    this.isProcessing = false;
-  });
-}
-
-
+  }
 }

@@ -82,6 +82,7 @@ this.SearchForm.controls['PermitName'].valueChanges.pipe(debounceTime(this.typea
 paginatorevt(evt: any) {
     this.pageIndex = evt.pageIndex + 1;
     this.pageSize = evt.pageSize;
+    this.GetAllPermits();
    
   }
 Search()

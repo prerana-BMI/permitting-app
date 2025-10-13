@@ -193,13 +193,42 @@ namespace permitapi.Controllers
             List<string> Result = new List<string>();
             try
             {
+               
 
-                Result = _context.PermitMasters.Where(a=>!string.IsNullOrEmpty(a.Category)).Select(a => a.Category).Distinct().ToList();
+                Result = _context.PermitMasters.Where(a => !string.IsNullOrEmpty(a.Category)).Select(a => a.Category).Distinct().ToList();
                 BaseObj.Data = Result;
                 BaseObj.Count = Result.Count;
                 BaseObj.Success = true;
 
             }
+            catch (Exception ex)
+            {
+                BaseObj.Message = ex.Message;
+                BaseObj.Success = false;
+            }
+            finally
+            {
+
+            }
+            return BaseObj;
+        }
+
+        [HttpGet]
+        [Route("GetAllClientMaster")]
+        public BaseReturn<List<EClientMaster>> GetAllClientMaster(string SearchText)
+        {
+            var BaseObj = new BaseReturn<List<EClientMaster>>();
+
+            try
+            {
+
+                var Result = _context.ClientMasters.Where(a => !string.IsNullOrEmpty(a.Name) && a.Name.ToLower().Contains(SearchText.ToLower())).Select(a =>new EClientMaster{ Name = a.Name })
+                .Distinct()
+                .ToList();
+                BaseObj.Data = Result;
+                BaseObj.Count = Result.Count;
+                BaseObj.Success = true;
+                 }
             catch (Exception ex)
             {
                 BaseObj.Message = ex.Message;

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright Akveo. All Rights Reserved.
+ * Licensed under the MIT License. See License.txt in the project root for license information.
+ */
+
+// material theme
 @use '@angular/material' as mat;
   @include mat.core();
 
@@ -18,13 +25,14 @@ $honeycomb-theme: mat.define-light-theme((
 @include mat.all-component-typographies();
 @include mat.all-component-themes($honeycomb-theme);
 
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap');
 
 // themes - our custom or/and out of the box themes
-@import '../src/app/@theme/styles/themes';
+@import 'app/@theme/styles/themes';
 
 // framework component themes (styles tied to theme variables)
 @import '@nebular/theme/styles/globals';
+
+// material core styles
 
 
 @import 'bootstrap/scss/functions';
@@ -33,10 +41,11 @@ $honeycomb-theme: mat.define-light-theme((
 @import 'bootstrap/scss/grid';
 
 // loading progress bar theme
-@import '../src/app/@theme/styles/pace.theme';
+@import 'app/@theme/styles/pace.theme';
 
-@import '../src/app/@theme/styles/layout';
-@import '../src/app/@theme/styles/overrides';
+@import 'app/@theme/styles/layout';
+@import 'app/@theme/styles/overrides';
+@import 'app/@theme/styles/common';
 
 // install the framework and custom global styles
 @include nb-install() {
@@ -44,11 +53,8 @@ $honeycomb-theme: mat.define-light-theme((
   // framework global styles
   @include nb-theme-global();
 
-
-  @include ngx-layout();
   // loading progress bar
   @include ngx-pace-theme();
 
   @include nb-overrides();
- 
 };

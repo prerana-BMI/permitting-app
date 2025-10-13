@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using contract;
 using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +23,6 @@ builder.Services.AddControllers()
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<permit_account_serviceContext>(options =>
 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
@@ -36,72 +36,64 @@ var mappingConfig = new MapperConfiguration(mc =>
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-{
-    // 1️⃣ Authority (used to discover signing keys and issuer config)
-    options.Authority = "https://login.microsoftonline.com/bfbb9a2b-6d99-4e78-b3c7-95005d555c8b";
-
-    // 2️⃣ Token validation
-    options.TokenValidationParameters = new TokenValidationParameters
+    .AddJwtBearer(options =>
     {
-        ValidateIssuer = false,           // ❌ Skip checking the token's issuer
-        ValidateAudience = false,         // ❌ Skip checking the audience
-        ValidateLifetime = false,         // ❌ Skip expiry check
-        ValidateIssuerSigningKey = false, // ❌ Skip signature check
-        SignatureValidator = (token, parameters) =>
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            var jwt = new System.IdentityModel.Tokens.Jwt.JwtSecurityToken(token);
-            return jwt; // Just parse and return the token without validating it
-        }
-    };
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = false,
 
-    options.Events = new JwtBearerEvents
-    {
-        OnMessageReceived = context =>
-        {
-            // Optional: log token or context here
-            return Task.CompletedTask;
-        },
-        OnTokenValidated = context =>
-        {
-            var jwt = context.SecurityToken as System.IdentityModel.Tokens.Jwt.JwtSecurityToken;
-
-          
-            if (jwt != null && context.Principal.Identity is ClaimsIdentity identity)
+            // This makes sure the handler accepts the token
+            SignatureValidator = (token, parameters) =>
             {
-                if (!identity.Claims.Any())
-                {
-                    var claims = jwt.Claims;
-                    identity.AddClaims(claims);
-                }
+                
+                var handler = new Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler();
+                var jsonToken = handler.ReadJsonWebToken(token);
+                return jsonToken;
             }
+        };
 
-            return Task.CompletedTask;
-        }
-    };
-});
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-
-
-builder.Services.AddAuthorization();
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.UseCors(builder => builder
-                                .AllowAnyOrigin()
-                                .AllowAnyMethod()
-                                .AllowAnyHeader());
-}
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine("AUTH FAILED: " + context.Exception);
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                var claims = context.Principal.Claims.Select(c => $"{c.Type}={c.Value}");
+                Console.WriteLine("TOKEN VALIDATED. Claims: " + string.Join(", ", claims));
+                return Task.CompletedTask;
+            }
+        };
+    });
 
 
+    builder.Services.AddHttpContextAccessor();
+    builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-app.UseHttpsRedirection();
-app.UseAuthentication(); // 👈 This is missing!
-app.UseAuthorization();
-app.MapControllers();
-app.Run();
+
+    builder.Services.AddAuthorization();
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+        app.UseCors(builder => builder
+                                    .AllowAnyOrigin()
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader());
+    }
+
+
+
+    app.UseHttpsRedirection();
+    app.UseAuthentication(); // 👈 This is missing!
+    app.UseAuthorization();
+    app.MapControllers();
+    app.Run();

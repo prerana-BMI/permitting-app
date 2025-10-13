@@ -20,36 +20,6 @@ overflow-y: none;
     box-shadow: #1c4876;
     margin-top: -100px;
   }
-
-
-  .panel-header {
-    background:#1c4876;
-    border-radius: 5px 5px 0px 0px;
-    padding: 5px 20px;
-
-    h5 {
-      font-weight: 600;
-      font-size: 17px;
-      line-height: 30px;
-      color: #ffffff;
-      margin: 0;
-    }
-  }
-}
-
-.panel-header {
-  background-image: #1c4876;
-  ;
-  border-radius: 5px 5px 0px 0px;
-  padding: 5px 20px;
-
-  h5 {
-    font-weight: 600;
-    font-size: 17px;
-    line-height: 30px;
-    color: #ffffff;
-    margin: 0;
-  }
 }
 
 .fa-times {
@@ -157,4 +127,34 @@ input:checked + .slider {
 
 input:checked + .slider:before {
   transform: translateX(26px);
+}
+
+.panel-header {
+  background:#1c4876;
+  border-radius: 5px 5px 0px 0px;
+  padding: 5px 20px;
+
+  h5 {
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 30px;
+    color: #ffffff;
+    margin: 0;
+  }
+}
+
+
+.panel-header {
+background-image: #1c4876;
+;
+border-radius: 5px 5px 0px 0px;
+padding: 5px 20px;
+
+h5 {
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 30px;
+  color: #ffffff;
+  margin: 0;
+}
 }

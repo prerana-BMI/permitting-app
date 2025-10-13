@@ -1,143 +1,75 @@
-<div class="col-md-12 rounded PageLayout position-relative" style="height:110px;">
- <div class="d-flex mt-4" [formGroup]="SearchForm">
-    <div class="col-lg-3 col-md-3 col-sm-12 p-1 mr-3">
-        
-<input type="text" class="form-control custom-input lableSyle" placeholder="Enter State"   formControlName="state"
-        placeholder="Enter State"  [matAutocomplete]="statelist"
-        oninput="this.value = this.value.toUpperCase()" >
-        <mat-autocomplete #statelist="matAutocomplete" [displayWith]="StateTypeAheadDisplay.bind(this)">
-          <mat-option *ngIf="isStateLoading">
-            <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
-            </mat-spinner>
-          </mat-option>
-          <mat-option class="mat-opt1" disabled>
-            <div>
-              <table>
-                <tr class="tr">
-                  <td style="width: 200px;">State</td>
-                </tr>
-              </table>
-            </div>
-          </mat-option>
-          <mat-option *ngFor="let l of StateList | slice:0:30" [value]="l.State" class="mat-opt">
-            <div>
-              <table>
-                <tr class="tr">
-        
-                  <td class="td td1" style="width: 200px;">{{l.State}} - US</td>
-                </tr>
-              </table>
-            </div>
-          </mat-option>
-          <mat-option *ngIf="StateList.length == 0" disabled>
-            No Options
-          </mat-option>
-        </mat-autocomplete>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-12 p-1 mr-3">
-       <input type="text" class="form-control custom-input lableSyle" placeholder="Enter City" 
-        oninput="this.value = this.value.toUpperCase()" 
-         formControlName="city"  [matAutocomplete]="ctlist">
-         <mat-autocomplete #ctlist="matAutocomplete"
-                      [displayWith]="CityTypeAheadDisplay.bind(this)">
-                      <mat-option *ngIf="isCityLoading">
-                        <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
-                        </mat-spinner>
-                      </mat-option>
-                      <mat-option class ="mat-opt1" disabled>
-                        <div>
-                          <table>
-                            <tr class="tr">
-                              <td  style="width: 200px;">City</td>
-                             
-                            </tr>
-                          </table>
-                        </div>
-                      </mat-option>
-                      <mat-option *ngFor="let l of CityList | slice:0:30" [value]="l.City"  class ="mat-opt" >
-                        <div>
-                          <table>
-                            <tr class="tr">
-                              <td class="td td1" style="width: 200px;">{{l.City}}</td>
-                             
-                            </tr>
-                          </table>
-                        </div>
-                      </mat-option>
-                      <mat-option *ngIf="CityList.length == 0" disabled>
-                        No Options
-                      </mat-option>
-        </mat-autocomplete>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-12 p-1">
-        <button type="button" class="btn btn-outline form-control d-flex align-items-center custom-outline-btn FlterButton" (click)="AddToList()">
-          <span style=" margin: 0 1px;"></span>
-          <i class="fas fa-plus"></i>
-          <span class="flex-grow-1 text-start">Add </span>
+<div class="page-container">
+
+  <!-- Map Section (Left) -->
+  <div class="map-section">
+  <app-map [selectedLocationsFromParent]="selectedLocations" (citySelected)="handleCitySelected($event)"></app-map>
+
+  </div>
+
+  <!-- Sidebar Section (Right) -->
+  <div class="sidebar-section">
+
+    <!-- Top Card: Search Filters -->
+    <div class="sidebar-card">
+      <div class="panel-header">Search Locations</div>
+      <div class="card-body" [formGroup]="SearchForm">
+        <mat-form-field appearance="outline">
+          <mat-label>State</mat-label>
+          <input matInput type="text" placeholder="Enter State" formControlName="state" [matAutocomplete]="statelist" oninput="this.value = this.value.toUpperCase()">
+          <mat-autocomplete #statelist="matAutocomplete" [displayWith]="StateTypeAheadDisplay.bind(this)">
+            <mat-option *ngIf="isStateLoading"><mat-spinner diameter="20"></mat-spinner></mat-option>
+            <mat-option *ngFor="let l of StateList | slice:0:30" [value]="l.State">{{l.State}} - US</mat-option>
+            <mat-option *ngIf="!StateList || StateList.length === 0" disabled>No states found</mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="SearchForm.get('state')?.hasError('notInList')">
+            Please select a valid state from list
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
+          <input matInput type="text" placeholder="Enter City" formControlName="city" [matAutocomplete]="ctlist" oninput="this.value = this.value.toUpperCase()">
+          <mat-autocomplete #ctlist="matAutocomplete" [displayWith]="CityTypeAheadDisplay.bind(this)">
+            <mat-option *ngIf="isCityLoading"><mat-spinner diameter="20"></mat-spinner></mat-option>
+            <mat-option *ngFor="let l of CityList | slice:0:30" [value]="l.City">{{l.City}}</mat-option>
+            <mat-option *ngIf="!CityList || CityList.length === 0" disabled>No cities found</mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="SearchForm.get('city')?.hasError('notInList')">
+            Please select a valid city from list
+          </mat-error>
+        </mat-form-field>
+
+        <button class="btn w-100 add-location-btn" (click)="AddToList()">
+          <i class="fas fa-plus-circle me-2"></i> Add Location
         </button>
-
-    
+      </div>
     </div>
+
+    <!-- Bottom Card: Selected Locations (Enhanced UI) -->
+    <div class="sidebar-card selected-locations-card" *ngIf="groupedLocationsByStates && groupedLocationsByStates.length > 0">
+      <div class="panel-header">Selected Locations</div>
+      <div class="card-body">
+        <div *ngFor="let group of groupedLocationsByStates" class="state-card">
+          <div class="state-card-header">
+            <span class="state-badge">{{ group.state }}</span>
+            <button class="remove-btn" title="Remove all cities in {{ group.state }}" (click)="removeState({ State: group.state, Selected: 'N' })">&times;</button>
+          </div>
+          <hr *ngIf="group.cities.length > 0">
+          <div class="city-tags" *ngIf="group.cities.length > 0">
+            <span *ngFor="let city of group.cities" class="city-tag">
+              {{ city }}
+              <button class="remove-btn" title="Remove {{city}}" (click)="removeCity({ City: city, State: group.state, Selected: 'N' })">&times;</button>
+            </span>
+          </div>
+        </div>
+      
+      
+           <button class="btn w-100 add-location-btn" (click)="Search()" >
+          <i class="fas fa-search me-2"></i>Search Permits
+           </button>
+     </div>
+    </div>
+
   </div>
 
 </div>
-<div class="row d-flex mt-5" >
-    <div class="col-12 col-xl-8 mb-4">
-      <div class="map-container">
-        <app-map [selectedLocationsFromParent]="RemovedLocation" (citySelected)="handleCitySelected($event)"></app-map>
-      </div>
-    </div>
- <!-- 🧩 Wrap the whole card in *ngIf -->
- <div class="col-12 col-xl-4 mb-4">
-  <div class="card shadow" *ngIf="groupedLocationsByStates.length > 0">
-    <div class="card-header text-white fw-bold panel-header">
-      Selected Locations
-    </div>
-  
-    <div class="card-body" style="overflow-y: auto; width: 500px;">
-      <div *ngFor="let group of groupedLocationsByStates" class="mb-4 p-3 border rounded bg-light">
-  
-        <!-- State Title and Remove Button -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h6 class="mb-0 text-primary fw-bold">
-            {{ group.state }}
-          </h6>
-          <button class="btn btn-sm btn-outline-danger py-0 px-2" (click)="removeState({ State: group.state ,  Selected : 'N' })"
-            title="Remove entire state">
-            &times;
-          </button>
-        </div>
-  
-        <!-- City Badges -->
-        <div class="d-flex flex-wrap" style="gap: 0.5rem;" *ngIf="group.cities.length > 0">
-          <span *ngFor="let city of group.cities"
-            class="badge bg-secondary text-white px-3 py-2 rounded-pill d-flex align-items-center"
-            style="font-size: 0.85rem;">
-            {{ city }}
-
-
-              <button type="button" class="btn btn-link p-0 m-0 text-danger" (click)="removeCity({ City: city, State: group.state , Selected : 'N'})"
-                title="Remove City">
-                <i class="fas fa-times"></i>
-              </button>
-          </span>
-        </div>
-  
-      </div>
-    </div>
-    <!-- Centered button outside card-body but still inside card -->
-<div class="text-center pb-3">
-  <button type="button" class="btn btn-outline custom-outline-btn FlterButton" style="min-width: 200px;"
-    (click)="Search()">
-    <i class="fas fa-search me-2"></i> Search
-  </button>
-</div>
-
-  </div>
-</div>
-
-
-
-
-</div>
-

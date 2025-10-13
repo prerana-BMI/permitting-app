@@ -17,6 +17,8 @@ namespace Data.DbEntities
         }
 
         public virtual DbSet<CityMaster> CityMasters { get; set; } = null!;
+
+        public virtual DbSet<ClientMaster> ClientMasters { get; set; } = null!;
         public virtual DbSet<PermitMaster> PermitMasters { get; set; } = null!;
         public virtual DbSet<PermitMasterDetail> PermitMasterDetails { get; set; } = null!;
         public virtual DbSet<PermitMatrix> PermitMatrices { get; set; } = null!;
@@ -37,7 +39,18 @@ namespace Data.DbEntities
             modelBuilder.UseCollation("utf8mb4_0900_ai_ci")
                 .HasCharSet("utf8mb4");
 
-            modelBuilder.Entity<CityMaster>(entity =>
+            modelBuilder.Entity<ClientMaster>(entity =>
+            {
+                entity.ToTable("client_master");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(100)
+                    .HasColumnName("name");
+            });
+
+             modelBuilder.Entity<CityMaster>(entity =>
             {
                 entity.ToTable("city_master");
 
@@ -150,7 +163,7 @@ namespace Data.DbEntities
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.ClientId).HasColumnName("client_id");
+                entity.Property(e => e.ClientName).HasColumnName("client_name");
 
                 entity.Property(e => e.CreatedBy).HasColumnName("created_by");
 

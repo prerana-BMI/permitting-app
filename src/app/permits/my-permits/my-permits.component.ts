@@ -47,7 +47,7 @@ export class MyPermitsComponent {
     this.SearchForm.controls['RegulatoryAgency'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
       if (typeof val === 'string' && val.length >= 1) {
         this.isAgencyLoading = true;
-        this.httpService.httpGetCall(Constants.GetRegulatoryAgencyBySearchText + val.toLowerCase(), false, false).subscribe((res: any) => {
+        this.httpService.httpGetCall(Constants.GetAllClientMaster + val.toLowerCase(), false, false).subscribe((res: any) => {
           if (res["Success"]) {
 
             this.RegagencyList = res["Data"];
@@ -80,7 +80,7 @@ export class MyPermitsComponent {
 
   }
   AgencyTypeAheadDisplay(val: any) {
-    let res = this.RegagencyList.find(a => a.Id == val);
+    let res = this.RegagencyList.find(a => a.Name == val);
     if (res != null) {
       return res.Name;
     };

@@ -3,43 +3,102 @@
 @import '@nebular/theme/styles/global/breakpoints';
 @import 'bootstrap/scss/bootstrap';
 
+// --- Layout ---
 
-@include nb-install-component() {
-  ::ng-deep router-outlet + * {
-    display: block;
-    animation: fade 1s;
+// --- End of Layout ---
 
-    @keyframes fade {
-      from {
-        opacity: 0;
-      }
+.custom-breadcrumb {
+  display: inline-flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
 
-      to {
-        opacity: 1;
-      }
+.breadcrumb-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 10px 0 30px;
+  background-color: white;
+  color: #1c4876;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    &.disabled {
+      pointer-events: none;
+      cursor: default;
+    }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 0;
+    height: 0;
+    border-top: 18px solid transparent;
+    border-bottom: 18px solid transparent;
+    border-left: 18px solid white;
+    transition: border-left-color 0.3s ease;
+  }
+
+  &:first-child {
+    padding-left: 20px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-left: 1px solid #dbe0f5;
+  }
+
+  &:last-child {
+    padding-right: 20px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    &::after {
+      content: none;
+    }
+  }
+
+  &.active {
+    background-color: #1c4876;
+    color: white;
+
+    &::after {
+      border-left-color: #1c4876;
+    }
+
+    &:last-child {
+        clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%);
+    }
+  }
+
+  &:has(+ .active) {
+    &::after {
+      border-left-color: #1c4876;
+    }
+  }
+
+  &:not(.active):hover {
+    background-color: #f5f7ff;
+
+    &::after {
+      border-left-color: #f5f7ff;
     }
   }
 }
 
-
-@include nb-install-component() {
-  .menu-sidebar ::ng-deep .scrollable {
-    padding-top: nb-theme(layout-padding-top);
-    border: 1px solid #c5c1c157;
-  }
-  nb-layout-header.fixed {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1040;
-    box-shadow:  0px -20px 32px rgba(0, 0, 0, 0.25);
+@media (max-width: 768px) {
+  .breadcrumb-container {
+    display: none;
   }
 }
-
-.breadcrumb {
-  --bs-breadcrumb-divider: ">" !important;
-}
-.breadcrumb-item a .fa-home {
-  margin-right: 5px;
+.breadcrumb
+{
+  background-color: transparent;
 }

@@ -86,7 +86,7 @@ namespace permitapi.Controllers
                     UserObj.UserName = UserName;
                     UserObj.UserRole = "User";
                     UserObj.IsActive = false;
-                    UserObj.CreatedBy = _currentUserService.User.UserId;
+                    UserObj.CreatedBy = 0;
                     _context.Users.Add(UserObj);
                     _context.SaveChanges();
                 }
