@@ -65,44 +65,59 @@ export class MapComponent implements AfterViewInit, OnChanges {
       weight: 3,
       opacity: 0.6,
       color: '#838589ff',
-      dashArray: '3',
+      dashArray: 'null',
       fillOpacity: 0.25
     });
 
-    const highlightFeature = (e: any) => {
-      const layer = e.target;
-      layer.setStyle({ weight: 3, color: '#1083cfff', fillOpacity: 0.25 });
-      layer.bringToFront();
-      if (this.infoDiv) this.infoDiv.innerHTML = `<b>${layer.feature.properties.name}</b>`;
-    };
+const highlightFeature = (e: any) => {
+  const layer = e.target;
+  const stateName = layer.feature.properties.name;
 
-    const resetHighlight = (e: any) => {
-      const layer = e.target;
-      const stateName = layer.feature.properties.name;
-      if (this.selectedStateLayers.has(stateName)) {
-        layer.setStyle({ color: '#073a9fff', weight: 3, fillOpacity: 0.25 });
-      } else {
-        layer.setStyle({ color: '#838589ff', weight: 3, fillOpacity: 0.25 });
-      }
-      if (this.infoDiv) this.infoDiv.innerHTML = 'Hover over a state';
-    };
+  // Check if it's already selected
+  const isSelected = this.selectedStateLayers.has(stateName);
 
-    // const zoomToFeature = (e: any) => {
-    //   const layer = e.target;
-    //   const stateName = layer.feature.properties.name;
+  // If not selected, give a temporary "hover" color
+  if (!isSelected) {
+    layer.setStyle({
+      weight: 3,
+      color: '#3366cc',       // bright blue border
+      fillColor: '#c9d9f7',   // light blue fill
+      fillOpacity: 0.65
+    });
+  }
 
-    //   // toggle selection of state
-    //   if (this.selectedStateLayers.has(stateName)) {
-    //     layer.setStyle({ color: '#838589ff', weight: 3, fillOpacity: 0.25 });
-    //     this.selectedStateLayers.delete(stateName);
-    //   } else {
-    //     layer.setStyle({ color: '#073a9fff', weight: 3, fillOpacity: 0.25 });
-    //     this.selectedStateLayers.set(stateName, layer);
-    //   }
+  layer.bringToFront();
 
-    //   this.map.fitBounds(layer.getBounds().pad(0.3));
-    //   this.citySelected.emit({ City: 'Unknown', State: stateName, Selected: this.selectedStateLayers.has(stateName) ? 'Y' : 'N' });
-    // };
+  if (this.infoDiv)
+    this.infoDiv.innerHTML = `<b>${layer.feature.properties.name}</b>`;
+};
+
+const resetHighlight = (e: any) => {
+  const layer = e.target;
+  const stateName = layer.feature.properties.name;
+
+  if (this.selectedStateLayers.has(stateName)) {
+    // Restore selected style
+    layer.setStyle({
+      color: '#073a9fff',
+      fillColor: '#98a8c8ff',
+      weight: 3,
+      fillOpacity: 0.55
+    });
+  } else {
+    // Restore default style
+    layer.setStyle({
+      color: '#838589ff',
+      fillColor: '#f9efe6',
+      weight: 3,
+      fillOpacity: 0.25
+    });
+  }
+
+  if (this.infoDiv)
+    this.infoDiv.innerHTML = 'Hover over a state';
+};
+
 
 
 const zoomToFeature = (e: any) => {
@@ -143,22 +158,7 @@ const zoomToFeature = (e: any) => {
     this.map.on('click', (event: L.LeafletMouseEvent) => this.onMapClick(event));
   }
 
-// private highlightSelectedStates(): void {
-//   const selectedStatesFromParent = new Set(
-//     (this.selectedLocationsFromParent || []).map(loc => loc.State).filter(s => s)
-//   );
 
-//   this.geojson.eachLayer((layer: any) => {
-//     const stateName = layer.feature.properties.name;
-//     if (selectedStatesFromParent.has(stateName)) {
-//       layer.setStyle({ color: '#073a9fff', weight: 3, fillOpacity: 0.25 });
-//       this.selectedStateLayers.set(stateName, layer);
-//     } else {
-//       layer.setStyle({ color: '#838589ff', weight: 3, fillOpacity: 0.25 });
-//       this.selectedStateLayers.delete(stateName);
-//     }
-//   });
-// }
 
 private highlightSelectedStates(): void {
   const selectedStatesFromParent = new Set(
@@ -168,12 +168,27 @@ private highlightSelectedStates(): void {
   );
 
   this.geojson.eachLayer((layer: any) => {
-    const stateName = layer.feature.properties.name.toLowerCase(); // lowercase
+    const stateName = layer.feature.properties.name.toLowerCase();
+
     if (selectedStatesFromParent.has(stateName)) {
-      layer.setStyle({ color: '#073a9fff', weight: 3, fillOpacity: 0.25 });
+      // 🔹 Darken selected state (fill + border)
+      layer.setStyle({
+       color: '#073a9fff',      // dark blue border
+        fillColor: '#98a8c8ff',   // dark blue fill
+        weight: 3,
+        fillOpacity: 0.55         // darker fill
+      });
+
       this.selectedStateLayers.set(layer.feature.properties.name, layer);
     } else {
-      layer.setStyle({ color: '#838589ff', weight: 3, fillOpacity: 0.25 });
+      // 🔸 Fade out non-selected states
+     layer.setStyle({
+        color: '#b0b0b0',         // light grey border
+        fillColor: '#f9efe6',     // very light background
+        weight: 1,
+        fillOpacity: 0.15         // faint fill
+      });
+
       this.selectedStateLayers.delete(layer.feature.properties.name);
     }
   });
