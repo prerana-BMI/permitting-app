@@ -8,14 +8,19 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
 import { AddUserComponent } from './add-user/add-user.component';
+import { activeauthGuard } from '../guard/activeauth.guard';
+
 const routes: Routes = [
   
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent , data: { allowAnonymous: true } },
   {
     path: '',
     component: PagesComponent,
     children: [
-      { path: 'UsersList', component: UsersListComponent }
+      {
+        path: 'UsersList', component: UsersListComponent,
+        canActivate: [activeauthGuard]
+      }
     ]
   }
  

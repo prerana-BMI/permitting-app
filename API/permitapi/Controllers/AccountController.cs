@@ -70,9 +70,9 @@ namespace permitapi.Controllers
             return BaseObj;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("IsUserExist")]
-        public BaseReturn<EUsers> IsUserExisit(string UserName)
+        public BaseReturn<EUsers> IsUserExisit( [FromBody] string UserName)
         {
             var BaseObj = new BaseReturn<EUsers>();
 
@@ -80,7 +80,7 @@ namespace permitapi.Controllers
             {
 
                 var Result = _context.Users.Where(a => a.UserName == UserName).AsNoTracking().FirstOrDefault();
-                if (Result == null)
+                if (Result == null && !string.IsNullOrEmpty(UserName))
                 {
                     var UserObj = new User();
                     UserObj.UserName = UserName;
@@ -137,7 +137,7 @@ namespace permitapi.Controllers
             }
             return BaseObj;
         }
-
+        
         [HttpGet]
         [Route("SaveUser")]
         public BaseReturn<int> SaveUser(EUsers Request)

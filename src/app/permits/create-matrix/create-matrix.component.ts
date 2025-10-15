@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs';
@@ -19,6 +19,7 @@ typeaheadDebounce : number = 500;
 CityList : Array<any> = [];
 isCityLoading : boolean= false;
 SelectedPermit : Array<number> = [];
+Submitted : boolean= false;
 TypeofPermitList : Array<string>= [];
   constructor(private fb: FormBuilder, 
     private HttpService: HttpService,
@@ -33,13 +34,17 @@ TypeofPermitList : Array<string>= [];
     this.AddMatrixForm = this.fb.group({
       TypeOfProject : '',
       RegulatoryAgency :'',
-      MatrixName : ''
+      MatrixName : ['', [Validators.required]]
 
     });
     this.InitializedTypeAhead();
     this.GeAllMasterPermitType()
   }
   Submit() {
+    if (this.AddMatrixForm.invalid) {
+      this.Submitted = true;
+      return
+    }
     let param = {
       TypeOfProject: this.AddMatrixForm.controls['TypeOfProject'].value,
       ClientName: this.AddMatrixForm.controls['RegulatoryAgency'].value,

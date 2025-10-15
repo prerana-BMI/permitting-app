@@ -7,11 +7,9 @@
         <div class="row pb-0">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="username" class="form-label labelClass lableSyle">Type Of Project</label>
-                    <select name="" id="" class="form-control custom-input" formControlName="TypeOfProject">
-                        <option value="">Select</option>
-                        <option value="{{i}}" *ngFor="let i of TypeofPermitList">{{i}}</option>
-                    </select>
+                        <label for="username" class="form-label labelClass lableSyle">Matrix Name <span  class="text-danger">*</span></label>
+                         <input type="text" class="form-control custom-input" formControlName="MatrixName">
+                         <span *ngIf="Submitted && AddMatrixForm.get('MatrixName')?.invalid" class="text-danger">Matrix Name is Required</span>
                 </div>
             </div>
         </div>
@@ -55,15 +53,13 @@
         </div>
          <div class="row pt-0">
             <div class="col-md-12">
-              
-                 
-                    <div class="form-group">
-                        <label for="username" class="form-label labelClass lableSyle">Matrix Name</label>
-                         <input type="text" class="form-control custom-input" formControlName="MatrixName">
-                    </div>
-                
-              
-
+              <div class="form-group">
+                    <label for="username" class="form-label labelClass lableSyle">Type Of Project</label>
+                    <select name="" id="" class="form-control custom-input" formControlName="TypeOfProject">
+                        <option value="">Select</option>
+                        <option value="{{i}}" *ngFor="let i of TypeofPermitList">{{i}}</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>

@@ -88,7 +88,7 @@ export class AuthService {
       return this.AccessToken
   }
   IsUserAuthorized(UserName : string ) {
-      this.HttpService.httpGetCall(Constants.IsUserExist+ UserName, {},true).subscribe((res:any)=>{
+      this.HttpService.httpPostCall(Constants.IsUserExist,JSON.stringify(UserName),true).subscribe((res:any)=>{
       if(res['Success'])
       { 
         let data = {
