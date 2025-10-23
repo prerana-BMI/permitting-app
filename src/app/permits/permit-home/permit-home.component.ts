@@ -117,21 +117,19 @@ handleCitySelected(event: { City: string, State: string, Selected: 'Y' | 'N' }) 
     loc => loc.City === event.City && loc.State === event.State
   );
 
-  if (event.Selected === 'Y') {
+  if (event.Selected === 'Y' && existingIndex === -1) {
     // Add city if not already added
-    if (existingIndex === -1) {
-      this.selectedLocations.push({ 
+    this.selectedLocations.push({ 
         City: event.City, 
         State: event.State, 
         Selected: 'Y'  // ✅ Add this
       });
+    
+  } 
+  else if(existingIndex !== -1 && event.State !== "" && event.City != "") {
+    this.selectedLocations.splice(existingIndex, 1);
     }
-  } else {
-    // Remove city
-    if (existingIndex !== -1) {
-      this.selectedLocations.splice(existingIndex, 1);
-    }
-  }
+  
 
   // Update grouped state-city view
   this.updateGroupedLocations();

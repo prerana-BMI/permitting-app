@@ -22,6 +22,7 @@ CityList : Array<any> = [];
 RegagencyList : Array<any> = [];
 isCityLoading : boolean= false;
  PermitData : any; 
+TypeofPermitList : Array<any> = [];
 CategoryList : Array<string> = [];
 user : any = {};
  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
@@ -35,8 +36,10 @@ user : any = {};
   }
 ngOnInit()
 {
-this.GetMasterCategory();
 this.user = this.Auth.GetLoggedInUser();
+this.GetMasterCategory();
+this.GeAllMasterPermitType()
+
 this.AddPermitForm= this.fb.group({
       Category: [''],
       TypeOfProject: [''],
@@ -54,7 +57,7 @@ this.AddPermitForm= this.fb.group({
       BasicFees: [''],
       AdditionalFees: ['']
     });
-    this.initializeTyopeAhead();
+  this.initializeTyopeAhead();
   if (this.PermitData != null) {
     this.SetData();
   }
@@ -135,6 +138,10 @@ SetData()
       BasicFees: this.PermitData.BasicFees,
       AdditionalFees: this.PermitData.PermitName
       });
+      if(this.user?.Role != 'Admin')
+      {
+        this.AddPermitForm.disable()
+      }
     }
   Submit() {
     let param = {
@@ -188,4 +195,25 @@ clear()
     };
     return '';
   }
+
+
+// GeAllMasterPermitType()
+// {
+//   await this.HttpService.httpGetCall(Constants.GetMasterPermitType,false , false).subscribe((res :any) => {
+//           if (res["Success"]) {
+
+//             this.TypeofPermitList = res["Data"];
+//           }
+//         });
+// }
+
+async GeAllMasterPermitType()
+{
+ let res :any =  await this.HttpService.httpGetCall(Constants.GetMasterPermitType,false , false).toPromise();
+          if (res["Success"]) {
+
+            this.TypeofPermitList = res["Data"];
+          }
+       
+}
 }

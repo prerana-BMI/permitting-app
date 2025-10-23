@@ -120,7 +120,9 @@ AddPermit()
 {
   
   let dialogRef = this.dialog.open(AddPermitsComponent, {
-        data: null
+        data: null,
+         width: '1000px',          // ✅ Fixed width
+        
       });
       dialogRef.afterClosed().subscribe(res => {
         if (res != null) {
@@ -133,7 +135,9 @@ AddPermit()
     this.httpService.httpGetCall(`${Constants.GetPermitById}?PermitId=${Id}`, true).subscribe((res: any) => {
       if (res["Success"]) {
       let dialogRef = this.dialog.open(AddPermitsComponent, {
-          data: res["Data"]
+          data: res["Data"],
+           width: '1000px',          // ✅ Fixed width
+          
         });
         dialogRef.afterClosed().subscribe(resdata => {
           if (resdata != null) {
