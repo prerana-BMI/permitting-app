@@ -175,8 +175,8 @@
       </div>
 
       <div class="form-actions">
-        <button type="button" class="btn-cancel" (click)="clear()">Cancel</button>
-        <button type="button" class="btn-save" (click)="Submit()">Save Permit</button>
+        <button type="button" class="btn-cancel" (click)="clear()">   <i class="fas fa-eraser"></i> Cancel</button>
+        <button type="button" class="btn-save" (click)="Submit()"  *ngIf="user?.Role == 'Admin'">  <i class="fas fa-save"></i>Save Permit</button>
       </div>
     </form>
   </div>
