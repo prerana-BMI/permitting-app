@@ -62,12 +62,12 @@ this.AddPermitForm= this.fb.group({
     this.SetData();
   }
 }
-  GetMasterCategory() {
-    this.HttpService.httpGetCall(Constants.CategoryList, false, false).subscribe((res: any) => {
-      if (res["Success"]) {
-        this.CategoryList = res["Data"]
-      }
-    })
+
+  async GetMasterCategory() {
+    let res: any = await this.HttpService.httpGetCall(Constants.CategoryList, false, true).toPromise();
+    if (res["Success"]) {
+      this.CategoryList = res["Data"];
+    }
   }
 initializeTyopeAhead()
 {
@@ -209,7 +209,7 @@ clear()
 
 async GeAllMasterPermitType()
 {
- let res :any =  await this.HttpService.httpGetCall(Constants.GetMasterPermitType,false , false).toPromise();
+ let res :any =  await this.HttpService.httpGetCall(Constants.GetMasterPermitType,false ,true).toPromise();
           if (res["Success"]) {
 
             this.TypeofPermitList = res["Data"];
