@@ -102,3 +102,45 @@
 {
   background-color: transparent;
 }
+ .sidebar-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; // pushes bottom section down
+    height: 100%;
+    padding: 1rem;
+    background-color: white !important;
+  }
+
+  .menu-section {
+    flex-grow: 1;
+    background-color: white !important;
+  
+  }
+
+  .bottom-section {
+    padding-top: 1rem;
+    border-top: 1px solid #dbe0f5; // subtle separator line (optional)
+  }
+
+  .btn {
+    border: 1px solid #0e3b64;
+    color: #0e3b64;
+    background-color: transparent;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0.65rem 1.5rem;
+    white-space: nowrap;
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+
+    i {
+      margin-right: 0.5rem;
+    }
+
+    &:hover {
+      background-color: #0e3b64;
+      color: white;
+    }
+  }
+
+

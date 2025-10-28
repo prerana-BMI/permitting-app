@@ -5,6 +5,7 @@ import { MENU_ITEMS } from './pages-menu';
 import { NbMenuItem } from '@nebular/theme';
 import { AuthService } from '../services/auth.service';
 import { Constants } from '../Models/Constants';
+import {  Location } from '@angular/common';
 
 @Component({
   selector: 'ngx-pages',
@@ -19,7 +20,7 @@ export class PagesComponent {
   RoleList: Array<{ Role: string, Value: Array<string> }> = Constants.RoleAssignment;
   MenuList: Array<string> = [];
 
-  constructor(private router: Router, private Auth: AuthService) {}
+  constructor(private router: Router, private Auth: AuthService , private location : Location) {}
 
   ngOnInit(): void {
     this.Auth.getAccessToken().subscribe({
@@ -56,4 +57,9 @@ export class PagesComponent {
     let splitLastSegment = lastSegment.split(/(?=[A-Z])/);
     return [...segments, ...splitLastSegment];
   }
+  back()
+  {
+    this.location.back();
+  }
+  
 }

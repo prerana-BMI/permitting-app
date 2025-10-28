@@ -1,137 +1,89 @@
-<div class="col-md-12 rounded PageLayout" style="height:120px;">
-  <div class="d-flex mt-2" [formGroup]="SearchForm">
-    <div class="col-lg-3 col-md-3 col-sm-12 p-1">
+<div class="page-container">
+  <div class="filter-panel" [formGroup]="SearchForm">
+    <div class="form-row">
       <div class="form-group">
-        <label for="city" class="form-label labelClass lableSyle">
-          Matrix Name
-        </label>
-        <input type="text" id="city" class="form-control custom-input" formControlName="MatrixName">
+        <label for="city" class="form-label">Matrix Name</label>
+        <input type="text" id="city" class="form-control" formControlName="MatrixName">
       </div>
-    </div>
-   
-    <div class="col-lg-3 col-md-3 col-sm-12 p-1">
       <div class="form-group">
-        <label for="city" class="form-label labelClass lableSyle">
-         Client Name
-        </label>
-        <input type="text" class="form-control custom-input" formControlName="RegulatoryAgency" [matAutocomplete]="agencyLst">
-                      <mat-autocomplete #agencyLst="matAutocomplete" [displayWith]="AgencyTypeAheadDisplay.bind(this)">
-                        <mat-option *ngIf="isAgencyLoading">
-                            <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
-                            </mat-spinner>
-                        </mat-option>
-                        <mat-option class="mat-opt1" disabled>
-                            <div>
-                                <table>
-                                    <tr class="tr">
-                                        <td style=""> Client Name</td>
-                    
-                                    </tr>
-                                </table>
-                            </div>
-                        </mat-option>
-                        <mat-option *ngFor="let l of RegagencyList | slice:0:30" [value]="l.Name" class="mat-opt">
-                            <div>
-                                <table>
-                                    <tr class="tr">
-                                        <td class="td td1">{{l.Name}}</td>
-                    
-                                    </tr>
-                                </table>
-                            </div>
-                        </mat-option>
-                        <mat-option *ngIf="RegagencyList.length == 0" disabled>
-                            No Options
-                        </mat-option>
-                    </mat-autocomplete>
+        <label for="city" class="form-label">Client Name</label>
+        <input type="text" class="form-control" formControlName="RegulatoryAgency" [matAutocomplete]="agencyLst">
+        <mat-autocomplete #agencyLst="matAutocomplete" [displayWith]="AgencyTypeAheadDisplay.bind(this)">
+          <mat-option *ngIf="isAgencyLoading">
+            <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
+            </mat-spinner>
+          </mat-option>
+          <mat-option class="mat-opt1" disabled>
+            <div>
+              <table>
+                <tr class="tr">
+                  <td style=""> Client Name</td>
+
+                </tr>
+              </table>
+            </div>
+          </mat-option>
+          <mat-option *ngFor="let l of RegagencyList | slice:0:30" [value]="l.Name" class="mat-opt">
+            <div>
+              <table>
+                <tr class="tr">
+                  <td class="td td1">{{l.Name}}</td>
+
+                </tr>
+              </table>
+            </div>
+          </mat-option>
+          <mat-option *ngIf="RegagencyList.length == 0" disabled>
+            No Options
+          </mat-option>
+        </mat-autocomplete>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn mb-3" (click)="Search()"><i class="fas fa-search"></i>Search</button>
+        <button type="button" class="btn mb-3" (click)="Search()"><i class="fa fa-eraser"></i>Clear</button>
       </div>
     </div>
-    
-    <div class="col-lg-1 col-md-1 col-sm-12 p-1 ml-2">
-       <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
-        (click)="Search()">
-        <span style=" margin: 0 1px;"></span>
-        <i class="fas fa-search"></i>
-        <span class="flex-grow-1 text-start">Search</span>
-
-      </button>
-    </div>
-     <div class="col-lg-1 col-md-1 p-1 col-sm-12 ml-4">
-      <button type="button"
-        class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
-        (click)="Search()">
-        <span style=" margin: 0 1px;"></span>
-        <i class="fa fa-eraser"></i>
-        <span class="flex-grow-1 text-start">Clear</span>
-
-      </button>
-
-    </div>
-
-
-  </div>
-</div>
-
-<div class="col-md-12 rounded PageLayout mt-4" style="height:500px;">
- <div class="col-md-12 mt-3 d-flex justify-content-between align-items-center">
-  <div class="d-flex align-items-center">
-  </div>
-    <div class="d-flex align-items-center mr-2">
-      <mat-paginator *ngIf="MatrixList != null" [length]="dataCount" [pageSize]="pageSize" [pageSizeOptions]="pageOption"
-        (page)="paginatorevt($event)" #paginator>
-      </mat-paginator>
-    
-    </div>
-</div>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card-body">
-    
-        <div class="">
-  <!-- Fixed header -->
-  <div class="table-header">
-    <table class="table fixed-table mb-0">
-      <thead style="background-color: #bbbbbb4d;">
-        <tr>
-          <th style="width: 80px;">Matrix Name</th>
-          <th style="width: 150px;">Client Name</th>
-          <th style="width: 150px;">Type Of Project</th>
-          <th style="width: 100px;">Permit Count</th>
-          <th style="width: 80px;">Action</th>
-        </tr>
-      </thead>
-    </table>
   </div>
 
-  <!-- Scrollable body -->
-  <div class="table-body">
-    <table class="table fixed-table">
-      <tbody>
-        <tr *ngFor="let item of MatrixList">
-          <td style="width: 80px;">{{item.MatrixName}}</td>
-          <td style="width: 150px;">{{item.ClientName}}</td>
-          <td style="width: 150px;">{{item.TypeOfProject}}</td>
-          <td style="width: 100px;">{{item.PermitCount}}</td>
-          <td style="width: 80px;">
-            <a class="btn btn-sm rounded-1" style="border: 1px solid #1c4876; color: #1c4876;" title="View"
-              (click)="ViewDetails(item.Id)">
-              <i class="far fa-eye"></i>
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
 
-
-        
+  <div class="data-panel">
+    <div class="panel-header">
+      <!-- <div class="d-flex align-items-center"> -->
+      <div class="panel-header-left">
       </div>
-
+      <mat-paginator *ngIf="MatrixList != null" [length]="dataCount" [pageSize]="pageSize"
+        [pageSizeOptions]="pageOption" (page)="paginatorevt($event)" #paginator></mat-paginator>
+    </div>
+    <div class="table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Matrix Name</th>
+            <th>Client Name</th>
+            <th>Type Of Project</th>
+            <th>Permit Count</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of MatrixList">
+            <td>{{item.MatrixName}}</td>
+            <td>{{item.ClientName}}</td>
+            <td>{{item.TypeOfProject}}</td>
+            <td>{{item.PermitCount}}</td>
+            <td class="action-cell">
+              <button class="btn" 
+                (click)="ViewDetails(item.Id)">
+                <i class="far fa-eye"></i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="!MatrixList?.length">
+            <td colspan="7" class="text-center p-5">No permits found.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
   </div>
-  <!-- <mat-paginator *ngIf="PermitList != null" [length]="dataCount" [pageSize]="pageSize" style="margin-top: 10px;"
-                [pageSizeOptions]='pageOption' (page)="paginatorevt($event)" #paginator></mat-paginator> -->
 </div>
-

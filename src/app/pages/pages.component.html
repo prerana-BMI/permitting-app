@@ -3,10 +3,23 @@
     <ngx-header></ngx-header>
   </nb-layout-header>
 
-  <nb-sidebar class="menu-sidebar" tag="menu-sidebar">
-    <nb-menu [items]="menu"></nb-menu>
-    <ng-content select="nb-menu"></ng-content>
-  </nb-sidebar>
+  <nb-sidebar class="menu-sidebar" tag="menu-sidebar" >
+  <div class="sidebar-container">
+    <!-- Top: Menu section -->
+    <div class="menu-section">
+      <nb-menu [items]="menu"></nb-menu>
+      <ng-content select="nb-menu"></ng-content>
+    </div>
+
+    <!-- Bottom: Back button -->
+    <div class="bottom-section">
+      <button class="btn w-100" (click)="back()">
+        <i class="fa-solid fa-arrow-left"></i>
+        Back
+      </button>
+    </div>
+  </div>
+</nb-sidebar>
 
   <nb-layout-column style="background-color: #fcfcfd;">
     <!-- <nav class="breadcrumb-container" aria-label="breadcrumb" style="margin-bottom: 15px;">
@@ -23,7 +36,5 @@
     <router-outlet></router-outlet>
   </nb-layout-column>
 
-  <nb-layout-footer fixed>
-    <ngx-footer></ngx-footer>
-  </nb-layout-footer>
+  
 </nb-layout>

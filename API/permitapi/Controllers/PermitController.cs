@@ -291,6 +291,7 @@ namespace permitapi.Controllers
                     {
                         permitObj.Category = Request.Category;
                         permitObj.PermitName = Request.PermitName;
+                        permitObj.TypeOfProject = Request.TypeOfProject;
                         permitObj.Level = Request.Level;
                         permitObj.City = Request.City;
                         permitObj.State = Request.State;
@@ -321,7 +322,8 @@ namespace permitapi.Controllers
                         City = Request.City,
                         State = Request.State,
                         RegulatoryAgencyName = Request.RegulatoryAgencyName,
-                        RegulatoryAgencyId = Request.RegulatoryAgencyId
+                        RegulatoryAgencyId = Request.RegulatoryAgencyId,
+                        TypeOfProject = Request.TypeOfProject,
                     };
                     _context.PermitMasters.Add(PermitObj);
                     _context.SaveChanges();

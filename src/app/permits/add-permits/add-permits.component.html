@@ -1,183 +1,246 @@
 <div class="add-edit-popuop">
-  <div class="panel-header">
-    <h5>Add New Permit</h5>
-    <i class="fa fa-times" (click)="clear()"></i>
-  </div>
-  <div class="shadowed-panel">
-    <form [formGroup]="AddPermitForm" class="form-modern">
-      <div class="form-grid">
-        <!-- Permit Name -->
-        <div class="form-group-modern">
-          <label for="permitName" class="form-label-modern">Permit Name</label>
-          <input type="text" id="permitName" class="form-control-modern" formControlName="PermitName" placeholder="Enter permit name">
+    <div class="shadowed-panel" [formGroup]="AddPermitForm">
+        <div class="panel-header d-flex justify-content-between align-items-center">
+            <h5> Add New Permit </h5>
+            <div><i class="fa fa-times" aria-hidden="true" (click)="clear()"></i></div>
         </div>
+        <div class="row">
+            <div class="col-md-12 p-3">
+                <div class="row d-flex pb-0">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="username" class="form-label labelClass lableSyle">Category</label>
+                            <select name="" id="" class="form-control custom-input" formControlName="Category">
+                                <option value="">Select</option>
+                                <option value="{{i}}" *ngFor="let i of CategoryList">{{i}}</option>
+                            </select>
+                        </div>
+                    </div>
 
-        <!-- Regulatory Agency -->
-        <div class="form-group-modern">
-          <label for="regulatoryAgency" class="form-label-modern">Regulatory Agency</label>
-          <input type="text" id="regulatoryAgency" class="form-control-modern" formControlName="RegulatoryAgency" [matAutocomplete]="Agencylist" placeholder="Enter agency name">
-          <mat-autocomplete #Agencylist="matAutocomplete" [displayWith]="AgencyTypeAheadDisplay.bind(this)">
-            <mat-option *ngIf="isAgencyLoading" disabled><mat-spinner diameter="20"></mat-spinner></mat-option>
-            <mat-option *ngIf="RegagencyList.length === 0" disabled>No Options</mat-option>
-            <mat-option *ngFor="let l of RegagencyList" [value]="l.Name">{{ l.Name }}</mat-option>
-          </mat-autocomplete>
-        </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="role" class="form-label labelClass lableSyle">Level</label>
+                            <select name="" id="" class="form-control custom-input" formControlName="Level">
+                                <option value="">Select</option>
+                                <option value="Federal">Federal</option>
+                                <option value="State">State</option>
+                                <option value="County">County</option>
+                            </select>
+                        </div>
+                    </div>
 
-        <!-- Category -->
-        <div class="form-group-modern">
-          <label for="category" class="form-label-modern">Category</label>
-          <select id="category" class="form-control-modern" formControlName="Category">
-            <option value="">Select Category</option>
-            <option *ngFor="let i of CategoryList" [value]="i">{{ i }}</option>
-          </select>
-        </div>
+                    <!-- Active Status -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="role" class="form-label labelClass lableSyle">State</label>
+                            <input type="text" class="form-control custom-input" formControlName="State"
+                                [matAutocomplete]="statelist" oninput="this.value = this.value.toUpperCase()">
+                            <mat-autocomplete #statelist="matAutocomplete"
+                                [displayWith]="StateTypeAheadDisplay.bind(this)">
+                                <mat-option *ngIf="isStateLoading">
+                                    <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
+                                    </mat-spinner>
+                                </mat-option>
+                                <mat-option class="mat-opt1" disabled>
+                                    <div>
+                                        <table>
+                                            <tr class="tr">
+                                                <td style="width: 200px;">State</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </mat-option>
+                                <mat-option *ngFor="let l of StateList | slice:0:30" [value]="l.State" class="mat-opt">
+                                    <div>
+                                        <table>
+                                            <tr class="tr">
 
-        <!-- Level -->
-        <div class="form-group-modern">
-          <label for="level" class="form-label-modern">Level</label>
-          <select id="level" class="form-control-modern" formControlName="Level">
-            <option value="">Select Level</option>
-            <option value="Federal">Federal</option>
-            <option value="State">State</option>
-            <option value="County">County</option>
-          </select>
-        </div>
+                                                <td class="td td1" style="width: 200px;">{{l.State}} - US</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </mat-option>
+                                <mat-option *ngIf="StateList.length == 0" disabled>
+                                    No Options
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
 
-        <!-- State, City, and Basic Fees Group -->
-        <div class="grid-full-width">
-          <div class="form-grid">
-            <!-- State & City -->
-            <div class="form-group-modern" >
-              <div class="inline-input-group">
-                <div class="form-group-modern mr-5">
-                  <label for="state" class="form-label-modern">State</label>
-                  <input type="text" id="state" class="form-control-modern" formControlName="State" [matAutocomplete]="statelist" placeholder="Enter state name">
-                  <mat-autocomplete #statelist="matAutocomplete" [displayWith]="StateTypeAheadDisplay.bind(this)">
-                            <mat-option *ngIf="isStateLoading">
-                                <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
-                                </mat-spinner>
-                            </mat-option>
-                            <mat-option class="mat-opt1" disabled>
-                                <div>
-                                    <table>
-                                        <tr class="tr">
-                                            <td style="width: 200px;">State</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </mat-option>
-                            <mat-option *ngFor="let l of StateList | slice:0:30" [value]="l.State" class="mat-opt">
-                                <div>
-                                    <table>
-                                        <tr class="tr">
-                    
-                                            <td class="td td1" style="width: 200px;">{{l.State}} - US</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </mat-option>
-                            <mat-option *ngIf="StateList.length == 0" disabled>
-                                No Options
-                            </mat-option>
-                        </mat-autocomplete>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="role" class="form-label labelClass lableSyle">City</label>
+                            <input type="text" class="form-control custom-input"
+                                oninput="this.value = this.value.toUpperCase()" formControlName="City"
+                                [matAutocomplete]="ctlist">
+                            <mat-autocomplete #ctlist="matAutocomplete" [displayWith]="CityTypeAheadDisplay.bind(this)">
+                                <mat-option *ngIf="isCityLoading">
+                                    <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
+                                    </mat-spinner>
+                                </mat-option>
+                                <mat-option class="mat-opt1" disabled>
+                                    <div>
+                                        <table>
+                                            <tr class="tr">
+                                                <td style="width: 200px;">City</td>
+
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </mat-option>
+                                <mat-option *ngFor="let l of CityList | slice:0:30" [value]="l.City" class="mat-opt">
+                                    <div>
+                                        <table>
+                                            <tr class="tr">
+                                                <td class="td td1" style="width: 200px;">{{l.City}}</td>
+
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </mat-option>
+                                <mat-option *ngIf="CityList.length == 0" disabled>
+                                    No Options
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group-modern">
-                  <label for="city" class="form-label-modern">City</label>
-                  <input type="text" id="city" class="form-control-modern" formControlName="City" [matAutocomplete]="ctlist"  placeholder="Enter city name">
-                  <mat-autocomplete #ctlist="matAutocomplete" [displayWith]="CityTypeAheadDisplay.bind(this)">
-                        <mat-option *ngIf="isCityLoading">
-                            <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
-                            </mat-spinner>
-                        </mat-option>
-                        <mat-option class="mat-opt1" disabled>
-                            <div>
-                                <table>
-                                    <tr class="tr">
-                                        <td style="width: 200px;">City</td>
-                    
-                                    </tr>
-                                </table>
-                            </div>
-                        </mat-option>
-                        <mat-option *ngFor="let l of CityList | slice:0:30" [value]="l.City" class="mat-opt">
-                            <div>
-                                <table>
-                                    <tr class="tr">
-                                        <td class="td td1" style="width: 200px;">{{l.City}}</td>
-                    
-                                    </tr>
-                                </table>
-                            </div>
-                        </mat-option>
-                        <mat-option *ngIf="CityList.length == 0" disabled>
-                            No Options
-                        </mat-option>
-                    </mat-autocomplete>
+                <div class="row d-flex pb-0">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="role" class="form-label labelClass lableSyle">Permit Name</label>
+                            <input type="text" class="form-control custom-input" formControlName="PermitName">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="role" class="form-label labelClass lableSyle">Regulatory Agency Name</label>
+                            <input type="text" class="form-control custom-input" formControlName="RegulatoryAgency"
+                                [matAutocomplete]="agencyLst">
+                            <mat-autocomplete #agencyLst="matAutocomplete"
+                                [displayWith]="AgencyTypeAheadDisplay.bind(this)">
+                                <mat-option *ngIf="isAgencyLoading">
+                                    <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
+                                    </mat-spinner>
+                                </mat-option>
+                                <mat-option class="mat-opt1" disabled>
+                                    <div>
+                                        <table>
+                                            <tr class="tr">
+                                                <td style="width: 200px;">Agenct Name</td>
+
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </mat-option>
+                                <mat-option *ngFor="let l of RegagencyList | slice:0:30" [value]="l.Name"
+                                    class="mat-opt">
+                                    <div>
+                                        <table>
+                                            <tr class="tr">
+                                                <td class="td td1">{{l.Name}}</td>
+
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </mat-option>
+                                <mat-option *ngIf="RegagencyList.length == 0" disabled>
+                                    No Options
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="role" class="form-label labelClass lableSyle">Basic Fees</label>
+                            <input type="number" class="form-control custom-input" formControlName="BasicFees">
+                        </div>
+                    </div>
+
                 </div>
-              </div>
+
+                <div class="row d-flex pb-0">
+                    <!-- Preparation Time Group -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label labelClass lableSyle">Preparation Time(in Days)</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <input type="number" class="form-control custom-input me-2" placeholder="Min"
+                                    formControlName="MinPrepTime" />
+                                <span class="mx-1">to</span>
+                                <input type="number" class="form-control custom-input ms-2" placeholder="Max"
+                                    formControlName="MaxPrepTime" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label labelClass lableSyle">Agency Review Time(in Days)</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <input type="number" class="form-control custom-input me-2" placeholder="Min"
+                                    formControlName="MinAgencyReviewTime" />
+                                <span class="mx-1">to</span>
+                                <input type="number" class="form-control custom-input ms-2" placeholder="Max"
+                                    formControlName="MaxAgencyReviewTime" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                 <div class="row d-flex pb-0">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="role" class="form-label labelClass lableSyle">Type Of Project</label>
+                            <select id="TypeOfProject" class="form-control custom-input" formControlName="TypeOfProject">
+                                <option value="">Select</option>
+                                <option value="{{i}}" *ngFor="let i of TypeofPermitList">{{i}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="role" class="form-label labelClass lableSyle">Additional Basic Fees</label>
+                            <input type="text" class="form-control custom-input" formControlName="RegulatoryAgency"
+                            >
+                           
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row d-flex pb-0">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="role" class="form-label labelClass lableSyle">Description</label>
+                            <textarea class="form-control custom-input" formControlName="Description" rows="2">
+                  </textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="role" class="form-label labelClass lableSyle">Threshold</label>
+                            <textarea class="form-control custom-input" formControlName="Threshold" rows="2">
+                        </textarea>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
+        </div>
+    </div>
 
-            <!-- Basic Fees -->
-
-            <div class="form-group-modern">
-              <label class="form-label-modern">Type Of Project</label>
-             <select id="TypeOfProject" class="form-control-modern" formControlName="TypeOfProject">
-                  <option value="">Select</option>
-                  <option value="{{i}}" *ngFor="let i of TypeofPermitList">{{i}}</option>
-              </select>
+    <div class="col-md-12">
+        <div class="row justify-content-center">
+            <div class="col-sm-4 pr-2" style="margin-top: -80px;margin-bottom: 20px;margin-left: 200px;">
+                <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn"
+                    *ngIf="user?.Role == 'Admin'" (click)="Submit()">
+                    <span style=" margin: 0 1px;"></span>
+                    <i class="fas fa-save"></i>
+                    <span class="flex-grow-1 text-start">Submit</span>
+                </button>
             </div>
-
-         </div>
         </div>
-
-        <!-- Preparation Time -->
-        <div class="form-group-modern">
-          <label class="form-label-modern">Preparation Time (in Days)</label>
-          <div class="inline-input-group">
-            <input type="text" class="form-control-modern" formControlName="MinPrepTime" placeholder="Min">
-            <span>to</span>
-            <input type="text" class="form-control-modern" formControlName="MaxPrepTime" placeholder="Max">
-          </div>
-        </div>
-
-
-          <div class="form-group-modern">
-              <label for="basicFees" class="form-label-modern">Basic Fees</label>
-              <input type="text" id="basicFees" class="form-control-modern" formControlName="BasicFees" placeholder="Enter basic fees">
-            </div>
-         
-        <!-- Agency Review Time -->
-        <div class="form-group-modern">
-          <label class="form-label-modern">Agency Review Time (in Days)</label>
-          <div class="inline-input-group">
-            <input type="text" class="form-control-modern" formControlName="MinAgencyReviewTime" placeholder="Min">
-            <span>to</span>
-            <input type="text" class="form-control-modern" formControlName="MaxAgencyReviewTime" placeholder="Max">
-          </div>
-        </div>
-
-        <!-- Additional Fees -->
-        <div class="form-group-modern">
-          <label for="additionalFees" class="form-label-modern">Additional Fees</label>
-          <input type="text" id="additionalFees" class="form-control-modern" formControlName="AdditionalFees" placeholder="Enter additional fees">
-        </div>
-
-        <!-- Description -->
-        <div class="form-group-modern grid-full-width">
-          <label for="description" class="form-label-modern">Description</label>
-          <textarea id="description" class="form-control-modern" formControlName="Description" placeholder="Enter permit description" rows="2"></textarea>
-        </div>
-
-          <div class="form-group-modern grid-full-width">
-          <label for="description" class="form-label-modern">Threshold</label>
-          <textarea id="description" class="form-control-modern" formControlName="Threshold" placeholder="Enter permit Threshold" rows="2"></textarea>
-        </div>
-      </div>
-
-      <div class="form-actions">
-        <button type="button" class="btn-cancel" (click)="clear()">   <i class="fas fa-eraser"></i> Cancel</button>
-        <button type="button" class="btn-save" (click)="Submit()"  *ngIf="user?.Role == 'Admin'">  <i class="fas fa-save"></i>Save Permit</button>
-      </div>
-    </form>
-  </div>
+    </div>
 </div>

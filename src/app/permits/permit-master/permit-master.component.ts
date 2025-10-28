@@ -121,7 +121,7 @@ AddPermit()
   
   let dialogRef = this.dialog.open(AddPermitsComponent, {
         data: null,
-         width: '1000px',          // ✅ Fixed width
+        //  width: '1000px',          // ✅ Fixed width
         
       });
       dialogRef.afterClosed().subscribe(res => {
@@ -136,7 +136,7 @@ AddPermit()
       if (res["Success"]) {
       let dialogRef = this.dialog.open(AddPermitsComponent, {
           data: res["Data"],
-           width: '1000px',          // ✅ Fixed width
+          //  width: '1000px',          // ✅ Fixed width
           
         });
         dialogRef.afterClosed().subscribe(resdata => {
