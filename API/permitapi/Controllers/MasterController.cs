@@ -102,8 +102,7 @@ namespace permitapi.Controllers
                 {
                     Name = a.Name,
                     Id = a.Id
-                })
-                .Take(20)
+               }).Take(20)
                 .ToList();
                 BaseObj.Data = Result;
                 BaseObj.Count = Result.Count;

@@ -203,6 +203,10 @@ namespace Data.DbEntities
                     .HasMaxLength(45)
                     .HasColumnName("department");
 
+                entity.Property(e => e.ContactPerson)
+                    .HasMaxLength(100)
+                    .HasColumnName("contact_person");
+
                 entity.Property(e => e.Link)
                     .HasMaxLength(100)
                     .HasColumnName("link");

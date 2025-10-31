@@ -11,5 +11,7 @@ namespace Data.DbEntities
         public string? Contact { get; set; }
         public string? Link { get; set; }
         public string? Department { get; set; }
+        public string? ContactPerson { get; set; }
+
     }
 }

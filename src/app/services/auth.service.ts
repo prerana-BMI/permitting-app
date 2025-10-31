@@ -15,8 +15,8 @@ import { BehaviorSubject } from 'rxjs';
 import { HttpService } from './http.service';
 import { Constants } from '../Models/Constants';
 import { ToastrService } from 'ngx-toastr';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-;
 @Injectable({
   providedIn: 'root'
 })
@@ -29,11 +29,9 @@ export class AuthService {
     private msalBroadcastService: MsalBroadcastService,
      private router: Router,
      private toastr: ToastrService,
-    private HttpService : HttpService) {}
+    private HttpService : HttpService,
+    private http: HttpClient) {}
 
-
-
-  // Step 6: Acquire and log access token
   getAccessToken(): Observable<string> {
   const account = this.msalService.instance.getActiveAccount();
   const request: SilentRequest = {
@@ -51,7 +49,7 @@ export class AuthService {
       localStorage.setItem('token', response.accessToken);
 
       console.log('Access Token:', response.accessToken);
-      return response.accessToken; // ✅ emit token
+      return response.accessToken;
     }),
     catchError(error => {
       console.error("Silent token acquisition failed", error);
@@ -74,11 +72,13 @@ export class AuthService {
     let role = localStorage.getItem('userDbDetails') ?? "";
     if (user != null && user != undefined) {
       this.User = JSON.parse(user);
-      this.User['Role'] = JSON.parse(role)?.UserRole; 
+      if (role) {
+        this.User['Role'] = JSON.parse(role)?.UserRole;
+      }
       return this.User;
-
     }
   }
+
     GetLocalStorageToken() {
     let token = localStorage.getItem('token');
     if (token != null && token != undefined) {
@@ -109,15 +109,14 @@ export class AuthService {
 GetUserProfilePhoto(): Observable<string> {
   return this.getAccessToken().pipe(
     switchMap(token => {
-      const headers = {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'image/jpeg'
-      };
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
 
-      return this.HttpService.httpGetBlob(
-        'https://graph.microsoft.com/v1.0/me/photo/$value',
-        headers
-      );
+      return this.http.get('https://graph.microsoft.com/v1.0/me/photo/$value', {
+        headers: headers,
+        responseType: 'blob'
+      });
     }),
     switchMap(blob => new Observable<string>(observer => {
       const reader = new FileReader();

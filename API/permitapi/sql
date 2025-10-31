@@ -68,6 +68,14 @@ CREATE SCHEMA `permit_repository_service` ;
   `created_on` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`));
 
+ALTER TABLE `permit_account_service`.`regulatory_agency_master` 
+ADD COLUMN `contact_person` VARCHAR(100) NULL DEFAULT NULL AFTER `department`,
+CHANGE COLUMN `name` `name` VARCHAR(250) NULL DEFAULT NULL ,
+CHANGE COLUMN `address` `address` VARCHAR(250) NULL DEFAULT NULL ;
+
+
+ALTER TABLE `permit_account_service`.`permit_master` 
+CHANGE COLUMN `type_of_project` `type_of_project` VARCHAR(100) NULL DEFAULT NULL ;
 
 
 
