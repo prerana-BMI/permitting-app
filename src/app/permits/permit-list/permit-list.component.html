@@ -216,7 +216,8 @@
               <input type="checkbox" class="big-checkbox" (change)="OnSingleChange($event, item)"
                 [(ngModel)]="item.Ischecked">
             </td>
-            <td>{{item.PermitName}}</td>
+            <td>{{item.PermitName | truncateHover:50}}</td>
+            <!-- <td [innerHTML]="item.PermitName | truncateHover:50"></td> -->
             <td>{{item.RegulatoryAgencyName}}</td>
             <td>{{item.Category}}</td>
             <td>{{item.State == null || item.State =="" ? "--" : item.State }}</td>
