@@ -216,9 +216,16 @@
               <input type="checkbox" class="big-checkbox" (change)="OnSingleChange($event, item)"
                 [(ngModel)]="item.Ischecked">
             </td>
-            <td>{{item.PermitName | truncateHover:50}}</td>
-            <!-- <td [innerHTML]="item.PermitName | truncateHover:50"></td> -->
-            <td>{{item.RegulatoryAgencyName}}</td>
+            <td>
+              <span matTooltip="{{ item.PermitName }}">
+                {{item.PermitName?.length > 50 ? (item.PermitName?.substring(0, 50) + '...') : item.PermitName }}
+              </span>
+            </td>
+             <td>
+              <span matTooltip="{{ item.RegulatoryAgencyName }}">
+                {{item.RegulatoryAgencyName?.length > 50 ? (item.RegulatoryAgencyName?.substring(0, 50) + '...') : item.RegulatoryAgencyName }}
+              </span>
+            </td>
             <td>{{item.Category}}</td>
             <td>{{item.State == null || item.State =="" ? "--" : item.State }}</td>
             <td>{{item.City== null || item.City == "" ? "--" : item.City }}</td>

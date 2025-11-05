@@ -138,7 +138,7 @@ SetData()
       BasicFees: this.PermitData.BasicFees,
       AdditionalFees: this.PermitData.PermitName
       });
-      if(this.user?.Role != 'Admin')
+      if(this.user?.Role != 'Admin' && this.user?.Role != 'Editior')
       {
         this.AddPermitForm.disable()
       }

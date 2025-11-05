@@ -30,7 +30,8 @@ export class Constants{
      public static ExportPermitsToExcel = '/api/Permit/ExportPermitToExcel';
      public static RoleAssignment : Array<{"Role"  : string , "Value" : Array<string>}> = [
         { Role : "User",  Value : ["Home","Matrix List" , "Permit Register"]},
-        { Role : "Admin", Value : ["Home","Matrix List" , "Users", "Permit Register"]}
+        { Role : "Admin", Value : ["Home","Matrix List" , "Users", "Permit Register"]},
+        { Role : "Editior", Value : ["Home","Matrix List" , "Permit Register"]}
     ];
      
 }

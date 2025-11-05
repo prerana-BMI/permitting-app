@@ -33,7 +33,7 @@
   <div class="data-panel">
     <div class="panel-header">
       <div class="panel-header-left">
-        <button class="btn-group btn" *ngIf="user?.Role == 'Admin'" (click)="AddPermit()">
+        <button class="btn-group btn" *ngIf="user?.Role == 'Admin' || user?.Role == 'Editior'" (click)="AddPermit()">
           <i class="fas fa-plus"></i> Add Permit
         </button>
        
@@ -55,8 +55,16 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of PermitList">
-            <td>{{ item.PermitName }}</td>
-            <td>{{ item.RegulatoryAgencyName }}</td>
+             <td>
+              <span matTooltip="{{ item.PermitName }}">
+                {{item.PermitName?.length > 50 ? (item.PermitName?.substring(0, 50) + '...') : item.PermitName }}
+              </span>
+            </td>
+             <td>
+              <span matTooltip="{{ item.RegulatoryAgencyName }}">
+                {{item.RegulatoryAgencyName?.length > 50 ? (item.RegulatoryAgencyName?.substring(0, 50) + '...') : item.RegulatoryAgencyName }}
+              </span>
+            </td>
             <td>{{ item.Category }}</td>
             <td>{{ item.Level || '--' }}</td>
             <td>{{ item.State || '--' }}</td>

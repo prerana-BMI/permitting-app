@@ -99,4 +99,10 @@ export class MyPermitsComponent {
     this.router.navigate(["/permits/MatrixDetails",Id]);
   }
 
+  DeleteDetails(Id : number)
+  {
+      this.httpService.httpGetCall(Constants.GetAllMatrix, param, true).subscribe((res: any) => {})
+  }
+
+
 }
