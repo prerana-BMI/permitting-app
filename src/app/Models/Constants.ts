@@ -27,6 +27,7 @@ export class Constants{
      public static SavePermitMatrix = '/api/Permit/SavePermitMatrix';
      public static GetAllMatrix = '/api/Permit/GetAllMatrix';
      public static GetMatrixDetailsById = '/api/Permit/GetMatrixDetailsById?MatrixId=';
+     public static DeleteMatrixDetailsById = '/api/Permit/DeleteMatrixDetailsById?MatrixId=';
      public static ExportPermitsToExcel = '/api/Permit/ExportPermitToExcel';
      public static RoleAssignment : Array<{"Role"  : string , "Value" : Array<string>}> = [
         { Role : "User",  Value : ["Home","Matrix List" , "Permit Register"]},

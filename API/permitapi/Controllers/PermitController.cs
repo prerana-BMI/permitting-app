@@ -532,7 +532,7 @@ namespace permitapi.Controllers
 
             return BaseObj;
         }
-        
+
         [HttpGet]
         [Route("ExportPermitToExcel")]
         public BaseReturn<List<EPermitMasterDetail>> ExportPermitsToExcel(EPermitByLocation Request)
@@ -612,9 +612,9 @@ namespace permitapi.Controllers
                     .OrderByDescending(a => a.Id)
                     .ToList();
                 }
-                    BaseObj.Count = Result.Count;
-                    BaseObj.Data = Result;
-                    BaseObj.Success = true;
+                BaseObj.Count = Result.Count;
+                BaseObj.Data = Result;
+                BaseObj.Success = true;
             }
             catch (Exception ex)
             {
@@ -629,6 +629,37 @@ namespace permitapi.Controllers
         }
 
 
+         [HttpPost]
+        [Route("DeleteMatrixDetailsById")]
+        public BaseReturn<bool> DeleteMatrixDetailsById(int MatrixId)
+        {
+            var BaseObj = new BaseReturn<bool>();
+
+            try
+            {
+                var Result = _context.PermitMatrices.Where(a => a.Id == MatrixId).FirstOrDefault();
+                _context.PermitMatrices.Remove(Result);
+                _context.SaveChanges();
+
+                if (Result == null)
+                {
+                    BaseObj.Message = "Record not Found";
+                    BaseObj.Success = false;
+                    return BaseObj;
+                }
+                BaseObj.Data = true;
+                BaseObj.Message = "Matrix Deleted Successfully";
+                BaseObj.Success = true;
+            }
+            catch (Exception ex)
+            {
+                BaseObj.Message = ex.Message;
+                BaseObj.Success = false;
+            }
+
+            return BaseObj;
+        }
+        
 
     }
 }

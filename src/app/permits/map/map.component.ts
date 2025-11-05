@@ -12,7 +12,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   private infoDiv!: HTMLElement;
   private cityLayer!: L.LayerGroup;
   private markerMap = new Map<string, L.Marker>();
-  private selectedStateLayers = new Map<string, L.Layer>(); // selected states
+  private selectedStateLayers = new Map<string, L.Layer>();
 
   @Output() citySelected = new EventEmitter<{ City: string, State: string, Selected: 'Y' | 'N' }>();
   @Input() selectedLocationsFromParent: { City: string; State: string; Selected?: string }[] = [];
@@ -32,8 +32,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectedLocationsFromParent'] && this.map) {
-      this.highlightSelectedStates();
-      this.syncMarkersWithParent();
+        this.highlightSelectedStates();
+        this.syncMarkersWithParent();
     }
   }
 
@@ -57,8 +57,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.infoDiv = document.getElementById('info') as HTMLElement;
     if (this.infoDiv) this.infoDiv.innerHTML = 'Hover over a state';
 
-    const geoData = await fetch('https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json')
-      .then(res => res.json());
+    const geoData = await fetch('https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json').then(res => res.json());
 
     const style = (feature: any) => ({
       fillColor: '#f9efe6',
@@ -69,146 +68,82 @@ export class MapComponent implements AfterViewInit, OnChanges {
       fillOpacity: 0.25
     });
 
-const highlightFeature = (e: any) => {
-  const layer = e.target;
-  const stateName = layer.feature.properties.name;
+    const highlightFeature = (e: any) => {
+        const layer = e.target;
+        const stateName = layer.feature.properties.name;
+        if (!this.selectedStateLayers.has(stateName)) {
+            layer.setStyle({ weight: 3, color: '#3366cc', fillColor: '#c9d9f7', fillOpacity: 0.65 });
+        }
+        layer.bringToFront();
+        if (this.infoDiv) this.infoDiv.innerHTML = `<b>${stateName}</b>`;
+    };
 
-  // Check if it's already selected
-  const isSelected = this.selectedStateLayers.has(stateName);
+    const resetHighlight = (e: any) => {
+        const layer = e.target;
+        const stateName = layer.feature.properties.name;
+        if (this.selectedStateLayers.has(stateName)) {
+            layer.setStyle({ color: '#073a9fff', fillColor: '#98a8c8ff', weight: 3, fillOpacity: 0.55 });
+        } else {
+            layer.setStyle({ color: '#838589ff', fillColor: '#f9efe6', weight: 3, fillOpacity: 0.25 });
+        }
+        if (this.infoDiv) this.infoDiv.innerHTML = 'Hover over a state';
+    };
 
-  // If not selected, give a temporary "hover" color
-  if (!isSelected) {
-    layer.setStyle({
-      weight: 3,
-      color: '#3366cc',       // bright blue border
-      fillColor: '#c9d9f7',   // light blue fill
-      fillOpacity: 0.65
-    });
-  }
+    const zoomToFeature = (e: any) => {
+        const layer = e.target;
+        const stateName = layer.feature.properties.name;
 
-  layer.bringToFront();
-
-  if (this.infoDiv)
-    this.infoDiv.innerHTML = `<b>${layer.feature.properties.name}</b>`;
-};
-
-const resetHighlight = (e: any) => {
-  const layer = e.target;
-  const stateName = layer.feature.properties.name;
-
-  if (this.selectedStateLayers.has(stateName)) {
-    // Restore selected style
-    layer.setStyle({
-      color: '#073a9fff',
-      fillColor: '#98a8c8ff',
-      weight: 3,
-      fillOpacity: 0.55
-    });
-  } else {
-    // Restore default style
-    layer.setStyle({
-      color: '#838589ff',
-      fillColor: '#f9efe6',
-      weight: 3,
-      fillOpacity: 0.25
-    });
-  }
-
-  if (this.infoDiv)
-    this.infoDiv.innerHTML = 'Hover over a state';
-};
-
-
-
-const zoomToFeature = (e: any) => {
-  const layer = e.target;
-  const stateName = layer.feature.properties.name;
-
-  // Toggle selection
-  if (this.selectedStateLayers.has(stateName)) {
-    layer.setStyle({ color: '#838589ff', weight: 3, fillOpacity: 0.25 });
-    this.selectedStateLayers.delete(stateName);
-
-    // Only emit state deselection, no city
-    this.citySelected.emit({ State: stateName, Selected: 'N' , City : '' });
-  } else {
-    layer.setStyle({ color: '#073a9fff', weight: 3, fillOpacity: 0.25 });
-    this.selectedStateLayers.set(stateName, layer);
-
-    // Only emit state selection, no city
-    this.citySelected.emit({ State: stateName, Selected: 'Y' ,City : ''});
-  }
-
-  // Zoom to the state
-  this.map.fitBounds(layer.getBounds().pad(0.3));
-};
-
-
-
+        if (this.selectedStateLayers.has(stateName)) {
+            this.selectedStateLayers.delete(stateName);
+            layer.setStyle({ weight: 3, color: '#3366cc', fillColor: '#c9d9f7', fillOpacity: 0.65 });
+            this.citySelected.emit({ State: stateName, Selected: 'N', City: '' });
+        } else {
+            this.selectedStateLayers.set(stateName, layer);
+            layer.setStyle({ color: '#073a9fff', fillColor: '#98a8c8ff', weight: 3, fillOpacity: 0.55 });
+            this.map.fitBounds(layer.getBounds().pad(0.3));
+            this.citySelected.emit({ State: stateName, Selected: 'Y', City: '' });
+        }
+    };
 
     const onEachFeature = (feature: any, layer: L.Layer) => {
-      layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        click: zoomToFeature
-      });
+      layer.on({ mouseover: highlightFeature, mouseout: resetHighlight, click: zoomToFeature });
     };
 
     this.geojson = L.geoJson(geoData, { style, onEachFeature }).addTo(this.map);
     this.map.on('click', (event: L.LeafletMouseEvent) => this.onMapClick(event));
   }
 
+  private highlightSelectedStates(): void {
+    const selectedStatesFromParent = new Set((this.selectedLocationsFromParent || []).map(loc => loc.State?.toLowerCase()).filter(s => s));
 
-
-private highlightSelectedStates(): void {
-  const selectedStatesFromParent = new Set(
-    (this.selectedLocationsFromParent || [])
-      .map(loc => loc.State?.toLowerCase())
-      .filter(s => s)
-  );
-
-  this.geojson.eachLayer((layer: any) => {
-    const stateName = layer.feature.properties.name.toLowerCase();
-
-    if (selectedStatesFromParent.has(stateName)) {
-      // 🔹 Darken selected state (fill + border)
-      layer.setStyle({
-       color: '#073a9fff',      // dark blue border
-        fillColor: '#98a8c8ff',   // dark blue fill
-        weight: 3,
-        fillOpacity: 0.55         // darker fill
-      });
-
-      this.selectedStateLayers.set(layer.feature.properties.name, layer);
-    } else {
-      // 🔸 Fade out non-selected states
-     layer.setStyle({
-        color: '#b0b0b0',         // light grey border
-        fillColor: '#f9efe6',     // very light background
-        weight: 1,
-        fillOpacity: 0.15         // faint fill
-      });
-
-      this.selectedStateLayers.delete(layer.feature.properties.name);
-    }
-  });
-}
-
-
-
+    this.geojson.eachLayer((layer: any) => {
+        const stateName = layer.feature.properties.name;
+        const stateNameLower = stateName.toLowerCase();
+        
+        if (selectedStatesFromParent.has(stateNameLower)) {
+            if (!this.selectedStateLayers.has(stateName)) {
+                this.selectedStateLayers.set(stateName, layer);
+                layer.setStyle({ color: '#073a9fff', fillColor: '#98a8c8ff', weight: 3, fillOpacity: 0.55 });
+            }
+        } else {
+            if (this.selectedStateLayers.has(stateName)) {
+                this.selectedStateLayers.delete(stateName);
+                layer.setStyle({ color: '#838589ff', fillColor: '#f9efe6', weight: 3, fillOpacity: 0.25 });
+            }
+        }
+    });
+  }
 
   private async onMapClick(event: L.LeafletMouseEvent): Promise<void> {
     const lat = event.latlng.lat;
     const lon = event.latlng.lng;
     const location = await this.getCityName(lat, lon);
 
-    if (!location.State) return;
+    if (!location.State || location.City === 'Unknown') return;
 
-    // Use lat/lon to generate unique key for multiple markers
     const key = `${location.City}|${location.State}|${lat.toFixed(5)}|${lon.toFixed(5)}`;
 
     if (this.markerMap.has(key)) {
-      // remove marker
       const marker = this.markerMap.get(key)!;
       this.map.removeLayer(marker);
       this.markerMap.delete(key);
@@ -216,14 +151,10 @@ private highlightSelectedStates(): void {
       return;
     }
 
-    // Add marker
     const marker = L.marker(event.latlng, { icon: this.cityIcon })
-    if(location.City != "" && location.City != null && location.City != 'Unknown')
-    {
-      marker
       .addTo(this.cityLayer)
       .bindTooltip(`${location.City}, ${location.State}`, { permanent: false, direction: 'top', opacity: 0.9 });
-    }
+
     marker.on('click', () => {
       this.map.removeLayer(marker);
       this.markerMap.delete(key);
@@ -233,33 +164,30 @@ private highlightSelectedStates(): void {
     this.markerMap.set(key, marker);
     this.citySelected.emit({ City: location.City, State: location.State, Selected: 'Y' });
 
-    // Keep state #073a9fff
-    this.geojson.eachLayer((layer: any) => {
-      if (layer.feature.properties.name === location.State) {
-        layer.setStyle({ color: '#073a9fff', weight: 3, fillOpacity: 0.25 });
-        this.selectedStateLayers.set(location.State, layer);
-      }
-    });
+    if (!this.selectedStateLayers.has(location.State)) {
+        this.geojson.eachLayer((layer: any) => {
+            if (layer.feature.properties.name === location.State) {
+                this.selectedStateLayers.set(location.State, layer);
+                layer.setStyle({ color: '#073a9fff', fillColor: '#98a8c8ff', weight: 3, fillOpacity: 0.55 });
+            }
+        });
+    }
   }
 
   private async getCityName(lat: number, lon: number): Promise<{ City: string; State: string }> {
     try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`, {
-        headers: { 'Accept': 'application/json' }
-      });
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
       const data = await res.json();
       const address = data.address;
       return { City: address.city || address.town || address.village || 'Unknown', State: address.state || 'Unknown' };
     } catch (err) {
-      console.error('Reverse geocoding error:', err);
       return { City: 'Unknown', State: 'Unknown' };
     }
   }
 
   private syncMarkersWithParent(): void {
-    const parentKeys = new Set((this.selectedLocationsFromParent || []).map(loc => `${loc.City}|${loc.State}`));
+    const parentKeys = new Set((this.selectedLocationsFromParent || []).filter(l => l.City).map(loc => `${loc.City}|${loc.State}`));
 
-    // Remove markers no longer in parent list
     for (const [key, marker] of Array.from(this.markerMap.entries())) {
       const [city, state] = key.split('|');
       if (!parentKeys.has(`${city}|${state}`)) {
@@ -268,24 +196,25 @@ private highlightSelectedStates(): void {
       }
     }
 
-    // Add new markers from parent list
     (this.selectedLocationsFromParent || []).forEach(loc => {
-      const existingMarker = Array.from(this.markerMap.values()).find(m => {
-        const tooltip = m.getTooltip()?.getContent() as string;
-        return tooltip?.includes(`${loc.City}, ${loc.State}`);
-      });
-      if (!existingMarker && loc.City && loc.City !== 'Unknown') {
+      if (!loc.City) return;
+      
+      const markerExists = Array.from(this.markerMap.keys()).some(k => k.startsWith(`${loc.City}|${loc.State}`));
+
+      if (!markerExists) {
         this.getLatLngFromCityState(loc.City, loc.State).then(latlng => {
           if (latlng) {
+            const key = `${loc.City}|${loc.State}|${latlng.lat.toFixed(5)}|${latlng.lng.toFixed(5)}`;
             const marker = L.marker(latlng, { icon: this.cityIcon })
               .addTo(this.cityLayer)
               .bindTooltip(`${loc.City}, ${loc.State}`, { permanent: false, direction: 'top', opacity: 0.9 });
+            
             marker.on('click', () => {
               this.cityLayer.removeLayer(marker);
-              this.markerMap.delete(`${loc.City}|${loc.State}|${latlng.lat}|${latlng.lng}`);
+              this.markerMap.delete(key);
               this.citySelected.emit({ City: loc.City, State: loc.State, Selected: 'N' });
             });
-            const key = `${loc.City}|${loc.State}|${latlng.lat}|${latlng.lng}`;
+
             this.markerMap.set(key, marker);
           }
         });
