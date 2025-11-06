@@ -72,7 +72,7 @@ namespace permitapi.Controllers
 
         [HttpPost]
         [Route("IsUserExist")]
-        public BaseReturn<EUsers> IsUserExisit(  string UserName)
+        public BaseReturn<EUsers> IsUserExisit( [FromBody] string UserName)
         {
             var BaseObj = new BaseReturn<EUsers>();
 
