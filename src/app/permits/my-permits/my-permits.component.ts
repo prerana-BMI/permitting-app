@@ -102,7 +102,7 @@ export class MyPermitsComponent {
   DeleteDetails(Id : number)
   {
       this.httpService.httpPostCall(Constants.DeleteMatrixDetailsById+Id, true).subscribe((res: any) => {
-        if(res.Succeess)
+        if(res.Success)
         {
           this.GetAllMatrix();
         }
