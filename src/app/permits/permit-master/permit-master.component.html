@@ -15,7 +15,7 @@
         <mat-autocomplete #permitlist="matAutocomplete" [displayWith]="PermitTypeAheadDisplay.bind(this)">
           <mat-option *ngIf="ispermitLoading"><mat-spinner diameter="20"></mat-spinner></mat-option>
           <mat-option *ngIf="PermitNameList.length === 0" disabled>No Options</mat-option>
-          <mat-option *ngFor="let l of PermitNameList" [value]="l.PermitName">{{ l.PermitName }}</mat-option>
+          <mat-option class ="mat-opt" *ngFor="let l of PermitNameList" [value]="l.PermitName">{{ l.PermitName }}</mat-option>
         </mat-autocomplete>
       </div>
       <div class="btn-group">

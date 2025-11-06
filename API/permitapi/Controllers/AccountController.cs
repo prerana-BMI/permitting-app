@@ -72,14 +72,14 @@ namespace permitapi.Controllers
 
         [HttpPost]
         [Route("IsUserExist")]
-        public BaseReturn<EUsers> IsUserExisit( [FromBody] string UserName)
+        public BaseReturn<EUsers> IsUserExisit(  string UserName)
         {
             var BaseObj = new BaseReturn<EUsers>();
 
             try
             {
-
-                var Result = _context.Users.Where(a => a.UserName == UserName).AsNoTracking().FirstOrDefault();
+                var tempUserName = UserName?.Split(".")[0];
+                var Result = _context.Users.Where(a => a.UserName.Contains(tempUserName)).AsNoTracking().FirstOrDefault();
                 if (Result == null && !string.IsNullOrEmpty(UserName))
                 {
                     var UserObj = new User();

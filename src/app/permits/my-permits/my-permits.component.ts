@@ -66,8 +66,8 @@ export class MyPermitsComponent {
       'ClientId': this.SearchForm.controls['RegulatoryAgency']?.value == null ? '' : this.SearchForm.controls['RegulatoryAgency']?.value,
       'MatrixName': this.SearchForm.controls['MatrixName']?.value == null ? '' : this.SearchForm.controls['MatrixName']?.value
     }
-    this.httpService.httpGetCall(Constants.GetAllMatrix, param, true).subscribe((res: any) => {
-      if (res["Success"]) {
+    this.httpService.httpGetCall(Constants.GetAllMatrix, param, true ).subscribe((res: any) => {
+      if (res.Success) {
         this.MatrixList = res["Data"];
         this.dataCount = res["Count"];
 
@@ -101,9 +101,11 @@ export class MyPermitsComponent {
 
   DeleteDetails(Id : number)
   {
-      this.httpService.httpGetCall(Constants.DeleteMatrixDetailsById+Id, true).subscribe((res: any) => {
-        if(res["Suceess"])
+      this.httpService.httpPostCall(Constants.DeleteMatrixDetailsById+Id, true).subscribe((res: any) => {
+        debugger
+        if(res["Succeess"])
         {
+          debugger
           this.GetAllMatrix();
         }
       })

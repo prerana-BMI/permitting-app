@@ -20,10 +20,13 @@
     <nb-action class="control-item" icon="bell-outline"></nb-action> -->
     <nb-action class="user-action">
       <nb-user [nbContextMenu]="userMenu"
+               nbContextMenuTag="my-user-menu"
                [onlyPicture]="userPictureOnly"
                [name]="user?.name"
-               [picture]="ProfileUrl">
+               [picture]="ProfileUrl"
+             >
       </nb-user>
+     
     </nb-action>
   </nb-actions>
 </div>

@@ -18,7 +18,7 @@
           <input matInput type="text" placeholder="Enter State" formControlName="state" [matAutocomplete]="statelist" oninput="this.value = this.value.toUpperCase()">
           <mat-autocomplete #statelist="matAutocomplete" [displayWith]="StateTypeAheadDisplay.bind(this)">
             <mat-option *ngIf="isStateLoading"><mat-spinner diameter="20"></mat-spinner></mat-option>
-            <mat-option *ngFor="let l of StateList | slice:0:30" [value]="l.State">{{l.State}} - US</mat-option>
+            <mat-option  class ="mat-opt" *ngFor="let l of StateList | slice:0:30" [value]="l.State">{{l.State}} - US</mat-option>
             <mat-option *ngIf="!StateList || StateList.length === 0" disabled>No states found</mat-option>
           </mat-autocomplete>
           <mat-error *ngIf="SearchForm.get('state')?.hasError('notInList')">
@@ -31,7 +31,7 @@
           <input matInput type="text" placeholder="Enter City" formControlName="city" [matAutocomplete]="ctlist" oninput="this.value = this.value.toUpperCase()">
           <mat-autocomplete #ctlist="matAutocomplete" [displayWith]="CityTypeAheadDisplay.bind(this)">
             <mat-option *ngIf="isCityLoading"><mat-spinner diameter="20"></mat-spinner></mat-option>
-            <mat-option *ngFor="let l of CityList | slice:0:30" [value]="l.City">{{l.City}}</mat-option>
+            <mat-option  class ="mat-opt" *ngFor="let l of CityList | slice:0:30" [value]="l.City">{{l.City}}</mat-option>
             <mat-option *ngIf="!CityList || CityList.length === 0" disabled>No cities found</mat-option>
           </mat-autocomplete>
           <mat-error *ngIf="SearchForm.get('city')?.hasError('notInList')">

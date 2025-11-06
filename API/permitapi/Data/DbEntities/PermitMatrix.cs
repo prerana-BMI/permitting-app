@@ -12,5 +12,7 @@ namespace Data.DbEntities
         public string? PermitList { get; set; }
         public int? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
+        public byte? Status { get; set; }
+        
     }
 }

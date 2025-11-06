@@ -372,6 +372,7 @@ namespace permitapi.Controllers
                 {
                     var UpdatePermit = _context.PermitMatrices.Where(a => a.Id == Request.Id).FirstOrDefault();
                     UpdatePermit.PermitList = Request.PermitList;
+
                     _context.PermitMatrices.Update(UpdatePermit);
                     _context.SaveChanges();
                     BaseObj.Message = "Matrix Updated";
@@ -384,7 +385,8 @@ namespace permitapi.Controllers
                     MatrixName = Request.MatrixName,
                     ClientName = Request.ClientName,
                     PermitList = Request.PermitList,
-                    CreatedBy = _currentUserService.User.UserId
+                    CreatedBy = _currentUserService.User.UserId,
+                    Status = 1
                 };
                 _context.PermitMatrices.Add(PermitObj);
                 _context.SaveChanges();
@@ -416,7 +418,7 @@ namespace permitapi.Controllers
             try
             {
                 var Result = _context.PermitMatrices.Where(a => (a.MatrixName == Request.MatrixName || string.IsNullOrEmpty(Request.MatrixName)) &&
-                                                       (a.ClientName == Request.ClientName || Request.ClientName == null))
+                                                       (a.ClientName == Request.ClientName || Request.ClientName == null) &&  a.Status== 1)
                                                        .Select(a => new EPermitMatrix()
                                                         {
                                                             TypeOfProject = a.TypeOfProject,
@@ -629,7 +631,7 @@ namespace permitapi.Controllers
         }
 
 
-         [HttpPost]
+        [HttpPost]
         [Route("DeleteMatrixDetailsById")]
         public BaseReturn<bool> DeleteMatrixDetailsById(int MatrixId)
         {
@@ -638,7 +640,8 @@ namespace permitapi.Controllers
             try
             {
                 var Result = _context.PermitMatrices.Where(a => a.Id == MatrixId).FirstOrDefault();
-                _context.PermitMatrices.Remove(Result);
+                Result.Status = 2;
+                _context.PermitMatrices.Update(Result);
                 _context.SaveChanges();
 
                 if (Result == null)

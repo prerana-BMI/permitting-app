@@ -183,6 +183,9 @@ namespace Data.DbEntities
                 entity.Property(e => e.TypeOfProject)
                     .HasMaxLength(100)
                     .HasColumnName("type_of_project");
+
+                entity.Property(e => e.Status)
+                    .HasColumnType("TINYINT");
             });
 
             modelBuilder.Entity<RegulatoryAgencyMaster>(entity =>
