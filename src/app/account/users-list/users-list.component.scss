@@ -120,6 +120,9 @@ $box-shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
     .btn-primary {
       background-color: $primary-brand-color;
       color: $white-background;
+      display: inline-flex;       /*  Use flexbox for alignment */
+      align-items: center;        /*  Vertically center content */
+      justify-content: center;
       border-radius: 8px;
       font-weight: 600;
       padding: 0.65rem 1.5rem;
