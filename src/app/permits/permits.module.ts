@@ -9,6 +9,7 @@ import { TruncateHoverPipe } from '../pipes/truncate-hover.pipe';
     CommonModule,
     PermitsRoutingModule,
   
-  ]
+  ],
+  exports : [TruncateHoverPipe]
 })
 export class PermitsModule {}
