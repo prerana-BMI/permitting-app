@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service'
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserComponent } from '../add-user/add-user.component';
+import { DatatransferService } from 'src/app/services/datatransfer.service';
 
 @Component({
   selector: 'app-users-list',
@@ -51,6 +52,7 @@ export class UsersListComponent {
     private fb: FormBuilder,
     private auth: AuthService,
     private dialog: MatDialog,
+    public datatransferService : DatatransferService
 
   ) {
 

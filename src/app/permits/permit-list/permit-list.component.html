@@ -202,12 +202,30 @@
             <th class="checkbox-cell" style="width: 5px;">
               <input type="checkbox" class="big-checkbox" [(ngModel)]="SelecAll" (click)="SelectAll($event)">
             </th>
-            <th>Permit</th>
-            <th>Regulatory Agency</th>
-            <th>Category</th>
-            <th>State</th>
-            <th>City</th>
-            <th>Level</th>
+            <th (click)="datatransferService.sortData('PermitName' , PermitList)">
+              Permit
+              <i class="fas" [ngClass]="datatransferService.getSortIcon('PermitName')"></i>
+            </th>
+            <th (click)="datatransferService.sortData('RegulatoryAgencyName' ,PermitList)">
+              Regulatory Agency
+              <i class="fas" [ngClass]="datatransferService.getSortIcon('RegulatoryAgencyName')"></i>
+            </th>
+            <th (click)="datatransferService.sortData('Category' , PermitList)">
+              Category
+              <i class="fas" [ngClass]="datatransferService.getSortIcon('Category')"></i>
+            </th>
+            <th (click)="datatransferService.sortData('State' , PermitList)">
+              State
+              <i class="fas" [ngClass]="datatransferService.getSortIcon('State')"></i>
+            </th>
+            <th (click)="datatransferService.sortData('City' , PermitList)">
+              City
+              <i class="fas" [ngClass]="datatransferService.getSortIcon('City')"></i>
+            </th>
+            <th (click)="datatransferService.sortData('Level' , PermitList)">
+              Level
+              <i class="fas" [ngClass]="datatransferService.getSortIcon('Level')"></i>
+            </th>
           </tr>
         </thead>
         <tbody>

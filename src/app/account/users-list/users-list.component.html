@@ -45,11 +45,11 @@
       <table class="table">
         <thead>
           <tr>
-            <th>User Name</th>
-            <th>User Role</th>
-            <th>Created By</th>
-            <th>Created On</th>
-            <th>Active Status</th>
+            <th (click)="datatransferService.sortData('UserName' , UserList)">User Name <i class="fas" [ngClass]="datatransferService.getSortIcon('UserName')"></i></th>
+            <th (click)="datatransferService.sortData('UserRole' , UserList)">User Role <i class="fas" [ngClass]="datatransferService.getSortIcon('UserRole')"></i></th>
+            <th (click)="datatransferService.sortData('CreatedBy' , UserList)">Created By <i class="fas" [ngClass]="datatransferService.getSortIcon('CreatedBy')"></i></th>
+            <th (click)="datatransferService.sortData('CreatedOn' , UserList)">Created On <i class="fas" [ngClass]="datatransferService.getSortIcon('CreatedOn')"></i></th>
+            <th (click)="datatransferService.sortData('IsActive' , UserList)">Active Status <i class="fas" [ngClass]="datatransferService.getSortIcon('IsActive')"></i></th>
             <th>Action</th>
           </tr>
         </thead>

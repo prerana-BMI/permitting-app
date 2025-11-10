@@ -50,6 +50,8 @@ export class PermitListComponent {
   SelectedCount : number = 0 ;
   NavigatedData  : any;
   StateCityMapping : {State : string , City : string}[]= [];
+ 
+
   constructor(private httpService: HttpService,
     private toastr: ToastrService,
     public router: Router,
@@ -58,7 +60,7 @@ export class PermitListComponent {
     private  HttpService : HttpService,
     private dialog: MatDialog,
     private Router : Router,
-    private datatransferService : DatatransferService,
+    public datatransferService : DatatransferService,
      
   ) {
   
@@ -114,6 +116,9 @@ export class PermitListComponent {
     })
   }
 
+
+
+ 
 paginatorevt(evt: any) {
     this.pageIndex = evt.pageIndex + 1;
     this.pageSize = evt.pageSize;
@@ -409,4 +414,3 @@ CreateMatrix(): void {
 
   }
 }
-

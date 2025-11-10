@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { BehaviorSubject, debounceTime } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service'
+import { DatatransferService } from 'src/app/services/datatransfer.service';
 @Component({
   selector: 'app-my-permits',
   templateUrl: './my-permits.component.html',
@@ -31,7 +32,8 @@ export class MyPermitsComponent {
     private toastr: ToastrService,
     public router: Router,
     private fb: FormBuilder,
-    private auth: AuthService
+    private auth: AuthService,
+    public datatransferService : DatatransferService,
   ) {
 
   }

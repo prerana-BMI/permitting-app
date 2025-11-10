@@ -123,7 +123,7 @@ SetData()
       this.AddPermitForm.patchValue ({
       Category : this.PermitData.Category,
       TypeOfProject: this.PermitData.TypeOfProject,
-     
+      AdditionalFees : this.PermitData.AdditionalBasic,
       State: this.PermitData.State,
       City: this.PermitData.City,
       Level:  this.PermitData.Level,
@@ -136,7 +136,7 @@ SetData()
       MinAgencyReviewTime: this.PermitData.AgencyReviewTimeMin,
       MaxAgencyReviewTime: this.PermitData.AgencyReviewTimeMax,
       BasicFees: this.PermitData.BasicFees,
-      AdditionalFees: this.PermitData.PermitName
+      
       });
       if(this.user?.Role != 'Admin' && this.user?.Role != 'Editior')
       {
@@ -160,7 +160,8 @@ SetData()
       AgencyReviewTimeMin: this.AddPermitForm.controls['MinAgencyReviewTime'].value,
       AgencyReviewTimeMax: this.AddPermitForm.controls['MaxAgencyReviewTime'].value,
       BasicFees: this.AddPermitForm.controls['BasicFees'].value,
-      Id: this.PermitData != null &&   this.PermitData != undefined ? this.PermitData.Id : 0
+      Id: this.PermitData != null &&   this.PermitData != undefined ? this.PermitData.Id : 0,
+      AdditionalBasic : this.AddPermitForm.controls['AdditionalFees'].value
     }
     this.HttpService.httpPostCall(Constants.SavePermits, param, true).subscribe((res: any) => {
       if (res["Success"]) {
