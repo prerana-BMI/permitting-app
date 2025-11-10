@@ -58,10 +58,10 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Matrix Name</th>
-            <th>Client Name</th>
-            <th>Type Of Project</th>
-            <th>Permit Count</th>
+            <th (click)="datatransferService.sortData('MatrixName' , MatrixList)">Matrix Name <i class="fas" [ngClass]="datatransferService.getSortIcon('MatrixName')"></i></th>
+            <th (click)="datatransferService.sortData('ClientName' , MatrixList)">Client  <i class="fas" [ngClass]="datatransferService.getSortIcon('ClientName')"></i></th>
+            <th (click)="datatransferService.sortData('TypeOfProject' , MatrixList)"> Type Of Project <i class="fas" [ngClass]="datatransferService.getSortIcon('TypeOfProject')"></i></th>
+            <th (click)="datatransferService.sortData('PermitCount' , MatrixList)">Permit Count <i class="fas" [ngClass]="datatransferService.getSortIcon('PermitCount')"></i></th>
             <th>Action</th>
           </tr>
         </thead>

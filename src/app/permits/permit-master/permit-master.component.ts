@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserComponent } from 'src/app/account/add-user/add-user.component';
 import { AddPermitsComponent } from '../add-permits/add-permits.component';
+import { DatatransferService } from 'src/app/services/datatransfer.service';
 @Component({
   selector: 'app-permit-master',
   templateUrl: './permit-master.component.html',
@@ -42,7 +43,8 @@ export class PermitMasterComponent {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private HttpService : HttpService,
-    private Auth : AuthService
+    private Auth : AuthService , 
+    public datatransferService : DatatransferService
   ) {
 
   }

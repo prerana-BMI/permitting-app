@@ -7,6 +7,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class DatatransferService {
 private data : any;
+ sortColumn: string = '';
+ sortDirection: 'asc' | 'desc' = 'asc';
   setData(data: any) {
     this.data = data;
   }
@@ -35,5 +37,35 @@ private data : any;
        return exists ? null : { notInList: true };
      };
    }
+
+    sortData(column: string , list : Array<any>) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    list.sort((a : any, b : any) => {
+      const valA = a[column] || '';
+      const valB = b[column] || '';
+
+      if (valA < valB) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
+      if (valA > valB) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+
+   getSortIcon(column: string) {
+    if (this.sortColumn !== column) {
+      return 'fa-sort';
+    }
+    return this.sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
+  }
+
    
 }
