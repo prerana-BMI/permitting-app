@@ -53,10 +53,11 @@ TypeofPermitList : Array<string>= [];
 
     };
     this.HttpService.httpPostCall(Constants.SavePermitMatrix, param).subscribe((res: any) => {
-      if (res["Success"]) {
-      }
-      this.dialogRef.close();
+      if (res.Success) {
+        this.dialogRef.close();
       this.Router.navigate(["/permits/MatrixList"]);
+      }
+     
     });
 
   }

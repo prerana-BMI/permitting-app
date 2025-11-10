@@ -3,11 +3,11 @@
     <div class="form-row">
       <div class="form-group">
         <label for="city" class="form-label">Matrix Name</label>
-        <input type="text" id="city" class="form-control" formControlName="MatrixName">
+        <input type="text" id="city" class="form-control" formControlName="MatrixName" placeholder="Enter Matrix name...">
       </div>
       <div class="form-group">
         <label for="city" class="form-label">Client Name</label>
-        <input type="text" class="form-control" formControlName="RegulatoryAgency" [matAutocomplete]="agencyLst">
+        <input type="text" class="form-control" formControlName="RegulatoryAgency" [matAutocomplete]="agencyLst" placeholder="Enter Client name...">
         <mat-autocomplete #agencyLst="matAutocomplete" [displayWith]="AgencyTypeAheadDisplay.bind(this)">
           <mat-option *ngIf="isAgencyLoading">
             <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">

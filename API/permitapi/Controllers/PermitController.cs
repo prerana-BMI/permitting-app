@@ -92,7 +92,7 @@ namespace permitapi.Controllers
                    (Request.City == null || Request.City.Count == 0 ? true : Request.City.Contains(a.City)) &&
                    (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
                    (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
-                   (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName))
+                   (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName) && !string.IsNullOrEmpty(a.PermitName))
                                         .Select(a => new EPermitMaster
                                                            {
                                                                Category = a.Category,
@@ -115,7 +115,7 @@ namespace permitapi.Controllers
                    (Request.State.Contains(a.State) || Request.City.Contains(a.City) || a.Level == "Federal") &&
                    (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
                    (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
-                   (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName)
+                   (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName) && !string.IsNullOrEmpty(a.PermitName)
                                                            ).Select(a => new EPermitMaster
                                                            {
                                                                Category = a.Category,
@@ -141,7 +141,7 @@ namespace permitapi.Controllers
                     a.Level == "Federal" &&
                    (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
                    (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
-                   (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName))
+                   (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName) && !string.IsNullOrEmpty(a.PermitName))
                                                          .Select(a => new EPermitMaster
                                                            {
                                                                Category = a.Category,
@@ -550,7 +550,7 @@ namespace permitapi.Controllers
                        (Request.City == null || Request.City.Count == 0 || Request.Level != "City" ? true : Request.City.Contains(a.City)) &&
                        (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
                        (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
-                       (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName)
+                       (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName) && !string.IsNullOrEmpty(a.PermitName)
                                                    ).ToList()
                                                     .Join(_context.PermitMasterDetails,
                                                     permit => permit.Id,
@@ -586,7 +586,7 @@ namespace permitapi.Controllers
                        (Request.State.Contains(a.State) || Request.City.Contains(a.City) || a.Level == "Federal") &&
                        (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
                        (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
-                       (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName)
+                       (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName) && !string.IsNullOrEmpty(a.PermitName)
                                                    ).ToList()
                                                     .Join(_context.PermitMasterDetails,
                                                     permit => permit.Id,
