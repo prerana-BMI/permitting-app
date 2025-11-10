@@ -73,9 +73,10 @@ export class PermitListComponent {
       RegulatoryAgency: ''
     });
     let res = this.datatransferService.getData();
+    this.NavigatedData = res;
     if (res != null && res['NavigatedFrom'] == 'Matrix') {
       this.datatransferService.setData(null);
-      this.NavigatedData = res;
+     
       res.SelectedLocation.forEach((item: any) => {
         item.cities.forEach((element: any) => {
           this.StateCityMapping.push({ State: item.state, City: element });
@@ -210,7 +211,7 @@ paginatorevt(evt: any) {
   }
   GetAllPermits()
   {
-    let param= {
+    let param = {
       'Level' : this.Level,
       'State' :  (this.Level == 'State' || this.Level == 'City') && this.State != '' ? [this.State] : this.StateList,
       'City' :   this.Level == "State" && this.City == "" ? [] : this.City != '' ? [this.City] : [...new Set(this.StateCityMapping.map(a => a.City))],
@@ -221,41 +222,47 @@ paginatorevt(evt: any) {
     }
     this.httpService.httpGetCall(Constants.GetPermitByLocation ,param, true).subscribe((res: any)=>{
       if (res["Success"]) {
-        this.PermitList = res['Data'];
+      this.PermitList = res['Data'];
       const order: { [key: string]: number } = { 'Federal': 1, 'State': 2, 'City': 3 };
       this.PermitList.sort((a: any, b: any) => order[a.Level] - order[b.Level]);
-        this.PermitList.forEach((a: any)=>{
-        this.ListOfId.find(Element=> Element.Id == a.Id) != undefined ? a.Ischecked = true : a.Ischecked
-      })
-        this.dataCount = res['Count'];
+        if (this.SelecAll) {
+          this.SelectAll({ target: { checked: true } });
+          this.ListOfId = this.ListOfId.filter(a=>a.isChecked == true);
+        }
+        else {
+          this.PermitList.forEach((a: any) => {
+            this.ListOfId.find(Element => Element.Id == a.Id) != undefined ? a.Ischecked = true : a.Ischecked
+          });
+          this.dataCount = res['Count'];
+        }
       }
     })
   }
-  GetAllFederalPermits()
-  {
-    let param= {
-      'Category' : this.SearchForm.controls['Category'].value == null ? '': this.SearchForm.controls['Category'].value,
-      'PermitName': this.SearchForm.controls['PermitName'].value == null ? '': this.SearchForm.controls['PermitName'].value,
-      'RegulatoryAgencyName': this.SearchForm.controls['RegulatoryAgency'].value == null ? '': this.SearchForm.controls['RegulatoryAgency'].value,
-    }
-    this.httpService.httpGetCall(Constants.GetAllFederalPermits ,param, true).subscribe((res: any)=>{
-      if (res["Success"]) {
-        this.PermitList = res['Data'];
-        this.PermitList.forEach(element => {
-          let isItemExist = this.ListOfId?.find(a => a == element.Id) ? true : false;
-          element.Ischecked = isItemExist;
-        });
-        this.dataCount = res['Count'];
-      }
-    })
-  }
+  // GetAllFederalPermits()
+  // {
+  //   let param= {
+  //     'Category' : this.SearchForm.controls['Category'].value == null ? '': this.SearchForm.controls['Category'].value,
+  //     'PermitName': this.SearchForm.controls['PermitName'].value == null ? '': this.SearchForm.controls['PermitName'].value,
+  //     'RegulatoryAgencyName': this.SearchForm.controls['RegulatoryAgency'].value == null ? '': this.SearchForm.controls['RegulatoryAgency'].value,
+  //   }
+  //   this.httpService.httpGetCall(Constants.GetAllFederalPermits ,param, true).subscribe((res: any)=>{
+  //     if (res["Success"]) {
+  //       this.PermitList = res['Data'];
+  //       this.PermitList.forEach(element => {
+  //         let isItemExist = this.ListOfId?.find(a => a == element.Id) ? true : false;
+  //         element.Ischecked = isItemExist;
+  //       });
+  //       this.dataCount = res['Count'];
+  //     }
+  //   })
+  // }
 CreateMatrix(): void {
   if (this.SelectedCount == 0) {
     this.toastr.error("Please Select Applicable Permits");
     return;
   }
 
-  if (this.NavigatedData != null) {
+  if (this.NavigatedData?.NavigatedFrom == 'Matrix') {
     let param = {
       Id: this.NavigatedData.MatrixId,
       PermitList: this.PermitList.filter(a => a.Ischecked == true).map(a => a.Id).join(',')
@@ -364,24 +371,24 @@ CreateMatrix(): void {
    return'';
   }
 
-  OnValueChanges() {
-    this.isCityLoading = true;
-    this.CityList =[];
-    this.PermitList =[];
-    this.ListOfId = [];
-    this.SelectedCount = 0;
-    if (this.City) {
-      this.HttpService.httpGetCall(`${Constants.GetCityBySearchText}?City=${this.City ?? "".toLowerCase()}&State=${this.State ?? "".toLowerCase()}`, false, false).subscribe((res: any) => {
-        if (res["Success"]) {
-          this.CityList = res["Data"];
-        }
-        this.isCityLoading = false;
-      });
-    }
-    else {
-      this.GetAllPermits();
-    }
-  }
+  // OnValueChanges() {
+  //   this.isCityLoading = true;
+  //   this.CityList =[];
+  //   this.PermitList =[];
+  //   this.ListOfId = [];
+  //   this.SelectedCount = 0;
+  //   if (this.City) {
+  //     this.HttpService.httpGetCall(`${Constants.GetCityBySearchText}?City=${this.City ?? "".toLowerCase()}&State=${this.State ?? "".toLowerCase()}`, false, false).subscribe((res: any) => {
+  //       if (res["Success"]) {
+  //         this.CityList = res["Data"];
+  //       }
+  //       this.isCityLoading = false;
+  //     });
+  //   }
+  //   else {
+  //     this.GetAllPermits();
+  //   }
+  // }
   ViewDetails()
   {
     let dialogRef = this.dialog.open(SelectedPermitComponent, {
@@ -410,7 +417,11 @@ CreateMatrix(): void {
   }
 
   OnLevelChanges(event: string) {
-  this.GetAllPermits();
 
+  this.State = '';
+  this.City = '';
+
+  this.GetAllPermits();
+  
   }
 }

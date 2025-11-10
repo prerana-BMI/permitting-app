@@ -19,7 +19,7 @@
           Permit Name
         </label>
         <input type="text" formControlName="PermitName" class="form-control custom-input"
-          [matAutocomplete]="permitlist">
+          [matAutocomplete]="permitlist" placeholder="Enter Permit name...">
         <mat-autocomplete #permitlist="matAutocomplete" [displayWith]="PermitTypeAheadDisplay.bind(this)">
           <mat-option *ngIf="ispermitLoading">
             <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
@@ -57,7 +57,7 @@
           Regulatory Agency
         </label>
         <input type="text" class="form-control custom-input" formControlName="RegulatoryAgency"
-          [matAutocomplete]="agencyLst">
+          [matAutocomplete]="agencyLst" placeholder="Enter Regulatory name...">
         <mat-autocomplete #agencyLst="matAutocomplete" [displayWith]="AgencyTypeAheadDisplay.bind(this)">
           <mat-option *ngIf="isAgencyLoading">
             <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
@@ -260,7 +260,7 @@
         <button class="btn" style="width: 150px;"
          (click)="CreateMatrix()">
           <i class="fa-solid fa-arrow-right"></i>
-          Next
+           {{this.NavigatedData?.NavigatedFrom == 'Matrix' ?  'Edit' : 'Submit'}}
         </button>
       </div>
     </div>

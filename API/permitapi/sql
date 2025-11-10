@@ -80,6 +80,10 @@ CHANGE COLUMN `type_of_project` `type_of_project` VARCHAR(100) NULL DEFAULT NULL
 ALTER TABLE `permit_account_service`.`permit_matrix` 
 ADD COLUMN `status` TINYINT NULL DEFAULT NULL AFTER `client_name`;
 
+ALTER TABLE `permit_account_service`.`permit_matrix` 
+CHANGE COLUMN `permit_list` `permit_list` VARCHAR(1000) NULL DEFAULT NULL ;
+
+
 
 
 

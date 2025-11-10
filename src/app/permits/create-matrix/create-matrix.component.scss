@@ -1,51 +1,159 @@
-@import 'bootstrap/scss/bootstrap';
+/* Add/Edit User Popup Styles */
 
+@import 'bootstrap/scss/bootstrap';
 .add-edit-popuop {
-  
-  overflow: hidden;
- width: 500px;
-  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050; // Ensure it's on top
 }
 
 .shadowed-panel {
-overflow-y: none;
-.row {
-    padding: 20px 30px 30px;
-  }
-
- &.shadowed-panel-header {
-    box-shadow: #1c4876;
-    margin-top: -100px;
-  }
+  width: 90%;
+  max-width: 500px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column; // Important for footer positioning
+  overflow: hidden; // Ensures header border-radius is respected
 }
 
-.fa-times {
-  color: white;
+.panel-header {
+  background-color: #1c4876; // Your primary brand color
+  color: #fff;
+  border-radius: 0px;
+
+  h5 {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+
+  .fa-times {
+    cursor: pointer;
+    font-size: 1.25rem;
+    opacity: 0.8;
+    &:hover {
+      opacity: 1;
+    }
+  }
+  .fa-times{
+  color: #ffffff;
   font-size: 20px;
   cursor: pointer;
 }
 
-.search-slt {
-  display: block;
-  width: 100%;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: #55595c;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  height: calc(3rem + 2px) !important;
-  border-radius: 0;
+}
+
+.panel-body {
+  padding: 2rem;
+  flex-grow: 1; // Allows the body to take up available space
+
+  .form-group {
+    margin-bottom: 1.5rem; // Consistent spacing
+  }
+
+  label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-control {
+    height: calc(1.5em + 1rem + 2px); // Taller, more modern input fields
+    padding: 0.5rem 1rem;
+  }
+}
+
+.panel-footer {
+  padding: 1.5rem 1rem;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: flex-end; // Align button to the right
+}
+
+.submit-btn {
+    background-color: #1c4876;
+    border-color: #1c4876;
+    color: #fff;
+    padding: 0.5rem 2rem;
+    font-size: 1rem;
+    &:hover {
+        background-color: #15375a;
+        border-color: #15375a;
+    }
+}
+
+/* Custom Switch for Active Status */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+  }
+
+  input:checked + .slider {
+    background-color: #1c4876; // Your primary color
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
 }
 
 
-.FlterButton {
-  margin-top: 45px;
-  font-size: 16px;
-  width: 120px;
-  font-family: Open Sans, sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  line-height: 1.5rem;
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .shadowed-panel {
+    width: 95%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .panel-body, .panel-footer {
+      padding: 1.5rem;
+  }
+
+  .panel-footer {
+      justify-content: center; // Center button on small screens
+      .btn {
+          width: 100%; // Make button full-width
+      }
+  }
 }
 .labelClass {
   display: block;
@@ -66,7 +174,7 @@ overflow-y: none;
   border-color: #a1aebb !important;
 }
 .FlterButton {
-  margin-top: 45px;
+
   font-size: 16px;
   width: 120px;
   font-family: Open Sans, sans-serif;
@@ -84,100 +192,11 @@ overflow-y: none;
   background-color: #0e3b64;
   color: white;
 }
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-}
 
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  background-color: #ccc;
-  border-radius: 24px;
-  top: 0; left: 0; right: 0; bottom: 0;
-  transition: 0.4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: 0.4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: #1c4876;
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
-}
- .mat-opt {
-  display: flex;
-  justify-content: space-between;
-  padding: 4px 8px;
-  border-bottom:  1px solid #e1dbdba6 !important;
-  align-items: center;
-}
- .mat-opt1 {
-  display: flex;
-  justify-content: space-between;
-  padding: 4px 8px;
- 
-  border-bottom: 1px solid #e1dbdba6 !important;
-  align-items: center;
-}
-
-.autocomplete-header {
-  font-weight: bold;
-  background-color: #f5f5f5;
-  border-bottom: 2px solid #ccc;
-}
-
-.autocomplete-cell {
-  width: 50%;
-  text-align: left;
-}
-
-.panel-header {
-  background:#1c4876;
-  border-radius: 5px 5px 0px 0px;
-  padding: 15px 20px;
-
-  h5 {
+ h5 {
     font-weight: 600;
     font-size: 17px;
     line-height: 30px;
     color: #ffffff;
     margin: 0;
   }
-}
-
-
-.panel-header {
-background-image: #1c4876;
-;
-border-radius: 5px 5px 0px 0px;
-padding: 5px 20px;
-
-h5 {
-  font-weight: 600;
-  font-size: 17px;
-  line-height: 30px;
-  color: #ffffff;
-  margin: 0;
-}
-}

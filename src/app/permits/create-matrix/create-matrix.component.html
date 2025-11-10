@@ -4,18 +4,13 @@
             <h5> Create Matrix </h5>
             <div><i class="fa fa-times" aria-hidden="true" (click)="clear()"></i></div>
         </div>
-        <div class="row pb-0">
-            <div class="col-md-12">
-                <div class="form-group">
+        <div class="panel-body">
+         <div class="form-group">
                         <label for="username" class="form-label labelClass lableSyle">Matrix Name <span  class="text-danger">*</span></label>
                          <input type="text" class="form-control custom-input" formControlName="MatrixName">
                          <span *ngIf="Submitted && AddMatrixForm.get('MatrixName')?.invalid" class="text-danger">Matrix Name is Required</span>
                 </div>
-            </div>
-        </div>
-         <div class="row pt-0 pb-0">
-            <div class="col-md-12">
-              <div class="form-group">
+         <div class="form-group">
                         <label for="username" class="form-label labelClass lableSyle">Client</label>
                          <input type="text" class="form-control custom-input" formControlName="RegulatoryAgency"
                           oninput="this.value = this.value.toUpperCase()"  [matAutocomplete]="agencyLst">
@@ -49,11 +44,7 @@
                         </mat-option>
                     </mat-autocomplete>
                     </div>
-             </div>
-        </div>
-         <div class="row pt-0">
-            <div class="col-md-12">
-              <div class="form-group">
+             <div class="form-group">
                     <label for="username" class="form-label labelClass lableSyle">Type Of Project</label>
                     <select name="" id="" class="form-control custom-input" formControlName="TypeOfProject">
                         <option value="">Select</option>
@@ -61,22 +52,10 @@
                     </select>
                 </div>
             </div>
-        </div>
-    </div>
+  
 
-    <div class="col-md-12 p-0">
-        <div class="row justify-content-center">
-            <div class="col-sm-4 pr-2" style="    margin-top: -60px;
-    margin-bottom: 20px;
-    margin-left: 60px;">
-                <button class="btn btn-outline form-control d-flex align-items-center FlterButton custom-outline-btn" (click)="Submit()">
-                    <span style=" margin: 0 1px;"></span>
-                    <i class="fas fa-save"></i>
-                    <span class="flex-grow-1 text-start">Submit</span>
-                </button>
+    <div class="panel-footer">
+        <button class="btn btn-primary submit-btn" (click)="Submit()"><i class="fas fa-save mr-2"></i>Submit</button>
             </div>
-        </div>
-    </div>
-
-
+</div>
 </div>
