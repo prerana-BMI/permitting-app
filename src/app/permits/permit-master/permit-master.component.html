@@ -36,7 +36,11 @@
         <button class="btn-group btn" *ngIf="user?.Role == 'Admin' || user?.Role == 'Editior'" (click)="AddPermit()">
           <i class="fas fa-plus"></i> Add Permit
         </button>
-       
+
+         <button class="btn-group btn" (click)="OpenBulkUploadPopup()">
+         <i class="fas fa-upload"></i> Bulk upload 
+        </button>
+
       </div>
       <mat-paginator  *ngIf="PermitList?.length" [length]="dataCount" [pageSize]="pageSize" [pageSizeOptions]="pageOption" (page)="paginatorevt($event)"></mat-paginator>
     </div>

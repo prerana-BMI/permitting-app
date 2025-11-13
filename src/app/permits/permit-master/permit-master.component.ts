@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddUserComponent } from 'src/app/account/add-user/add-user.component';
 import { AddPermitsComponent } from '../add-permits/add-permits.component';
 import { DatatransferService } from 'src/app/services/datatransfer.service';
+import { BulkUploadComponent } from '../bulk-upload/bulk-upload.component';
 @Component({
   selector: 'app-permit-master',
   templateUrl: './permit-master.component.html',
@@ -157,6 +158,19 @@ AddPermit()
       return res.PermitName;
     };
     return '';
+  }
+
+  OpenBulkUploadPopup()
+  {
+
+     let dialogRef = this.dialog.open(BulkUploadComponent, {
+        
+      });
+      dialogRef.afterClosed().subscribe(res => {
+        if (res != null) {
+          this.GetAllPermits();
+        }
+      });
   }
 
 }

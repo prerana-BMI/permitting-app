@@ -1,0 +1,43 @@
+<div class="popup-overlay" (click)="closePopup()">
+    <div class="popup-panel" (click)="$event.stopPropagation()">
+        <div class="panel-header">
+            <h5>Upload Your Document</h5>
+          <div><i class="fa fa-times" aria-hidden="true" (click)="closePopup()"></i></div>
+        </div>
+        <div class="panel-body">
+            <!-- If no file is selected, show the drop zone -->
+            <div *ngIf="!selectedFile"
+                 class="drop-zone"
+                 (dragover)="onDragOver($event)"
+                 (dragleave)="onDragLeave($event)"
+                 (drop)="onDrop($event)"
+                 [class.drag-over]="isDragOver"
+                 (click)="fileInput.click()">
+                <div class="drop-zone-content">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag & Drop your file here</p>
+                    <span>or</span>
+                    <button class="btn btn-browse" tyle>Browse Files</button>
+                </div>
+                <input #fileInput type="file" (change)="onFileSelected($event)" hidden>
+            </div>
+
+            <!-- If a file is selected, show file info -->
+            <div *ngIf="selectedFile" class="file-info-container">
+                 <div class="file-info">
+                    <i class="fas fa-file-alt"></i>
+                    <div class="file-details">
+                        <p class="file-name">{{ selectedFile.name }}</p>
+                        <p class="file-size">{{ selectedFile.size / 1024 | number:'1.1-2' }} KB</p>
+                    </div>
+                </div>
+                <button class="remove-file-btn" (click)="removeSelectedFile()"><i class="fas fa-trash-alt"></i></button>
+            </div>
+        </div>
+        <div class="panel-footer">
+          
+        <button class="btn btn-primary submit-btn" (click)="onSubmit()" ><i class="fas fa-save mr-2"></i>Submit</button>
+    
+        
+    </div>
+</div>

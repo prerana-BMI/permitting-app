@@ -48,8 +48,8 @@ export class HttpService {
     return this.http.get<T>(url);
   }
   
-  httpGetBlob(url: string, headersObj: any) : Observable<Blob> {
-    return this.http.get(url, {
+  httpGetBlob(baseUrl: string, headersObj: any) : Observable<Blob> {
+    return this.http.get(this.baseUrl+baseUrl, {
       headers: new HttpHeaders(headersObj),
       responseType: 'blob'
     });

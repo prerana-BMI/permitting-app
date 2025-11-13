@@ -8,6 +8,8 @@ using contract.Entities;
 using Data.DbEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
+using Microsoft.EntityFrameworkCore;
 
 namespace permitapi.Controllers
 {
@@ -662,7 +664,83 @@ namespace permitapi.Controllers
 
             return BaseObj;
         }
-        
+      [HttpGet]
+[Route("DownloadExcel")]
+public IActionResult DownloadExcel()
+{
+    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
+    using var package = new ExcelPackage();
+    var mainSheet = package.Workbook.Worksheets.Add("Permit");
+
+    // ✅ Header row
+    string[] headers = new[]
+    {
+        "Category", "Level", "State", "City", "Permit Name",
+        "Regulatory Agency", "Basic Fees", "Prep Time Min", "Prep Time Max",
+        "Agency Review Time Min", "Agency Review Time Max",
+        "Additional Basic Fees", "Description", "Threshold"
+    };
+
+    for (int i = 0; i < headers.Length; i++)
+        mainSheet.Cells[1, i + 1].Value = headers[i];
+
+    // ✅ Make headers bold and centered
+      using (var range = mainSheet.Cells[1, 1, 1, headers.Length])
+    {
+        range.Style.Font.Bold = true;
+        range.Style.Font.Color.SetColor(System.Drawing.Color.White);
+        range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+        range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(0, 102, 204)); // Blue color
+        range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+        range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+        range.Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+        range.Style.Border.Bottom.Color.SetColor(System.Drawing.Color.White);
     }
+    // ✅ Fetch unique category list
+    var categoriesList = _context.PermitMasters
+        .AsNoTracking()
+        .Where(a => !string.IsNullOrEmpty(a.Category))
+        .Select(a => a.Category.Trim())
+        .Distinct()
+        .OrderBy(a => a)
+        .ToList();
+
+    // ✅ Create hidden worksheet for dropdown data
+    var listSheet = package.Workbook.Worksheets.Add("Lists");
+
+    for (int i = 0; i < categoriesList.Count; i++)
+        listSheet.Cells[i + 1, 1].Value = categoriesList[i];
+
+    // ✅ Define a named range for category list
+    if (categoriesList.Count > 0)
+    {
+        var lastRow = categoriesList.Count;
+        var namedRange = listSheet.Cells[$"A1:A{lastRow}"];
+        package.Workbook.Names.Add("CategoryList", namedRange);
+
+        // ✅ Add data validation to Category column (A2:A100)
+        var validation = mainSheet.DataValidations.AddListValidation("A2:A100");
+        validation.Formula.ExcelFormula = "=CategoryList";
+        validation.ShowErrorMessage = true;
+        validation.ErrorStyle = OfficeOpenXml.DataValidation.ExcelDataValidationWarningStyle.stop;
+        validation.ErrorTitle = "Invalid Category";
+        validation.Error = "Please select a valid category from the dropdown list.";
+    }
+
+    // ✅ Hide the list sheet
+    listSheet.Hidden = eWorkSheetHidden.VeryHidden;
+
+    // ✅ Auto-fit columns
+    mainSheet.Cells["A:N"].AutoFitColumns();
+
+    // ✅ Return file
+    var bytes = package.GetAsByteArray();
+
+    return File(bytes,
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "PermitBulkUpload.xlsx");
+}
+
+  }
 }
