@@ -4,7 +4,7 @@
 
       <div class="form-group">
         <label for="city" class="form-label">User Name</label>
-        <input type="text" id="city" class="form-control" formControlName="UserName" placeholder="Enter Permit name...">
+        <input type="text" id="city" class="form-control" formControlName="UserName" placeholder="Enter User name...">
       </div>
 
       <div class="form-group">
@@ -13,6 +13,7 @@
           <option value="">Select</option>
           <option value="Admin">Admin</option>
           <option value="User">User</option>
+          <option value="Editior">Editior</option>
         </select>
       </div>
       <div class="btn-group">
@@ -41,8 +42,7 @@
 
 
     <div class="table-container">
-
-      <table class="table">
+      <table class="table header-table" style="border: 1px solid #e9ecef;margin-bottom: 0rem;">
         <thead>
           <tr>
             <th (click)="datatransferService.sortData('UserName' , UserList)">User Name <i class="fas" [ngClass]="datatransferService.getSortIcon('UserName')"></i></th>
@@ -53,6 +53,9 @@
             <th>Action</th>
           </tr>
         </thead>
+        </table>
+        <div class="table-container">
+        <table class="table body-table">
         <tbody>
           <tr *ngFor="let item of UserList; let i = index;">
             <td>{{ item.UserName }}</td>
