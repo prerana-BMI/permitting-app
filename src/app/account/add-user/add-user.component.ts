@@ -1,5 +1,5 @@
 import { Component, Inject, AfterViewInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { disableDebugTools } from '@angular/platform-browser';
 import { Constants } from 'src/app/Models/Constants';
@@ -13,19 +13,20 @@ import { HttpService } from 'src/app/services/http.service';
 export class AddUserComponent {
   UserData: any = null;
   AddUserForm!: FormGroup;
+  Submitted : boolean= false;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddUserComponent>,
     private fb: FormBuilder,
-    private httpService: HttpService,) {
+    private httpService: HttpService) {
     this.UserData = data?.Item;
 
   }
 
   ngOnInit() {
     this.AddUserForm = this.fb.group({
-      ActiveStatus: [true],
-      UserRole: [''],
-      UserName: ['']
+      ActiveStatus: [true , [Validators.required]],
+      UserRole: ['' , [Validators.required]],
+      UserName: ['' , [Validators.required , Validators.email]]
 
     });
     if (this.UserData != undefined) {
@@ -45,6 +46,10 @@ export class AddUserComponent {
     this.dialogRef.close();
   }
   Submit() {
+    if (this.AddUserForm.invalid) {
+      this.Submitted = true;
+      return
+    }
     let param = {
       UserName: this.AddUserForm.controls['UserName'].value,
       UserRole: this.AddUserForm.controls['UserRole'].value,

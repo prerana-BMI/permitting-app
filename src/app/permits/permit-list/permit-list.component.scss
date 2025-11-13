@@ -110,13 +110,18 @@ $box-shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
   }
 
-  .table-container {
-    max-height: 550px; /* Limit height and make table scrollable */
-    overflow-y: auto;   /* Add vertical scrollbar when content overflows */
-    overflow-x: auto;
-    border: 1px solid $card-border-color;
-    border-radius: 8px;
-  }
+  .header-table,
+.body-table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-container {
+  max-height: 600px;
+  overflow-y: auto;
+  border : 1px solid #e3e2e2;
+}
 
   .table {
     width: 100%;
@@ -131,28 +136,24 @@ $box-shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
       
     }
 
-    thead th {
-      background-color: $table-header-bg;
-      color: $primary-brand-color;
-      font-size: 0.9rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      position: sticky; /* Make table header sticky */
-      top: 0; /* Stick to the top of the container */
-      z-index: 1
-    }
- tbody {
-      position: relative; /* Establish stacking context */
-      z-index: 0; /* Ensure it's below the sticky header */
-    }
+  .header-table th {
+  padding: 1rem;
+  text-align: left;
+  vertical-align: middle;
+  background-color: #f7f9fc; 
+  color: #1c4876;
+  /* Light gray header */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
 
-    tbody tr {
-      border-bottom: 1px solid $card-border-color;
-      &:last-of-type {
-        border: none;
-      }
-    }
+.body-table td {
+  padding: 1rem;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
   }
 
   .action-cell .btn {

@@ -152,6 +152,19 @@ $box-shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
     border-radius: 8px;
   }
 
+    .table-container {
+      max-height: 600px;
+      overflow-y: auto;
+      border: 1px solid #e3e2e2;
+    }
+  
+    .header-table,
+    .body-table {
+      table-layout: fixed;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
   .table {
     width: 100%;
     border-collapse: collapse;
@@ -164,6 +177,24 @@ $box-shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
       // white-space: nowrap;
       
     }
+
+        .header-table th {
+          padding: 1rem;
+          text-align: left;
+          vertical-align: middle;
+          background-color: #f7f9fc;
+          /* Light gray header */
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+    
+        .body-table td {
+          padding: 1rem;
+          text-align: left;
+          vertical-align: middle;
+          border-bottom: 1px solid #ddd;
+        }
 
     thead th {
       background-color: $table-header-bg;

@@ -55,7 +55,7 @@
         [pageSizeOptions]="pageOption" (page)="paginatorevt($event)" #paginator></mat-paginator>
     </div>
     <div class="table-container">
-      <table class="table">
+      <table class="table header-table" style="border: 1px solid #e9ecef;margin-bottom: 0rem;">
         <thead>
           <tr>
             <th (click)="datatransferService.sortData('MatrixName' , MatrixList)">Matrix Name <i class="fas" [ngClass]="datatransferService.getSortIcon('MatrixName')"></i></th>
@@ -65,6 +65,9 @@
             <th>Action</th>
           </tr>
         </thead>
+      </table>
+       <div class="table-container">
+        <table class="table body-table">
         <tbody>
           <tr *ngFor="let item of MatrixList">
             <td>{{item.MatrixName}}</td>
