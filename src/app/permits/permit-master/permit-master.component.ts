@@ -12,6 +12,7 @@ import { AddUserComponent } from 'src/app/account/add-user/add-user.component';
 import { AddPermitsComponent } from '../add-permits/add-permits.component';
 import { DatatransferService } from 'src/app/services/datatransfer.service';
 import { BulkUploadComponent } from '../bulk-upload/bulk-upload.component';
+import * as saveAs from 'file-saver';
 @Component({
   selector: 'app-permit-master',
   templateUrl: './permit-master.component.html',
@@ -171,6 +172,17 @@ AddPermit()
           this.GetAllPermits();
         }
       });
+  }
+  DownloadExcelFormat() {
+    this.httpService.httpGetBlob(Constants.DownloadExcel, null).subscribe({
+      next: (blob: Blob) => {
+        const fileName = 'PermitBulkUploadFormat.xlsx';
+        saveAs(blob, fileName); // triggers browser download
+      },
+      error: (err) => {
+        console.error('Error downloading file', err);
+      }
+    });
   }
 
 }

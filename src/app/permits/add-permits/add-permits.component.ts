@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { debounceTime } from 'rxjs';
 import { Constants } from 'src/app/Models/Constants';
 import { AuthService } from 'src/app/services/auth.service';
+import { DatatransferService } from 'src/app/services/datatransfer.service';
 import { HttpService } from 'src/app/services/http.service';
 
 @Component({
@@ -28,6 +29,7 @@ user : any = {};
  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddPermitsComponent>,
     private HttpService : HttpService,
+    private dataTransferService : DatatransferService,
     private Auth : AuthService,
     private fb: FormBuilder) {
     this.PermitData = data;
@@ -57,6 +59,18 @@ this.AddPermitForm= this.fb.group({
       BasicFees: [''],
       AdditionalFees: ['']
     });
+  this.AddPermitForm.get('RegulatoryAgency')?.setValidators([
+    this.dataTransferService.valueInListValidator(() => this.RegagencyList, 'Name')
+  ]);
+
+  this.AddPermitForm.get('State')?.setValidators([
+    this.dataTransferService.valueInListValidator(() => this.StateList, 'State')
+  ]);
+
+  this.AddPermitForm.get('City')?.setValidators([
+    this.dataTransferService.valueInListValidator(() => this.CityList, 'City')
+  ]);
+
   this.initializeTyopeAhead();
   if (this.PermitData != null) {
     this.SetData();

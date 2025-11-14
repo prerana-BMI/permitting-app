@@ -691,7 +691,8 @@ public IActionResult DownloadExcel()
         range.Style.Font.Bold = true;
         range.Style.Font.Color.SetColor(System.Drawing.Color.White);
         range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-        range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(0, 102, 204)); // Blue color
+        //range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(0, 102, 204)); // Blue color
+        range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(79, 129, 189));
         range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
         range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
         range.Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
