@@ -119,6 +119,11 @@ namespace Data.DbEntities
                     .HasMaxLength(45)
                     .HasColumnName("state");
 
+                entity.Property(e => e.FromBulkUpload)
+                      .HasColumnName("from_bulk_upload")
+                      .HasColumnType("bit(1)")
+                      .HasDefaultValue(false);
+
                 entity.Property(e => e.TypeOfProject)
                     .HasMaxLength(45)
                     .HasColumnName("type_of_project");

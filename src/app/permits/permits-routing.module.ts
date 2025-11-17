@@ -14,7 +14,7 @@ import {AddPermitsComponent} from './add-permits/add-permits.component';
 import { CreateMatrixComponent } from './create-matrix/create-matrix.component';
 import { MatrixDetailsComponent } from './matrix-details/matrix-details.component';
 import { SelectedPermitComponent } from './selected-permit/selected-permit.component';
-
+import { BulkUploadComponent } from './bulk-upload/bulk-upload.component';
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
@@ -23,14 +23,13 @@ const routes: Routes = [{
      { path: 'PermitHome', component: PermitHomeComponent },
      {path : 'MatrixList' , component : MyPermitsComponent},
      {path : 'PermitMasterList', component: PermitMasterComponent},
-     {path : 'MatrixDetails/:id', component: MatrixDetailsComponent},
-   
+     {path : 'MatrixDetails/:id', component: MatrixDetailsComponent}
   ]
 }];
 
 @NgModule({
   declarations :[PermitListComponent , PermitHomeComponent, MyPermitsComponent,MapComponent , PermitMasterComponent ,
-                 AddPermitsComponent ,CreateMatrixComponent,MatrixDetailsComponent , SelectedPermitComponent],
+                 AddPermitsComponent ,CreateMatrixComponent,MatrixDetailsComponent , SelectedPermitComponent , BulkUploadComponent],
   imports: [RouterModule.forChild(routes),
     ToastrModule,
     CommonModule,

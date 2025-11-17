@@ -5,6 +5,7 @@ export class Constants{
     public static GetCityBySearchText  = '/api/Master/GetCityBySearchText';
     public static GetStateBySearchText  = '/api/Master/GetStateBySearchText?State=';
     public static GetUserById  = '/api/Account/GetUserById?Id=';
+    public static DownloadExcel  = '/api/Permit/DownloadExcel';
     public static SaveUser  = '/api/Account/SaveUser';
     public static PageSizeOptions: Array<{ "key": number, "value": number }> =
         [
@@ -25,6 +26,7 @@ export class Constants{
      public static GetAllFederalPermits = '/api/Permit/GetAllFederalPermits'; 
      public static GetMasterPermitType = '/api/Master/GetMasterPermitType';
      public static SavePermitMatrix = '/api/Permit/SavePermitMatrix';
+     public static ImportExcelFile = '/api/Permit/ImportExcelFile';
      public static GetAllMatrix = '/api/Permit/GetAllMatrix';
      public static GetMatrixDetailsById = '/api/Permit/GetMatrixDetailsById?MatrixId=';
      public static DeleteMatrixDetailsById = '/api/Permit/DeleteMatrixDetailsById?MatrixId=';

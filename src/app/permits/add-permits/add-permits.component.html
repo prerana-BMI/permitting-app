@@ -63,7 +63,12 @@
                                 <mat-option *ngIf="StateList.length == 0" disabled>
                                     No Options
                                 </mat-option>
+                                
                             </mat-autocomplete>
+                            <mat-error *ngIf="AddPermitForm.get('State')?.hasError('notInList')">
+                                Select a valid state from list
+                            </mat-error>
+
                         </div>
                     </div>
 
@@ -101,7 +106,11 @@
                                 <mat-option *ngIf="CityList.length == 0" disabled>
                                     No Options
                                 </mat-option>
+                               
                             </mat-autocomplete>
+                             <mat-error *ngIf="AddPermitForm.get('City')?.hasError('notInList')">
+                                     Select a valid city from list
+                             </mat-error>
                         </div>
                     </div>
                 </div>
@@ -147,7 +156,11 @@
                                 <mat-option *ngIf="RegagencyList.length == 0" disabled>
                                     No Options
                                 </mat-option>
+                                
                             </mat-autocomplete>
+                            <mat-error *ngIf="AddPermitForm.get('RegulatoryAgency')?.hasError('notInList')">
+                                    Select a valid Regulatory from list
+                            </mat-error>
                         </div>
                     </div>
                     <div class="col-md-3">

@@ -42,14 +42,21 @@ export class HttpService {
 
     return this.http.post<T[]>(this.baseUrl + method, data, config);
   }
+
+  httpPostFile<T>(method: string, formData: FormData, autoLoader: boolean = true): Observable<T> {
+    const headers = new HttpHeaders()
+      .set('Loader', autoLoader.toString());
+    return this.http.post<T>(this.baseUrl + method, formData, { headers });
+  }
+
   httpGetThirdPartyCall<T>(method: string, data: string = ''): Observable<T> {
     let apiKey = 'c2163fd2f9c3c394a3becb6191c7195f';
     const url = `https://api.openweathermap.org/geo/1.0/direct?q=${data}&limit=5&appid=${apiKey}`;
     return this.http.get<T>(url);
   }
   
-  httpGetBlob(url: string, headersObj: any) : Observable<Blob> {
-    return this.http.get(url, {
+  httpGetBlob(baseUrl: string, headersObj: any , autoLoader: boolean = true) : Observable<Blob> {
+    return this.http.get(this.baseUrl+baseUrl, {
       headers: new HttpHeaders(headersObj),
       responseType: 'blob'
     });
