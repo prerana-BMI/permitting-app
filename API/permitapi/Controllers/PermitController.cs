@@ -875,12 +875,9 @@ namespace permitapi.Controllers
             }
             _context.PermitMasters.AddRange(PermitObjBulkList);
             _context.SaveChanges();
-            foreach (var item in PermitObjBulkList)
+            for (int i = 0; i < PermitObjBulkList.Count; i++)
             {
-                PermitMasterDetailsList.ForEach(a =>
-                {
-                    a.PermitId = item.Id;
-                });
+                PermitMasterDetailsList[i].PermitId = PermitObjBulkList[i].Id;
             }
 
             _context.PermitMasterDetails.AddRange(PermitMasterDetailsList);

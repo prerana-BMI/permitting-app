@@ -55,7 +55,7 @@ export class HttpService {
     return this.http.get<T>(url);
   }
   
-  httpGetBlob(baseUrl: string, headersObj: any) : Observable<Blob> {
+  httpGetBlob(baseUrl: string, headersObj: any , autoLoader: boolean = true) : Observable<Blob> {
     return this.http.get(this.baseUrl+baseUrl, {
       headers: new HttpHeaders(headersObj),
       responseType: 'blob'

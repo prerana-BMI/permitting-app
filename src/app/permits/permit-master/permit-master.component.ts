@@ -168,9 +168,9 @@ AddPermit()
         
       });
       dialogRef.afterClosed().subscribe(res => {
-        if (res != null) {
+        // if (res != null) {
           this.GetAllPermits();
-        }
+       // }
       });
   }
   DownloadExcelFormat() {

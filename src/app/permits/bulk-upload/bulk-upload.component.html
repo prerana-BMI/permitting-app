@@ -14,13 +14,13 @@
                  [class.drag-over]="isDragOver"
                  (click)="fileInput.click()">
                 <div class="drop-zone-content">
-                    <i class="fas fa-cloud-upload-alt"></i>
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem;color: #3498db;" ></i>
                     <p>Drag & Drop your file here</p>
                     <span>or</span>
                     <div class="d-flex justify-content-center">
                         <button class="btn btn-browse" tyle >Browse Files</button>
-                        <button class="btn-group btn" (click)="OpenBulkUploadPopup()">
-                            <i class="fas fa-upload"></i>
+                        <button class="btn-group btn" (click)="DownloadExcelFormat(); $event.stopPropagation()">
+                            <i class="fas fa-download"></i>Bulk Upload Format
                         </button>
                     </div>
                    

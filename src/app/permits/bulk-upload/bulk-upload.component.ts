@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import * as saveAs from 'file-saver';
 import { Constants } from 'src/app/Models/Constants';
 import { HttpService } from 'src/app/services/http.service';
 
@@ -74,6 +75,18 @@ export class BulkUploadComponent {
     // For now, just hiding the popup. In a real app, you'd emit an event.
     this.dialogRef.close()
   }
+
+    DownloadExcelFormat() {
+      this.httpService.httpGetBlob(Constants.DownloadExcel, null , false).subscribe({
+        next: (blob: Blob) => {
+          const fileName = 'PermitBulkUploadFormat.xlsx';
+          saveAs(blob, fileName); // triggers browser download
+        },
+        error: (err) => {
+          console.error('Error downloading file', err);
+        }
+      });
+    }
 
 
 
