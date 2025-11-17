@@ -8,6 +8,8 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+$white-background: #ffffff;
+
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -119,10 +121,10 @@
 }
 
 .drop-zone-content i {
-  font-size: 3rem;
-  color: #3498db;
-  margin-bottom: 1rem;
-}
+    font-size: 2rem;
+    color: #3498db;
+    // margin-bottom: 1rem;
+  }
 
 .drop-zone-content p {
   margin: 0.5rem 0;
@@ -220,6 +222,27 @@
 .btn-secondary:hover {
   background-color: #d3d9df;
 }
+
+.btn-group {
+    display: flex;
+    gap: 0.50rem;
+    align-items: center;
+  }
+
+  .btn {
+    border: 1px solid #0e3b64;
+    color: #0e3b64;
+    background-color: transparent;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0.65rem 1.5rem;
+    white-space: nowrap;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      background-color: #0e3b64;
+      color: $white-background;
+    }
+  }
 
 
 @keyframes fadeIn {

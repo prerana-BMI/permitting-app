@@ -664,84 +664,259 @@ namespace permitapi.Controllers
 
             return BaseObj;
         }
-      [HttpGet]
-[Route("DownloadExcel")]
-public IActionResult DownloadExcel()
-{
-    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-    using var package = new ExcelPackage();
-    var mainSheet = package.Workbook.Worksheets.Add("Permit");
+        [Route("DownloadExcel")]
+        public IActionResult DownloadExcel()
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-    // ✅ Header row
-    string[] headers = new[]
-    {
+            using var package = new ExcelPackage();
+            var mainSheet = package.Workbook.Worksheets.Add("Permit");
+
+            // FINAL ORDERED HEADERS
+            string[] headers = new[]
+            {
         "Category", "Level", "State", "City", "Permit Name",
-        "Regulatory Agency", "Basic Fees", "Prep Time Min", "Prep Time Max",
+        "Basic Fees", "Prep Time Min", "Prep Time Max",
         "Agency Review Time Min", "Agency Review Time Max",
-        "Additional Basic Fees", "Description", "Threshold"
+        "Type Of Project", "Additional Basic Fees",
+        "Description", "Threshold",
+        "Regulatory Agency",         // O (15)
+        "Regulatory Agency ID"       // P (16) hidden
     };
 
-    for (int i = 0; i < headers.Length; i++)
-        mainSheet.Cells[1, i + 1].Value = headers[i];
+            for (int i = 0; i < headers.Length; i++)
+                mainSheet.Cells[1, i + 1].Value = headers[i];
 
-    // ✅ Make headers bold and centered
-      using (var range = mainSheet.Cells[1, 1, 1, headers.Length])
-    {
-        range.Style.Font.Bold = true;
-        range.Style.Font.Color.SetColor(System.Drawing.Color.White);
-        range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-        //range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(0, 102, 204)); // Blue color
-        range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(79, 129, 189));
-        range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-        range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-        range.Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-        range.Style.Border.Bottom.Color.SetColor(System.Drawing.Color.White);
+            // HEADER STYLING
+            using (var range = mainSheet.Cells[1, 1, 1, headers.Length])
+            {
+                range.Style.Font.Bold = true;
+                range.Style.Font.Color.SetColor(System.Drawing.Color.White);
+                range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(79, 129, 189));
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+            }
+
+            // DB DATA
+            var permitData = _context.PermitMasters.AsNoTracking().ToList();
+            var cityData = _context.CityMasters.AsNoTracking().ToList();
+            var LevelList = new List<string> { "Federal", "State", "County" };
+
+            var categoriesList = permitData
+                .Where(a => !string.IsNullOrEmpty(a.Category))
+                .Select(a => a.Category).Distinct().OrderBy(a => a).ToList();
+
+            var CityList = cityData.Select(a => a.City).Distinct().OrderBy(a => a).ToList();
+            var StateList = cityData.Select(a => a.State).Distinct().OrderBy(a => a).ToList();
+
+            var regulatoryLookup = permitData
+                .Where(a => !string.IsNullOrEmpty(a.RegulatoryAgencyName))
+                .Select(a => new { a.RegulatoryAgencyName, a.RegulatoryAgencyId })
+                .Distinct()
+                .OrderBy(a => a.RegulatoryAgencyName)
+                .ToList();
+
+            var TypeOfprojectList = permitData.Select(a => a.TypeOfProject).Distinct().OrderBy(a => a).ToList();
+
+            // CREATE HIDDEN SHEET
+            var listSheet = package.Workbook.Worksheets.Add("Lists");
+
+            // CATEGORY LIST (Column A)
+            for (int i = 0; i < categoriesList.Count; i++)
+                listSheet.Cells[i + 1, 1].Value = categoriesList[i];
+
+            // City List (Column B)
+            for (int i = 0; i < CityList.Count; i++)
+                listSheet.Cells[i + 1, 2].Value = CityList[i];
+
+            // State List (Column C)
+            for (int i = 0; i < StateList.Count; i++)
+                listSheet.Cells[i + 1, 3].Value = StateList[i];
+
+            // Level List (Column D)
+            for (int i = 0; i < LevelList.Count; i++)
+                listSheet.Cells[i + 1, 4].Value = LevelList[i];
+
+            // Regulatory List (Name = Column E, ID = Column F)
+            for (int i = 0; i < regulatoryLookup.Count; i++)
+            {
+                listSheet.Cells[i + 1, 5].Value = regulatoryLookup[i].RegulatoryAgencyName;
+                listSheet.Cells[i + 1, 6].Value = regulatoryLookup[i].RegulatoryAgencyId;
+            }
+            for (int i = 0; i < TypeOfprojectList.Count; i++)
+            {
+                listSheet.Cells[i + 1, 11].Value = TypeOfprojectList[i];
+
+            }
+
+            // Create named ranges
+            package.Workbook.Names.Add("CategoryList", listSheet.Cells[$"A1:A{categoriesList.Count}"]);
+            package.Workbook.Names.Add("CityList", listSheet.Cells[$"B1:B{CityList.Count}"]);
+            package.Workbook.Names.Add("StateList", listSheet.Cells[$"C1:C{StateList.Count}"]);
+            package.Workbook.Names.Add("LevelList", listSheet.Cells[$"D1:D{LevelList.Count}"]);
+            package.Workbook.Names.Add("RegAgencyLookup", listSheet.Cells[$"E1:F{regulatoryLookup.Count}"]);
+            package.Workbook.Names.Add("TypeOfprojectList", listSheet.Cells[$"K1:K{TypeOfprojectList.Count}"]);
+
+            // Add dropdowns
+            mainSheet.DataValidations.AddListValidation("A2:A100").Formula.ExcelFormula = "=CategoryList";
+            mainSheet.DataValidations.AddListValidation("B2:B100").Formula.ExcelFormula = "=LevelList";
+            mainSheet.DataValidations.AddListValidation("C2:C100").Formula.ExcelFormula = "=StateList";
+            mainSheet.DataValidations.AddListValidation("D2:D100").Formula.ExcelFormula = "=CityList";
+            mainSheet.DataValidations.AddListValidation("K2:K100").Formula.ExcelFormula = "=TypeOfprojectList";
+            // Regulatory Agency dropdown at Column "O" (15)
+            var regVal = mainSheet.DataValidations.AddListValidation("O2:O100");
+            regVal.Formula.ExcelFormula = "=INDEX(RegAgencyLookup,0,1)";
+
+            // Fill Regulatory Agency ID at Column "P" (16)
+            for (int row = 2; row <= 500; row++)
+            {
+                mainSheet.Cells[row, 16].Formula = $"IFERROR(VLOOKUP(O{row},RegAgencyLookup,2,FALSE),\"\")";
+            }
+
+            // Hide ID column (P)
+            mainSheet.Column(16).Hidden = true;
+
+            // Hide hidden sheet
+            listSheet.Hidden = eWorkSheetHidden.VeryHidden;
+
+            // Auto-fit
+            mainSheet.Cells.AutoFitColumns();
+
+            return File(
+                package.GetAsByteArray(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "PermitBulkUpload.xlsx"
+            );
+        }
+
+
+        [HttpPost("ImportExcelFile")]
+        public BaseReturn<bool> ReadExcel(IFormFile file)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var BaseObj = new BaseReturn<bool>();
+            if (file == null || file.Length == 0)
+            {
+                BaseObj.Success = false;
+                BaseObj.Data = false;
+                BaseObj.Message = "File not found";
+                return BaseObj;
+            }
+
+            var rowList = new List<Dictionary<string, string>>();
+            using (var stream = file.OpenReadStream())
+            using (var package = new ExcelPackage(stream))
+            {
+                var ws = package.Workbook.Worksheets[0];
+
+                int colCount = ws.Dimension.End.Column;
+                int rowCount = GetLastUsedRow(ws);   // ← only read rows with data
+
+                var headers = new List<string>();
+
+                // Read headers
+                for (int col = 1; col <= colCount; col++)
+                    headers.Add(ws.Cells[1, col].Text);
+
+                // Read data rows
+                for (int row = 2; row <= rowCount; row++)
+                {
+                    var rowData = new Dictionary<string, string>();
+
+                    for (int col = 1; col <= colCount; col++)
+                    {
+                        string header = headers[col - 1];
+                        string value = ws.Cells[row, col].Text?.Trim();
+
+                        rowData[header] = value;
+                    }
+
+                    rowList.Add(rowData);
+
+
+                }
+            }
+            var PermitObjBulk = new PermitMaster();
+            var PermitObjBulkList = new List<PermitMaster>();
+            var PermitMasterDetailsList = new List<PermitMasterDetail>();
+            var PermitMasterDetails = new PermitMasterDetail();
+
+            foreach (var item in rowList)
+            {
+                PermitObjBulk = new PermitMaster()
+                {
+                    Category = item.GetValueOrDefault("Category"),
+                    Level = item.GetValueOrDefault("Level"),
+                    State = item.GetValueOrDefault("State"),
+                    City = item.GetValueOrDefault("City"),
+                    PermitName = item.GetValueOrDefault("Permit Name"),
+                    RegulatoryAgencyName = item.GetValueOrDefault("Regulatory Agency"),
+                    RegulatoryAgencyId = Convert.ToInt32(item.GetValueOrDefault("Regulatory Agency ID")),
+                    TypeOfProject = item.GetValueOrDefault("Type Of Project"),
+                };
+
+                var PermitMasterDetailsObj = new PermitMasterDetail()
+                {
+                    BasicFees = Convert.ToDecimal(item.GetValueOrDefault("Basic Fees")),
+                    PrepTimeMin = Convert.ToInt32(item.GetValueOrDefault("Prep Time Min")),
+                    PrepTimeMax = Convert.ToInt32(item.GetValueOrDefault("Prep Time Max")),
+                    AgencyReviewTimeMin = Convert.ToInt32(item.GetValueOrDefault("Agency Review Time Min")),
+                    AgencyReviewTimeMax = Convert.ToInt32(item.GetValueOrDefault("Agency Review Time Max")),
+                    AdditionalBasic = item.GetValueOrDefault("Additional Basic Fees"),
+                    Description = item.GetValueOrDefault("Description"),
+                    Threshold = item.GetValueOrDefault("Threshold")
+
+                };
+                PermitObjBulkList.Add(PermitObjBulk);
+                PermitMasterDetailsList.Add(PermitMasterDetailsObj);
+
+            }
+            _context.PermitMasters.AddRange(PermitObjBulkList);
+            _context.SaveChanges();
+            foreach (var item in PermitObjBulkList)
+            {
+                PermitMasterDetailsList.ForEach(a =>
+                {
+                    a.PermitId = item.Id;
+                });
+            }
+
+            _context.PermitMasterDetails.AddRange(PermitMasterDetailsList);
+            _context.SaveChanges();
+            BaseObj.Success = true;
+            BaseObj.Data = true;
+            BaseObj.Message = "Permits uploaded successfully";
+            return BaseObj;
+
+        }
+
+        private int GetLastUsedRow(ExcelWorksheet ws)
+        {
+            int lastRow = ws.Dimension.End.Row;
+
+            for (int row = lastRow; row >= 1; row--)
+            {
+                bool hasValue = false;
+
+                for (int col = 1; col <= ws.Dimension.End.Column; col++)
+                {
+                    if (!string.IsNullOrWhiteSpace(ws.Cells[row, col].Text))
+                    {
+                        hasValue = true;
+                        break;
+                    }
+                }
+
+                if (hasValue)
+                    return row;
+            }
+
+            return 1; // only header exists
+        }
+
+
+
     }
-    // ✅ Fetch unique category list
-    var categoriesList = _context.PermitMasters
-        .AsNoTracking()
-        .Where(a => !string.IsNullOrEmpty(a.Category))
-        .Select(a => a.Category.Trim())
-        .Distinct()
-        .OrderBy(a => a)
-        .ToList();
-
-    // ✅ Create hidden worksheet for dropdown data
-    var listSheet = package.Workbook.Worksheets.Add("Lists");
-
-    for (int i = 0; i < categoriesList.Count; i++)
-        listSheet.Cells[i + 1, 1].Value = categoriesList[i];
-
-    // ✅ Define a named range for category list
-    if (categoriesList.Count > 0)
-    {
-        var lastRow = categoriesList.Count;
-        var namedRange = listSheet.Cells[$"A1:A{lastRow}"];
-        package.Workbook.Names.Add("CategoryList", namedRange);
-
-        // ✅ Add data validation to Category column (A2:A100)
-        var validation = mainSheet.DataValidations.AddListValidation("A2:A100");
-        validation.Formula.ExcelFormula = "=CategoryList";
-        validation.ShowErrorMessage = true;
-        validation.ErrorStyle = OfficeOpenXml.DataValidation.ExcelDataValidationWarningStyle.stop;
-        validation.ErrorTitle = "Invalid Category";
-        validation.Error = "Please select a valid category from the dropdown list.";
-    }
-
-    // ✅ Hide the list sheet
-    listSheet.Hidden = eWorkSheetHidden.VeryHidden;
-
-    // ✅ Auto-fit columns
-    mainSheet.Cells["A:N"].AutoFitColumns();
-
-    // ✅ Return file
-    var bytes = package.GetAsByteArray();
-
-    return File(bytes,
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "PermitBulkUpload.xlsx");
-}
-
-  }
 }

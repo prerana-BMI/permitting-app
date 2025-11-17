@@ -17,7 +17,13 @@
                     <i class="fas fa-cloud-upload-alt"></i>
                     <p>Drag & Drop your file here</p>
                     <span>or</span>
-                    <button class="btn btn-browse" tyle>Browse Files</button>
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-browse" tyle >Browse Files</button>
+                        <button class="btn-group btn" (click)="OpenBulkUploadPopup()">
+                            <i class="fas fa-upload"></i>
+                        </button>
+                    </div>
+                   
                 </div>
                 <input #fileInput type="file" (change)="onFileSelected($event)" hidden>
             </div>

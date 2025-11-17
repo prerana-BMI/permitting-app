@@ -26,6 +26,7 @@ export class Constants{
      public static GetAllFederalPermits = '/api/Permit/GetAllFederalPermits'; 
      public static GetMasterPermitType = '/api/Master/GetMasterPermitType';
      public static SavePermitMatrix = '/api/Permit/SavePermitMatrix';
+     public static ImportExcelFile = '/api/Permit/ImportExcelFile';
      public static GetAllMatrix = '/api/Permit/GetAllMatrix';
      public static GetMatrixDetailsById = '/api/Permit/GetMatrixDetailsById?MatrixId=';
      public static DeleteMatrixDetailsById = '/api/Permit/DeleteMatrixDetailsById?MatrixId=';
