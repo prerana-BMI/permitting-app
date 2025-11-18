@@ -855,6 +855,7 @@ namespace permitapi.Controllers
                     RegulatoryAgencyName = item.GetValueOrDefault("Regulatory Agency"),
                     RegulatoryAgencyId = Convert.ToInt32(item.GetValueOrDefault("Regulatory Agency ID")),
                     TypeOfProject = item.GetValueOrDefault("Type Of Project"),
+                    FromBulkUpload = true
                 };
 
                 var PermitMasterDetailsObj = new PermitMasterDetail()
