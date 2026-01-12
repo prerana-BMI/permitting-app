@@ -26,6 +26,19 @@
           </mat-error>
         </mat-form-field>
 
+         <mat-form-field appearance="outline">
+          <mat-label>County</mat-label>
+          <input matInput type="text" placeholder="Enter County" formControlName="county" [matAutocomplete]="countylst" oninput="this.value = this.value.toUpperCase()">
+          <mat-autocomplete #countylst="matAutocomplete" [displayWith]="CountyTypeAheadDisplay.bind(this)">
+            <mat-option *ngIf="isCountyLoading"><mat-spinner diameter="20"></mat-spinner></mat-option>
+            <mat-option  class ="mat-opt" *ngFor="let l of CountyList | slice:0:30" [value]="l.State">{{l.State}} - US</mat-option>
+            <mat-option *ngIf="!CountyList || CountyList.length === 0" disabled>No County found</mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="SearchForm.get('county')?.hasError('notInList')">
+            Please select a valid county from list
+          </mat-error>
+        </mat-form-field>
+
         <mat-form-field appearance="outline">
           <mat-label>City</mat-label>
           <input matInput type="text" placeholder="Enter City" formControlName="city" [matAutocomplete]="ctlist" oninput="this.value = this.value.toUpperCase()">
@@ -38,6 +51,8 @@
             Please select a valid city from list
           </mat-error>
         </mat-form-field>
+
+        
 
         <button class="btn w-100 add-location-btn" (click)="AddToList()">
           <i class="fas fa-plus-circle ml-2"></i> Add Location

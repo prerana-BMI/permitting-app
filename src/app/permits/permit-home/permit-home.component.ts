@@ -19,12 +19,14 @@ export class PermitHomeComponent {
   SearchForm! : FormGroup;
   typeaheadDebounce : number = 500;
   StateList : Array<any> = [];
+  CountyList : Array<any> = [];
   SelectedStateName : string = '';
-  selectedLocations: { City: string; State: string , Selected: string}[] = [];
+  selectedLocations: { City: string; State: string; County?: string; Selected: string }[] = [];
   selectedStates:  Array<any> = [];
   selectedCities:  Array<any> = [];
    groupedLocationsByStates: { state: string, cities: string[] }[] = [];
 RemovedLocation: any = {};
+  isCountyLoading : boolean= false;
   constructor(private Formbuilder : FormBuilder,
     private HttpService : HttpService,
     private router : Router,
@@ -51,8 +53,9 @@ ngOnInit()
   InitForm()
   {
     this.SearchForm = this.Formbuilder.group({
-      city : ['' , []],
+      city : ['', []],
       state : ['',[]],
+      county : ['',[]]
      
     });
     
@@ -68,6 +71,18 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
             this.CityList = res["Data"];
           }
           this.isCityLoading = false;
+        });
+      }
+    });
+
+     this.SearchForm.controls['county'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
+      if (typeof val === 'string' && val.length >= 1) {
+         this.isCountyLoading = true;
+        this.HttpService.httpGetCall(Constants.GetStateBySearchText+  val.toLowerCase(),false , false).subscribe((res :any) => {
+          if (res["Success"]) {
+            this.CountyList = res["Data"];
+          }
+          this.isCountyLoading = false;
         });
       }
     });
@@ -94,11 +109,19 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
   }
 
   StateTypeAheadDisplay(val: any) {
-      this.SelectedStateName = '';
+    this.SelectedStateName = '';
     let res = this.StateList.find(a => a.State == val);
     if (res != null) {
       this.SelectedStateName = res.State;
       return res.State;
+    }
+    return ''
+  }
+
+   CountyTypeAheadDisplay(val: any) {
+    let res = this.CountyList.find(a => a.county == val);
+    if (res != null) {
+      return res.County;
     }
     return ''
   }
@@ -112,17 +135,17 @@ this.SearchForm.controls['city'].valueChanges.pipe(debounceTime(this.typeaheadDe
     });
     this.router.navigate(["permits/PermitList"]);
   }
-handleCitySelected(event: { City: string, State: string, Selected: 'Y' | 'N' }) {
+handleCitySelected(event: { City: string, State: string, County: string, Selected: 'Y' | 'N' }) {
   const existingIndex = this.selectedLocations.findIndex(
     loc => loc.City === event.City && loc.State === event.State
   );
 
   if (event.Selected === 'Y' && existingIndex === -1) {
-    // Add city if not already added
     this.selectedLocations.push({ 
         City: event.City, 
         State: event.State, 
-        Selected: 'Y'  // ✅ Add this
+        County: event.County,
+        Selected: 'Y'
       });
     
   } 
@@ -130,8 +153,7 @@ handleCitySelected(event: { City: string, State: string, Selected: 'Y' | 'N' }) 
     this.selectedLocations.splice(existingIndex, 1);
     }
   
-
-  // Update grouped state-city view
+  this.selectedLocations = [...this.selectedLocations];
   this.updateGroupedLocations();
 }
 
@@ -155,39 +177,30 @@ AddToList() {
   const city = this.SearchForm.controls['city'].value;
   let state = this.SearchForm.controls['state'].value;
 
-  // If neither state nor city is entered → do nothing
   if (!state && !city) return;
 
-  // Find exact case match from StateList to match GeoJSON
   const matchedState = this.StateList.find(s => s.State.toUpperCase() === state.toUpperCase());
   if (matchedState) state = matchedState.State;
 
-  // Case: State entered but city empty → add state only
   if (state && (!city || city === '' || city === 'Unknown')) {
     this.addStateOnly(state);
     this.SearchForm.reset();
     return;
   }
 
-  // Case: City+State entered → add normally
   const existingStateIndex = this.selectedLocations.findIndex(
     loc => loc.State === state
   );
 
   if (existingStateIndex !== -1) {
-    // State already exists
-    const existingEntry = this.selectedLocations[existingStateIndex];
-
-    // If city not already in the entry, add it
     if (!this.selectedLocations.some(loc => loc.State === state && loc.City === city)) {
       this.selectedLocations.push({ City: city, State: state, Selected: 'Y' });
     }
   } else {
-    // State does not exist → add new city+state entry
     this.selectedLocations.push({ City: city, State: state, Selected: 'Y' });
   }
 
-  this.selectedLocations = [...this.selectedLocations]; // force reference update
+  this.selectedLocations = [...this.selectedLocations]; 
   this.updateGroupedLocations();
   this.SearchForm.reset();
 }
@@ -202,8 +215,8 @@ addStateOnly(state: string) {
     loc => loc.State === state && (!loc.City || loc.City === '')
   );
   if (!exists) {
-    this.selectedLocations.push({ City: '', State: state, Selected: 'Y' }); // ✅ include Selected
-    this.selectedLocations = [...this.selectedLocations]; // ✅ force reference update
+    this.selectedLocations.push({ City: '', State: state, Selected: 'Y' });
+    this.selectedLocations = [...this.selectedLocations]; 
     this.updateGroupedLocations();
   }
 }
@@ -250,7 +263,7 @@ removeCity(item: { City: string, State: string , Selected : string }) {
 removeState(item: { State: string ,  Selected : string }) {
   this.RemovedLocation = item;
   this.selectedLocations = this.selectedLocations.filter(loc => loc.State !== item.State);
-  this.selectedLocations = [...this.selectedLocations]; // 👈 Force reference update
+  this.selectedLocations = [...this.selectedLocations];
   this.updateGroupedLocations();
 }
 
