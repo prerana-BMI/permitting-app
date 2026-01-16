@@ -31,7 +31,7 @@
           <input matInput type="text" placeholder="Enter County" formControlName="county" [matAutocomplete]="countylst" oninput="this.value = this.value.toUpperCase()">
           <mat-autocomplete #countylst="matAutocomplete" [displayWith]="CountyTypeAheadDisplay.bind(this)">
             <mat-option *ngIf="isCountyLoading"><mat-spinner diameter="20"></mat-spinner></mat-option>
-            <mat-option  class ="mat-opt" *ngFor="let l of CountyList | slice:0:30" [value]="l.State">{{l.State}} - US</mat-option>
+            <mat-option  class ="mat-opt" *ngFor="let l of CountyList | slice:0:30" [value]="l.County">{{l.County}} - US</mat-option>
             <mat-option *ngIf="!CountyList || CountyList.length === 0" disabled>No County found</mat-option>
           </mat-autocomplete>
           <mat-error *ngIf="SearchForm.get('county')?.hasError('notInList')">
@@ -61,29 +61,64 @@
     </div>
 
     <!-- Bottom Card: Selected Locations (Enhanced UI) -->
-    <div class="sidebar-card selected-locations-card" *ngIf="groupedLocationsByStates && groupedLocationsByStates.length > 0">
-      <div class="panel-header">Selected Locations</div>
-      <div class="card-body">
-        <div *ngFor="let group of groupedLocationsByStates" class="state-card">
-          <div class="state-card-header">
-            <span class="state-badge">{{ group.state }}</span>
-            <button class="remove-btn" title="Remove all cities in {{ group.state }}" (click)="removeState({ State: group.state, Selected: 'N' })">&times;</button>
-          </div>
-          <hr *ngIf="group.cities.length > 0">
-          <div class="city-tags" *ngIf="group.cities.length > 0">
-            <span *ngFor="let city of group.cities" class="city-tag">
-              {{ city }}
-              <button class="remove-btn" title="Remove {{city}}" (click)="removeCity({ City: city, State: group.state, Selected: 'N' })">&times;</button>
-            </span>
+      <!-- Selected Locations Grid -->
+  <div class="sidebar-card selected-locations-card" *ngIf="groupedLocations && groupedLocations.length > 0">
+    <div class="panel-header">Selected Locations</div>
+    <div class="card-body">
+      <!-- Loop through each state group -->
+      <div *ngFor="let stateGroup of groupedLocations" class="state-card">
+        <!-- State Header -->
+        <div class="state-card-header">
+          <span class="state-badge">{{ stateGroup.state }}</span>
+          <button class="remove-btn" title="Remove all in {{ stateGroup.state }}" (click)="removeState(stateGroup.state)">&times;</button>
+        </div>
+        <hr *ngIf="!stateGroup.isStateOnly && stateGroup.counties.length > 0" />
+
+        <!-- Display if the entire state is selected -->
+        <div *ngIf="stateGroup.isStateOnly" class="full-selection-notice">
+          All locations in {{ stateGroup.state }} are selected.
+        </div>
+
+        <!-- Otherwise, display counties and cities -->
+        <div *ngIf="!stateGroup.isStateOnly">
+          <!-- Loop through each county group in the state -->
+          <div *ngFor="let countyGroup of stateGroup.counties" class="county-group">
+            <!-- County Header -->
+            <div class="county-header">
+              <strong>{{ countyGroup.county }} County</strong>
+              <button class="remove-btn remove-county-btn" title="Remove all in {{ countyGroup.county }} County" (click)="removeCounty(countyGroup, stateGroup.state)">&times;</button>
+            </div>
+
+            <!-- Display if the entire county is selected -->
+            <div *ngIf="countyGroup.isCountyOnly" class="full-selection-notice">
+              All locations in {{ countyGroup.county }} County are selected.
+            </div>
+
+            <!-- Otherwise, display city tags -->
+            <div *ngIf="!countyGroup.isCountyOnly" class="city-tags">
+              <span *ngFor="let city of countyGroup.cities" class="city-tag">
+                {{ city.City }}
+                <button class="remove-btn" title="Remove {{ city.City }}" (click)="removeCity(city)">&times;</button>
+              </span>
+            </div>
           </div>
         </div>
-      
-      
-           <button class="btn w-100 add-location-btn" (click)="Search()" >
-          <i class="fas fa-search me-2"></i>Search Permits
-           </button>
-     </div>
+      </div>
+
+      <!-- Search Button -->
+      <button class="btn w-100 add-location-btn mt-3" (click)="Search()">
+        <i class="fas fa-search me-2"></i>Search Permits
+      </button>
     </div>
+  </div>
+  
+  <div class="sidebar-card selected-locations-card" *ngIf="!groupedLocations || groupedLocations.length === 0">
+    <div class="panel-header">Selected Locations</div>
+    <div class="card-body text-center text-muted py-3">
+      No locations selected. Use the search below to add locations.
+    </div>
+  </div>
+
 
   </div>
 

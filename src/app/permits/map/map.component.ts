@@ -170,7 +170,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
     const selectedCounties = new Set(
         (this.selectedLocationsFromParent || [])
-            .filter(loc => loc.Selected === 'Y' && loc.City && loc.County)
+            .filter(loc => loc.Selected === 'Y' &&  loc.County)
             .map(loc => `${loc.State}|${loc.County}`)
     );
 
