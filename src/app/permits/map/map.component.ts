@@ -1,4 +1,3 @@
-
 import { Component, AfterViewInit, EventEmitter, Output, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as L from 'leaflet';
 
@@ -81,6 +80,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     });
 
     const onEachFeature = (feature: any, layer: L.Layer) => {
+      layer.bindTooltip(feature.properties.name);
       layer.on({
         mouseover: (e: L.LeafletMouseEvent) => {
           const stateName = feature.properties.name;
@@ -142,6 +142,17 @@ export class MapComponent implements AfterViewInit, OnChanges {
     const stateId = this.getStateId(stateName);
     if (!stateId) return;
 
+    const onEachCountyFeature = (feature: any, layer: L.Layer) => {
+      const countyName = feature.properties.NAME;
+      layer.bindTooltip(`County - ${countyName}<br>State - ${stateName}`);
+      layer.on({
+          click: () => {
+            const isSelected = this.isCountySelected(stateName, countyName);
+            this.citySelected.emit({ State: stateName, County: countyName, City: '', Selected: isSelected ? 'N' : 'Y' });
+          }
+      });
+  };
+
     const countyLayer = L.geoJson(this.countyGeojson, {
         filter: (feature) => feature.properties.STATE === stateId,
         style: { 
@@ -150,7 +161,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
             opacity: 0.5,
             color: '#333',
             fillOpacity: 0.2
-        }
+        },
+        onEachFeature: onEachCountyFeature
     }).addTo(this.map);
     this.stateCountyLayers.set(stateName, countyLayer);
     this.updateCountyHighlights(); 
@@ -162,6 +174,12 @@ export class MapComponent implements AfterViewInit, OnChanges {
         this.map.removeLayer(countyLayer);
         this.stateCountyLayers.delete(stateName);
     }
+  }
+
+  private isCountySelected(stateName: string, countyName: string): boolean {
+    return (this.selectedLocationsFromParent || []).some(
+      loc => loc.Selected === 'Y' && loc.State === stateName && loc.County === countyName
+    );
   }
 
   private updateCountyHighlights(): void {
