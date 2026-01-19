@@ -20,8 +20,9 @@ import { DatatransferService } from 'src/app/services/datatransfer.service';
 })
 export class PermitListComponent {
   City : string  = '' ;
+  County : string  = '' ;
   Level : string = 'All';
-  LevelList : string[] = ["All","Federal","State","City"];
+  LevelList : string[] = ["All","Federal","State", "County", "City"];
   State : string = '';
   PermitList : Array<any> = [];
   pageSize: number = 10;
@@ -47,9 +48,10 @@ export class PermitListComponent {
   isCityLoading : boolean= false;
   ListOfId : Array<any> = [];
   StateList : Array<any> = [];
+  CountyList : Array<any> = [];
   SelectedCount : number = 0 ;
   NavigatedData  : any;
-  StateCityMapping : {State : string , City : string}[]= [];
+  StateCityMapping : {State : string ,  City : string , County : string  }[]= [];
  
 
   constructor(private httpService: HttpService,
@@ -79,7 +81,7 @@ export class PermitListComponent {
      
       res.SelectedLocation.forEach((item: any) => {
         item.cities.forEach((element: any) => {
-          this.StateCityMapping.push({ State: item.state, City: element });
+        //this.StateCityMapping.push({ State: item.state, City: element});
         });
          
       });
@@ -91,12 +93,11 @@ export class PermitListComponent {
     {
       this.datatransferService.setData(null);
       res.data.forEach((item: any) => {
-        item.cities.forEach((element: any) => {
-          this.StateCityMapping.push({ State: item.state, City: element });
-        });
-         
+         this.StateCityMapping.push({ State: item.State, City: item.City , County : item.County  });
       });
-      this.StateList =  res.data.map((obj : any)=>obj.state);
+      
+      this.StateList = [...new Set(res.data.map((obj: any) => obj.State))];
+      
     }
     else{
        this.router.navigate(['/permits/PermitHome']);
@@ -213,8 +214,9 @@ paginatorevt(evt: any) {
   {
     let param = {
       'Level' : this.Level,
-      'State' :  (this.Level == 'State' || this.Level == 'City') && this.State != '' ? [this.State] : this.StateList,
-      'City' :   this.Level == "State" && this.City == "" ? [] : this.City != '' ? [this.City] : [...new Set(this.StateCityMapping.map(a => a.City))],
+      'State' :  (this.Level == 'State' || this.Level == 'City' || this.Level == "County") && this.State != '' ? [this.State] : this.StateList,
+      'County' : this.Level == "County" ? [this.County] : this.CountyList,
+      'City' :  this.Level == "City" ? [this.City] :  this.CityList,
       'Category' : this.SearchForm.controls['Category'].value == null ? '': this.SearchForm.controls['Category'].value,
       'PermitName': this.SearchForm.controls['PermitName'].value == null ? '': this.SearchForm.controls['PermitName'].value,
       'RegulatoryAgencyName': this.SearchForm.controls['RegulatoryAgency'].value == null ? '': this.SearchForm.controls['RegulatoryAgency'].value,
@@ -223,7 +225,7 @@ paginatorevt(evt: any) {
     this.httpService.httpGetCall(Constants.GetPermitByLocation ,param, true).subscribe((res: any)=>{
       if (res["Success"]) {
       this.PermitList = res['Data'];
-      const order: { [key: string]: number } = { 'Federal': 1, 'State': 2, 'City': 3 };
+      const order: { [key: string]: number } = { 'Federal': 1, 'State': 2,  'County': 3 , 'City': 4 };
       this.PermitList.sort((a: any, b: any) => order[a.Level] - order[b.Level]);
         if (this.SelecAll) {
           this.SelectAll({ target: { checked: true } });
@@ -363,9 +365,23 @@ CreateMatrix(): void {
      }
    
   }
+
+  CountyTypeAheadDisplay(val: any) {
+    let res = this.CountyList.find(a => a == val);
+     if (res != null) {
+      this.City = '';
+      this.CityList = [...new Set(this.StateCityMapping.filter(c=>c.State == this.State && c.County == val ).map(a=>a.City))];
+       return res;
+     }
+   
+  }
+
   LevelTypeAheadDisplay(val: any) {
     let res = this.LevelList.find(a => a == val);
      if (res != null) {
+      this.State = '';
+      this.City = '';
+      this.County = '';
        return res;
      }
    return'';
@@ -409,18 +425,15 @@ CreateMatrix(): void {
   {
      let res = this.StateList.find(a => a == val);
      if (res != null) {
-       this.CityList = this.StateCityMapping.filter(c=>c.State == val).map(a=>a.City);
-       this.City = '';
-        return res;
+      this.City = '';
+      this.County = '';
+      this.CountyList = [...new Set(this.StateCityMapping.filter((c:any)=>c.State == val).map((a:any)=>a.County))];
+       return res;
      }
    return'';
   }
 
   OnLevelChanges(event: string) {
-
-  this.State = '';
-  this.City = '';
-
   this.GetAllPermits();
   
   }

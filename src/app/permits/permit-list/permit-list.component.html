@@ -89,7 +89,6 @@
         </mat-autocomplete>
       </div>
 
-
       <div class="btn-group">
         <!-- <div class="form-group"> -->
 
@@ -151,9 +150,30 @@
     </mat-autocomplete>
  </mat-form-field>
 
+
+  <mat-form-field appearance="outline" class="mr-2" style="height: 75px;"  >
+    <mat-label style="color: black;">County</mat-label>
+    <input matInput placeholder="Enter County" [(ngModel)]="County" (ngModelChange)="GetAllPermits()"  [matAutocomplete]="countylist" [disabled]="Level != 'County' && Level != 'City'  ? true : false">
+     <mat-autocomplete #countylist="matAutocomplete"
+                      [displayWith]="CountyTypeAheadDisplay.bind(this)">
+                      <mat-option *ngFor="let l of CountyList | slice:0:30" [value]="l"  class ="mat-opt" >
+                        <div>
+                          <table>
+                            <tr class="tr">
+                              <td class="td td1" style="width: 200px;">{{l}}</td>
+                             
+                            </tr>
+                          </table>
+                        </div>
+                      </mat-option>
+                      
+      </mat-autocomplete>
+ </mat-form-field>
+
+
  <mat-form-field appearance="outline" class="mr-2" style="height: 75px;"  >
     <mat-label style="color: black;">City</mat-label>
-    <input matInput placeholder="Enter City" [(ngModel)]="City" (ngModelChange)="GetAllPermits()"  [matAutocomplete]="ctlist" [disabled]="Level != 'City'  ? true : false">
+    <input matInput placeholder="Enter City" [(ngModel)]="City" (ngModelChange)="GetAllPermits()"  [matAutocomplete]="ctlist" [disabled]="Level != 'City'   ? true : false">
      <mat-autocomplete #ctlist="matAutocomplete"
                       [displayWith]="CityTypeAheadDisplay.bind(this)">
                       <mat-option *ngFor="let l of CityList | slice:0:30" [value]="l"  class ="mat-opt" >
@@ -170,7 +190,10 @@
       </mat-autocomplete>
  </mat-form-field>
 
- 
+  <div class="btn-group align align-items-center">
+       <button class="btn mb-3" (click)="Search()">
+          <i class="fas fa-search"></i></button>
+  </div>
 
   </div>
 
