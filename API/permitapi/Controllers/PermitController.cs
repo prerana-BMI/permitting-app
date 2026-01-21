@@ -86,12 +86,11 @@ namespace permitapi.Controllers
             List<EPermitMaster> Result = new List<EPermitMaster>();
             try
             {
-                if (Request.Level == "State" || Request.Level == "City")
+                if (Request.Level == "State")
                 {
                     Result = _context.PermitMasters.Where(a =>
-                    Request.State.Contains(a.State) &&
-                    a.Level == Request.Level &&
-                   (Request.City == null || Request.City.Count == 0 ? true : Request.City.Contains(a.City)) &&
+                    Request.State.Contains(a.State) && 
+                    a.Level == "State"  && 
                    (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
                    (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
                    (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName) && !string.IsNullOrEmpty(a.PermitName))
@@ -110,11 +109,39 @@ namespace permitapi.Controllers
                                         .ToList();
 
                 }
-                else if (Request.Level == "All")
+               else if (Request.Level == "County")
+                {
+                    Result = _context.PermitMasters.Where(a =>
+                    Request.State.Contains(a.State) &&
+                    Request.County.Contains(a.County) &&
+                    a.Level == "County"  && 
+                   (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
+                   (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
+                   (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName) && !string.IsNullOrEmpty(a.PermitName))
+                                        .Select(a => new EPermitMaster
+                                                           {
+                                                               Category = a.Category,
+                                                               PermitName = a.PermitName,
+                                                               State = a.State,
+                                                               City = a.City,
+                                                               County = a.County,
+                                                               Level = a.Level,
+                                                               RegulatoryAgencyName = a.RegulatoryAgencyName,
+                                                               Id = a.Id
+                                                           })
+                                        .OrderByDescending(a => a.Level)
+                                        .ToList();
+
+                }
+
+                else if (Request.Level == "City")
                 {
 
                     Result = _context.PermitMasters.Where(a =>
-                   (Request.State.Contains(a.State) || Request.City.Contains(a.City) || a.Level == "Federal") &&
+                    Request.State.Contains(a.State)  &&
+                    Request.County.Contains(a.County) &&
+                    Request.City.Contains(a.City) &&
+                    a.Level == "City"  && 
                    (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
                    (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
                    (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName) && !string.IsNullOrEmpty(a.PermitName)
@@ -136,7 +163,38 @@ namespace permitapi.Controllers
 
 
                 }
-                else
+
+                 else if (Request.Level == "All")
+                {
+
+                    Result = _context.PermitMasters.Where(a =>
+                    Request.State.Contains(a.State)  &&
+                    Request.County.Contains(a.County) &&
+                    Request.City.Contains(a.City) &&
+                   (string.IsNullOrEmpty(Request.Category) || a.Category == Request.Category) &&
+                   (string.IsNullOrEmpty(Request.PermitName) || a.PermitName == Request.PermitName) &&
+                   (string.IsNullOrEmpty(Request.RegulatoryAgencyName) || a.RegulatoryAgencyName == Request.RegulatoryAgencyName) && !string.IsNullOrEmpty(a.PermitName) ||
+                    a.Level == "Federal" 
+                                                           ).Select(a => new EPermitMaster
+                                                           {
+                                                               Category = a.Category,
+                                                               PermitName = a.PermitName,
+                                                               State = a.State,
+                                                               City = a.City,
+                                                               County = a.County,
+                                                               Level = a.Level,
+                                                               RegulatoryAgencyName = a.RegulatoryAgencyName,
+                                                               Id = a.Id
+                                                           })
+                           .OrderByDescending(a => a.Level)
+                           .ToList();
+
+
+
+
+                }
+                   
+                else 
                 {
 
                     Result = _context.PermitMasters.Where(a =>

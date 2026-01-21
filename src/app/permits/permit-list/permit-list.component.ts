@@ -212,14 +212,15 @@ paginatorevt(evt: any) {
   }
   GetAllPermits()
   {
-    let param = {
+
+     let param = {
       'Level' : this.Level,
-      'State' :  (this.Level == 'State' || this.Level == 'City' || this.Level == "County") && this.State != '' ? [this.State] : this.StateList,
-      'County' : this.Level == "County" ? [this.County] : this.CountyList,
-      'City' :  this.Level == "City" ? [this.City] :  this.CityList,
+      'State' :  this.Level == 'State' && this.State == '' ?  this.StateList :  this.Level != 'All'  ? [this.State] :  this.StateList ,
+      'County' : this.Level == "County"  && this.County == '' ? this.CountyList : this.Level != 'All'  ? [this.County] : [...new Set(this.StateCityMapping.map((a:any)=>a.County))],
+      'City' :  this.Level == "City"  && this.City == '' ? this.CityList : this.Level != 'All'  ?  [this.City] :  [...new Set(this.StateCityMapping.map((a:any)=>a.City))],
       'Category' : this.SearchForm.controls['Category'].value == null ? '': this.SearchForm.controls['Category'].value,
       'PermitName': this.SearchForm.controls['PermitName'].value == null ? '': this.SearchForm.controls['PermitName'].value,
-      'RegulatoryAgencyName': this.SearchForm.controls['RegulatoryAgency'].value == null ? '': this.SearchForm.controls['RegulatoryAgency'].value,
+      'RegulatoryAgencyName': this.SearchForm.controls['RegulatoryAgency'].value == null ? '' : this.SearchForm.controls['RegulatoryAgency'].value
 
     }
     this.httpService.httpGetCall(Constants.GetPermitByLocation ,param, true).subscribe((res: any)=>{
