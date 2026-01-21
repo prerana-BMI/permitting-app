@@ -277,3 +277,69 @@ $state-badge-text: #1c4876;
   width: 50%;
   text-align: left;
 }
+
+/* --- Added Styles for Improved Alignment and Spacing (as requested) --- */
+
+/* Add a clear separation for county groups */
+.selected-locations-card .county-group {
+  margin-top: 1rem;
+  padding-left: 0.5rem; /* Indent county sections slightly */
+}
+
+/* Style the county header to align items */
+.selected-locations-card .county-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+/* Ensure county name has strong emphasis */
+.selected-locations-card .county-header strong {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* General style for all remove buttons in the card for consistency */
+.selected-locations-card .remove-btn {
+  background: transparent;
+  border: 1px solid #ced4da; /* Light-gray border */
+  color: #6c757d; /* Muted text color */
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  line-height: 20px; /* Vertically center the 'x' */
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.selected-locations-card .remove-btn:hover {
+  background-color: #e74c3c;
+  color: white;
+  border-color: #e74c3c;
+}
+
+/* Adjust city tag styles for better spacing and appearance */
+.selected-locations-card .city-tag {
+  background-color: #f1f3f5; /* Lighter gray for tags */
+  color: #343a40;
+  padding: 0.3rem 0.75rem;
+  border-radius: 15px; /* Pill shape */
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: inline-flex; /* Ensure flex properties work */
+  align-items: center;
+}
+
+/* Style the remove button inside city tags */
+.selected-locations-card .city-tag .remove-btn {
+  width: 16px;
+  height: 16px;
+  font-size: 0.9rem;
+  line-height: 14px;
+  margin-left: 0.5rem;
+  border: 1px solid #adb5bd;
+}

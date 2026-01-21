@@ -9,23 +9,26 @@
                 <div class="row d-flex pb-0">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label for="username" class="form-label labelClass lableSyle">Category</label>
+                            <label for="username" class="form-label labelClass lableSyle">Category<span class="text-danger">*</span></label>
                             <select name="" id="" class="form-control custom-input" formControlName="Category">
                                 <option value="">Select</option>
                                 <option value="{{i}}" *ngFor="let i of CategoryList">{{i}}</option>
                             </select>
+                            <span *ngIf="Submitted && AddPermitForm.get('Category')?.invalid" class="text-danger">Category Name is Required</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label for="role" class="form-label labelClass lableSyle">Level</label>
-                            <select name="" id="" class="form-control custom-input" formControlName="Level">
+                            <label for="role" class="form-label labelClass lableSyle">Level <span  class="text-danger">*</span></label>
+                            <select name="" id="" class="form-control custom-input" formControlName="Level" (change)="OnChanges($event)">
                                 <option value="">Select</option>
                                 <option value="Federal">Federal</option>
                                 <option value="State">State</option>
                                 <option value="County">County</option>
+                                 <option value="City">City</option>
                             </select>
+                            <span *ngIf="Submitted && AddPermitForm.get('Level')?.invalid" class="text-danger">Level  is Required</span>
                         </div>
                     </div>
 
@@ -72,6 +75,51 @@
                         </div>
                     </div>
 
+                     <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="role" class="form-label labelClass lableSyle">County</label>
+                            <input type="text" class="form-control custom-input"
+                                oninput="this.value = this.value.toUpperCase()" formControlName="County"
+                                [matAutocomplete]="cntlist">
+                            <mat-autocomplete #cntlist="matAutocomplete" [displayWith]="CountyTypeAheadDisplay.bind(this)">
+                                <mat-option *ngIf="isCountyLoading">
+                                    <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
+                                    </mat-spinner>
+                                </mat-option>
+                                <mat-option class="mat-opt1" disabled>
+                                    <div>
+                                        <table>
+                                            <tr class="tr">
+                                                <td style="width: 200px;">County</td>
+
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </mat-option>
+                                <mat-option *ngFor="let l of CountyList | slice:0:30" [value]="l.County" class="mat-opt">
+                                    <div>
+                                        <table>
+                                            <tr class="tr">
+                                                <td class="td td1" style="width: 200px;">{{l.County}}</td>
+
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </mat-option>
+                                <mat-option *ngIf="CountyList.length == 0" disabled>
+                                    No Options
+                                </mat-option>
+                               
+                            </mat-autocomplete>
+                             <mat-error *ngIf="AddPermitForm.get('County')?.hasError('notInList')">
+                                     Select a valid county from list
+                             </mat-error>
+                        </div>
+                    </div>
+
+                    
+                </div>
+                <div class="row d-flex pb-0">
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="role" class="form-label labelClass lableSyle">City</label>
@@ -113,15 +161,14 @@
                              </mat-error>
                         </div>
                     </div>
-                </div>
-                <div class="row d-flex pb-0">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label for="role" class="form-label labelClass lableSyle">Permit Name</label>
+                            <label for="role" class="form-label labelClass lableSyle">Permit Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control custom-input" formControlName="PermitName">
+                            <span *ngIf="Submitted && AddPermitForm.get('PermitName')?.invalid" class="text-danger">Permit Name is Required</span>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label for="role" class="form-label labelClass lableSyle">Regulatory Agency Name</label>
                             <input type="text" class="form-control custom-input" formControlName="RegulatoryAgency"
@@ -136,7 +183,7 @@
                                     <div>
                                         <table>
                                             <tr class="tr">
-                                                <td style="width: 200px;">Agenct Name</td>
+                                                <td style="width: 200px;"> Regulatory Agency Name</td>
 
                                             </tr>
                                         </table>
@@ -204,11 +251,12 @@
                  <div class="row d-flex pb-0">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="role" class="form-label labelClass lableSyle">Type Of Project</label>
+                            <label for="role" class="form-label labelClass lableSyle">Type Of Project <span  class="text-danger">*</span></label>
                             <select id="TypeOfProject" class="form-control custom-input" formControlName="TypeOfProject">
                                 <option value="">Select</option>
                                 <option value="{{i}}" *ngFor="let i of TypeofPermitList">{{i}}</option>
                             </select>
+                            <span *ngIf="Submitted && AddPermitForm.get('TypeOfProject')?.invalid" class="text-danger">Type Of Project  is Required</span>
                         </div>
                     </div>
                     <div class="col-md-6">

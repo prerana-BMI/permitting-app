@@ -60,9 +60,9 @@ namespace Data.DbEntities
                     .HasMaxLength(45)
                     .HasColumnName("city");
 
-                entity.Property(e => e.Country)
+                entity.Property(e => e.County)
                     .HasMaxLength(45)
-                    .HasColumnName("country");
+                    .HasColumnName("county");
 
                 entity.Property(e => e.CreatedBy).HasColumnName("created_by");
 

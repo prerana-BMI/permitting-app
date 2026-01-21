@@ -11,6 +11,7 @@ namespace contract.Entities
         public List<string> State { get; set; }  = new List<string>();
         public List<string> City { get; set; }  = new List<string>();
         public string Category { get; set; }
+        public List<string> County { get; set; }
         public string PermitName { get; set; }
         public string RegulatoryAgencyName { get; set; }
     }

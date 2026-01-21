@@ -16,19 +16,22 @@ namespace permitapi.Controllers
         }
         [HttpGet]
         [Route("GetCityBySearchText")]
-        public BaseReturn<List<ECityMaster>> GetCityBySearchText(string City, string State)
+        public BaseReturn<List<ECityMaster>> GetCityBySearchText(string City, string State, string County )
         {
             var BaseObj = new BaseReturn<List<ECityMaster>>();
             List<ECityMaster> Result = new List<ECityMaster>();
             try
             {
 
-                Result = _context.CityMasters.Where(a => a.City.ToLower().Contains(City) && a.State == State).AsNoTracking().Select(a => new ECityMaster
+                Result = _context.CityMasters.Where(a => (string.IsNullOrEmpty(City) ? true : a.City.ToLower().Contains(City)) &&
+                                                     (string.IsNullOrEmpty(State) ? true :  a.State.ToLower().Contains(State))  &&
+                                                     (string.IsNullOrEmpty(County) ? true : a.County.ToLower().Contains(County))).AsNoTracking().Select(a => new ECityMaster
                 {
 
                     City = a.City,
                     State = a.State,
-                    Country = a.Country,
+                    County = a.County,
+                    Id  =  a.Id
 
                 }).ToList();
                 BaseObj.Data = Result;
@@ -63,7 +66,7 @@ namespace permitapi.Controllers
                 .Select(a => new ECityMaster
                 {
                     State = a.State,
-                    Country = a.Country
+                    County = a.County
                 })
                 .ToList();
 

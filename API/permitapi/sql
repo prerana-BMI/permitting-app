@@ -86,6 +86,10 @@ CHANGE COLUMN `permit_list` `permit_list` VARCHAR(1000) NULL DEFAULT NULL ;
 ALTER TABLE `permit_account_service`.`permit_master` 
 ADD COLUMN `from_bulk_upload` BIT(1) NOT NULL DEFAULT b'0' AFTER `created_on`;
 
+ALTER TABLE `permit_account_service`.`city_master` 
+CHANGE COLUMN `country` `county` VARCHAR(45) NULL DEFAULT NULL ;
+
+
 
 
 

@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { debounceTime } from 'rxjs';
 import { Constants } from 'src/app/Models/Constants';
@@ -25,7 +25,11 @@ isCityLoading : boolean= false;
  PermitData : any; 
 TypeofPermitList : Array<any> = [];
 CategoryList : Array<string> = [];
+isCountyLoading: boolean = false;
+CountyList: any[] = [];
 user : any = {};
+Submitted : boolean = false ;
+
  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddPermitsComponent>,
     private HttpService : HttpService,
@@ -43,12 +47,13 @@ this.GetMasterCategory();
 this.GeAllMasterPermitType()
 
 this.AddPermitForm= this.fb.group({
-      Category: [''],
-      TypeOfProject: [''],
+      Category: ['' , Validators.required],
+      TypeOfProject: ['', Validators.required],
       State: [''],
+      County :[''],
       City: [''],
-      Level: [''],
-      PermitName: [''],
+      Level: ['' , Validators.required],
+      PermitName: ['' , Validators.required],
       RegulatoryAgency: [''],
       Description: [''],
       Threshold: [''],
@@ -70,6 +75,9 @@ this.AddPermitForm= this.fb.group({
   this.AddPermitForm.get('City')?.setValidators([
     this.dataTransferService.valueInListValidator(() => this.CityList, 'City')
   ]);
+   this.AddPermitForm.get('County')?.setValidators([
+    this.dataTransferService.valueInListValidator(() => this.CountyList, 'County')
+  ]);
 
   this.initializeTyopeAhead();
   if (this.PermitData != null) {
@@ -89,8 +97,9 @@ this.AddPermitForm.controls['City'].valueChanges.pipe(debounceTime(this.typeahea
   this.CityList = [];
       if (typeof val === 'string' && val.length >= 1) {
          this.isCityLoading = true;
-          let state = this.AddPermitForm.controls['State'].value;
-         this.HttpService.httpGetCall(`${Constants.GetCityBySearchText}?City=${val.toLowerCase()}&State=${state.toLowerCase()}`,false,false).subscribe((res :any) => {
+          let state = this.AddPermitForm.controls['State'].value.toLowerCase();
+          let county =this.AddPermitForm.controls['County'].value.toLowerCase();
+         this.HttpService.httpGetCall(`${Constants.GetCityBySearchText}?State=${state}&County=${county}&City=${val.toLowerCase()}`,false,false).subscribe((res :any) => {
           if (res["Success"] ) {
             this.CityList = res["Data"];
           }
@@ -102,7 +111,7 @@ this.AddPermitForm.controls['City'].valueChanges.pipe(debounceTime(this.typeahea
       this.StateList = [];
       if (typeof val === 'string' && val.length >= 1) {
          this.isStateLoading = true;
-        this.HttpService.httpGetCall(Constants.GetStateBySearchText+  val.toLowerCase(),false , false).subscribe((res :any) => {
+        this.HttpService.httpGetCall(Constants.GetStateBySearchText +  val.toLowerCase(),false , false).subscribe((res :any) => {
           if (res["Success"]) {
 
             this.StateList = res["Data"];
@@ -111,6 +120,20 @@ this.AddPermitForm.controls['City'].valueChanges.pipe(debounceTime(this.typeahea
         });
       }
     });
+
+    this.AddPermitForm.controls['County'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
+      const state = this.AddPermitForm.controls['State'].value??"".toLowerCase();
+      if (typeof val === 'string' && val.length >= 1 && state) {
+        this.isCountyLoading = true;
+        this.HttpService.httpGetCall(`${Constants.GetCityBySearchText}?State=${state}&County=${val.toLowerCase()}`, false, false).subscribe((res: any) => {
+          if (res?.Success) {
+            this.CountyList = res.Data;
+          }
+          this.isCountyLoading = false;
+        });
+      }
+    });
+
 
      this.AddPermitForm.controls['RegulatoryAgency'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
       this.StateList = [];
@@ -129,17 +152,49 @@ this.AddPermitForm.controls['City'].valueChanges.pipe(debounceTime(this.typeahea
     
   }
 
+  OnChanges(event: Event)
+  {
+    let val = (event.target as HTMLInputElement).value ; 
+    if(val== "Federal")
+    {
+      this.AddPermitForm.controls['County'].disable();
+      this.AddPermitForm.controls['State'].disable();
+      this.AddPermitForm.controls['City'].disable();
+    }
+    else if(val == "State")
+    {
+      this.AddPermitForm.controls['State'].enable();
+       this.AddPermitForm.controls['County'].disable();
+     this.AddPermitForm.controls['City'].disable(); 
+    }
+    else if(val == "County")
+    {
+       this.AddPermitForm.controls['State'].enable();
+        this.AddPermitForm.controls['County'].enable();
+     this.AddPermitForm.controls['City'].disable(); 
+    }
+    else{
+       this.AddPermitForm.controls['County'].enable();
+     this.AddPermitForm.controls['City'].enable(); 
+     this.AddPermitForm.controls['State'].enable(); 
+    }
+    
+    
+  }
+
 SetData()
     {
       this.RegagencyList= [{Name : this.PermitData.RegulatoryAgencyName,Id : this.PermitData.RegulatoryAgencyId}];
       this.StateList = [{State : this.PermitData.State}];
       this.CityList = [{City : this.PermitData.City}];
+      this.CountyList = [{County : this.PermitData.County}]
       this.AddPermitForm.patchValue ({
       Category : this.PermitData.Category,
       TypeOfProject: this.PermitData.TypeOfProject,
       AdditionalFees : this.PermitData.AdditionalBasic,
       State: this.PermitData.State,
       City: this.PermitData.City,
+      County : this.PermitData.County,
       Level:  this.PermitData.Level,
       PermitName: this.PermitData.PermitName,
       RegulatoryAgency: this.PermitData.RegulatoryAgencyName,
@@ -158,11 +213,17 @@ SetData()
       }
     }
   Submit() {
+    this.Submitted = true; 
+    if(this.AddPermitForm.invalid)
+    {
+     return;
+    }
     let param = {
       Category: this.AddPermitForm.controls['Category'].value,
       TypeOfProject: this.AddPermitForm.controls['TypeOfProject'].value,
       State: this.AddPermitForm.controls['State'].value,
       City: this.AddPermitForm.controls['City'].value,
+      County: this.AddPermitForm.controls['County'].value,
       Level: this.AddPermitForm.controls['Level'].value,
       PermitName: this.AddPermitForm.controls['PermitName'].value,
       RegulatoryAgencyName: this.AddPermitForm.controls['RegulatoryAgency'].value,
@@ -211,6 +272,13 @@ clear()
     return '';
   }
 
+  CountyTypeAheadDisplay(val: any) {
+    let res = this.CountyList.find(a => a.County == val);
+    if (res != null) {
+      return res.County;
+    }
+    return ''
+  }
 
 // GeAllMasterPermitType()
 // {
