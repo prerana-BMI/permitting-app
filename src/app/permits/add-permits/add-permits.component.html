@@ -9,17 +9,18 @@
                 <div class="row d-flex pb-0">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label for="username" class="form-label labelClass lableSyle">Category</label>
+                            <label for="username" class="form-label labelClass lableSyle">Category<span class="text-danger">*</span></label>
                             <select name="" id="" class="form-control custom-input" formControlName="Category">
                                 <option value="">Select</option>
                                 <option value="{{i}}" *ngFor="let i of CategoryList">{{i}}</option>
                             </select>
+                            <span *ngIf="Submitted && AddPermitForm.get('Category')?.invalid" class="text-danger">Category Name is Required</span>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label for="role" class="form-label labelClass lableSyle">Level</label>
+                            <label for="role" class="form-label labelClass lableSyle">Level <span  class="text-danger">*</span></label>
                             <select name="" id="" class="form-control custom-input" formControlName="Level" (change)="OnChanges($event)">
                                 <option value="">Select</option>
                                 <option value="Federal">Federal</option>
@@ -27,6 +28,7 @@
                                 <option value="County">County</option>
                                  <option value="City">City</option>
                             </select>
+                            <span *ngIf="Submitted && AddPermitForm.get('Level')?.invalid" class="text-danger">Level  is Required</span>
                         </div>
                     </div>
 
@@ -161,8 +163,9 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label for="role" class="form-label labelClass lableSyle">Permit Name</label>
+                            <label for="role" class="form-label labelClass lableSyle">Permit Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control custom-input" formControlName="PermitName">
+                            <span *ngIf="Submitted && AddPermitForm.get('PermitName')?.invalid" class="text-danger">Permit Name is Required</span>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -248,11 +251,12 @@
                  <div class="row d-flex pb-0">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="role" class="form-label labelClass lableSyle">Type Of Project</label>
+                            <label for="role" class="form-label labelClass lableSyle">Type Of Project <span  class="text-danger">*</span></label>
                             <select id="TypeOfProject" class="form-control custom-input" formControlName="TypeOfProject">
                                 <option value="">Select</option>
                                 <option value="{{i}}" *ngFor="let i of TypeofPermitList">{{i}}</option>
                             </select>
+                            <span *ngIf="Submitted && AddPermitForm.get('TypeOfProject')?.invalid" class="text-danger">Type Of Project  is Required</span>
                         </div>
                     </div>
                     <div class="col-md-6">

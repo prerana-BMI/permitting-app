@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { debounceTime } from 'rxjs';
 import { Constants } from 'src/app/Models/Constants';
@@ -28,6 +28,8 @@ CategoryList : Array<string> = [];
 isCountyLoading: boolean = false;
 CountyList: any[] = [];
 user : any = {};
+Submitted : boolean = false ;
+
  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddPermitsComponent>,
     private HttpService : HttpService,
@@ -45,13 +47,13 @@ this.GetMasterCategory();
 this.GeAllMasterPermitType()
 
 this.AddPermitForm= this.fb.group({
-      Category: [''],
-      TypeOfProject: [''],
+      Category: ['' , Validators.required],
+      TypeOfProject: ['', Validators.required],
       State: [''],
       County :[''],
       City: [''],
-      Level: [''],
-      PermitName: [''],
+      Level: ['' , Validators.required],
+      PermitName: ['' , Validators.required],
       RegulatoryAgency: [''],
       Description: [''],
       Threshold: [''],
@@ -211,6 +213,11 @@ SetData()
       }
     }
   Submit() {
+    this.Submitted = true; 
+    if(this.AddPermitForm.invalid)
+    {
+     return;
+    }
     let param = {
       Category: this.AddPermitForm.controls['Category'].value,
       TypeOfProject: this.AddPermitForm.controls['TypeOfProject'].value,
