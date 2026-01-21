@@ -20,11 +20,12 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="role" class="form-label labelClass lableSyle">Level</label>
-                            <select name="" id="" class="form-control custom-input" formControlName="Level">
+                            <select name="" id="" class="form-control custom-input" formControlName="Level" (change)="OnChanges($event)">
                                 <option value="">Select</option>
                                 <option value="Federal">Federal</option>
                                 <option value="State">State</option>
                                 <option value="County">County</option>
+                                 <option value="City">City</option>
                             </select>
                         </div>
                     </div>
@@ -72,6 +73,51 @@
                         </div>
                     </div>
 
+                     <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="role" class="form-label labelClass lableSyle">County</label>
+                            <input type="text" class="form-control custom-input"
+                                oninput="this.value = this.value.toUpperCase()" formControlName="County"
+                                [matAutocomplete]="cntlist">
+                            <mat-autocomplete #cntlist="matAutocomplete" [displayWith]="CountyTypeAheadDisplay.bind(this)">
+                                <mat-option *ngIf="isCountyLoading">
+                                    <mat-spinner diameter="20" style="margin-left: 40%;" color="accent">
+                                    </mat-spinner>
+                                </mat-option>
+                                <mat-option class="mat-opt1" disabled>
+                                    <div>
+                                        <table>
+                                            <tr class="tr">
+                                                <td style="width: 200px;">County</td>
+
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </mat-option>
+                                <mat-option *ngFor="let l of CountyList | slice:0:30" [value]="l.County" class="mat-opt">
+                                    <div>
+                                        <table>
+                                            <tr class="tr">
+                                                <td class="td td1" style="width: 200px;">{{l.County}}</td>
+
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </mat-option>
+                                <mat-option *ngIf="CountyList.length == 0" disabled>
+                                    No Options
+                                </mat-option>
+                               
+                            </mat-autocomplete>
+                             <mat-error *ngIf="AddPermitForm.get('County')?.hasError('notInList')">
+                                     Select a valid county from list
+                             </mat-error>
+                        </div>
+                    </div>
+
+                    
+                </div>
+                <div class="row d-flex pb-0">
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="role" class="form-label labelClass lableSyle">City</label>
@@ -113,15 +159,13 @@
                              </mat-error>
                         </div>
                     </div>
-                </div>
-                <div class="row d-flex pb-0">
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="role" class="form-label labelClass lableSyle">Permit Name</label>
                             <input type="text" class="form-control custom-input" formControlName="PermitName">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label for="role" class="form-label labelClass lableSyle">Regulatory Agency Name</label>
                             <input type="text" class="form-control custom-input" formControlName="RegulatoryAgency"
@@ -136,7 +180,7 @@
                                     <div>
                                         <table>
                                             <tr class="tr">
-                                                <td style="width: 200px;">Agenct Name</td>
+                                                <td style="width: 200px;"> Regulatory Agency Name</td>
 
                                             </tr>
                                         </table>

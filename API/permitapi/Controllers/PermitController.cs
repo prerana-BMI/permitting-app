@@ -354,6 +354,7 @@ namespace permitapi.Controllers
                         permitObj.TypeOfProject = Request.TypeOfProject;
                         permitObj.Level = Request.Level;
                         permitObj.City = Request.City;
+                        permitObj.County = Request.County;
                         permitObj.State = Request.State;
                         permitObj.CreatedBy = _currentUserService.User.UserId;
                         permitObj.RegulatoryAgencyName = Request.RegulatoryAgencyName;
@@ -380,6 +381,7 @@ namespace permitapi.Controllers
                         PermitName = Request.PermitName,
                         Level = Request.Level,
                         City = Request.City,
+                        County = Request.County,
                         State = Request.State,
                         RegulatoryAgencyName = Request.RegulatoryAgencyName,
                         RegulatoryAgencyId = Request.RegulatoryAgencyId,
