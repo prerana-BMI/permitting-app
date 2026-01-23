@@ -315,6 +315,7 @@ namespace permitapi.Controllers
                               AgencyReviewTimeMin = detail.AgencyReviewTimeMin,
                               AgencyReviewTimeMax = detail.AgencyReviewTimeMax,
                               BasicFees = detail.BasicFees,
+                              AdditionalBasic= detail.AdditionalBasic,
                               PermitName = master.PermitName,
                               Id = master.Id
                           })
@@ -345,7 +346,7 @@ namespace permitapi.Controllers
                 if (Request.Id > 0)
                 {
                     var permitObj = _context.PermitMasters.FirstOrDefault(a => a.Id == Request.Id);
-                    var PermitDetailsObj = _context.PermitMasterDetails.FirstOrDefault(a => a.PermitId == Request.PermitId);
+                    var PermitDetailsObj = _context.PermitMasterDetails.FirstOrDefault(a => a.PermitId == Request.Id);
 
                     if (permitObj != null && PermitDetailsObj != null)
                     {
