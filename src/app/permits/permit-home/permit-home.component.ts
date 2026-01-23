@@ -92,10 +92,17 @@ export class PermitHomeComponent implements OnInit {
     this.SearchForm.controls['county'].valueChanges.pipe(debounceTime(this.typeaheadDebounce)).subscribe(val => {
       const state = this.SearchForm.controls['state'].value;
       if (typeof val === 'string' && val.length >= 1 && state) {
+        
         this.isCountyLoading = true;
         this.HttpService.httpGetCall(`${Constants.GetCityBySearchText}?State=${state.toLowerCase()}&County=${val.toLowerCase()}&City=`, false, false).subscribe((res: any) => {
           if (res?.Success) {
-            this.CountyList = res.Data;
+            const map = new Map<string, any>();
+            res.Data.forEach((item: any) => {
+              if (!map.has(item.County)) {
+                map.set(item.County, item);
+              }
+            });
+            this.CountyList = Array.from(map.values());
           }
           this.isCountyLoading = false;
         });
@@ -110,7 +117,16 @@ export class PermitHomeComponent implements OnInit {
         this.isCityLoading = true;
         this.HttpService.httpGetCall(`${Constants.GetCityBySearchText}?State=${state.toLowerCase()}&County=${county.toLowerCase()}&City=${val.toLowerCase()}`, false, false).subscribe((res: any) => {
           if (res["Success"]) {
-            this.CityList = res["Data"];
+            const map = new Map<string, any>();
+            res.Data.forEach((item:any) => {
+              if(!map.has(item.City))
+              {
+                map.set(item.City , item)
+              }
+              
+            });
+            
+            this.CityList = Array.from(map.values())
           }
           this.isCityLoading = false;
         });

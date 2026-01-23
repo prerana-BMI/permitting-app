@@ -101,7 +101,15 @@ this.AddPermitForm.controls['City'].valueChanges.pipe(debounceTime(this.typeahea
           let county =this.AddPermitForm.controls['County'].value.toLowerCase();
          this.HttpService.httpGetCall(`${Constants.GetCityBySearchText}?State=${state}&County=${county}&City=${val.toLowerCase()}`,false,false).subscribe((res :any) => {
           if (res["Success"] ) {
-            this.CityList = res["Data"];
+            const map = new Map<string,any>();
+            res.Data.forEach((item : any) => {
+              if(!map.has(item.City))
+              {
+                map.set(item.City, item)
+              }
+            });
+            
+            this.CityList = Array.from(map.values());
           }
           this.isCityLoading = false;
         });
@@ -127,7 +135,15 @@ this.AddPermitForm.controls['City'].valueChanges.pipe(debounceTime(this.typeahea
         this.isCountyLoading = true;
         this.HttpService.httpGetCall(`${Constants.GetCityBySearchText}?State=${state}&County=${val.toLowerCase()}`, false, false).subscribe((res: any) => {
           if (res?.Success) {
-            this.CountyList = res.Data;
+            const map= new Map<string,any>();
+            res.Data.forEach((item:any) => {
+             if(!map.has(item.County))
+             {
+              map.set(item.County,item)
+             }
+            });
+            this.CountyList = Array.from(map.values());
+
           }
           this.isCountyLoading = false;
         });
@@ -234,7 +250,7 @@ SetData()
       PrepTimeMax: this.AddPermitForm.controls['MaxPrepTime'].value,
       AgencyReviewTimeMin: this.AddPermitForm.controls['MinAgencyReviewTime'].value,
       AgencyReviewTimeMax: this.AddPermitForm.controls['MaxAgencyReviewTime'].value,
-      BasicFees: this.AddPermitForm.controls['BasicFees'].value,
+      BasicFees: this.AddPermitForm.controls['BasicFees'].value || 0,
       Id: this.PermitData != null &&   this.PermitData != undefined ? this.PermitData.Id : 0,
       AdditionalBasic : this.AddPermitForm.controls['AdditionalFees'].value
     }

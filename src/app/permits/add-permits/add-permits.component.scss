@@ -2,13 +2,13 @@
 
 .add-edit-popuop {
   
-  overflow: hidden;
+   overflow-y: auto;
  
   box-sizing: border-box;
 }
 
 .shadowed-panel {
-overflow-y: none;
+
 .row {
     padding: 20px 30px 30px;
   }

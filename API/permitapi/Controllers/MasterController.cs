@@ -24,7 +24,7 @@ namespace permitapi.Controllers
             {
 
                 Result = _context.CityMasters.Where(a => (string.IsNullOrEmpty(City) ? true : a.City.ToLower().Contains(City)) &&
-                                                     (string.IsNullOrEmpty(State) ? true :  a.State.ToLower().Contains(State))  &&
+                                                       (a.State.ToLower()==State) &&
                                                      (string.IsNullOrEmpty(County) ? true : a.County.ToLower().Contains(County))).AsNoTracking().Select(a => new ECityMaster
                 {
 
