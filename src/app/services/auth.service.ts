@@ -102,19 +102,19 @@ export class AuthService {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         this.router.navigate(['/account/login']);
-
-   if(RedirectedFromLogin)  
-    {
-     this.SendMailUsingGraph(
-       Constants.AdminUser,
-       `Permit application Access Requested by ${UserName}`,
-       `User <b>${UserName}</b> tried to login at ${new Date().toLocaleString()}.<br><br>
+        const createdOn = new Date(res['Data']?.CreatedOn);
+        const diffMs = (new Date().getTime() - createdOn.getTime()) / (1000 * 60 * 60 * 24);
+        if (RedirectedFromLogin && diffMs >= 7) {
+          this.SendMailUsingGraph(
+            Constants.AdminUser,
+            `Permit application Access Requested by ${UserName}`,
+            `User <b>${UserName}</b> tried to login at ${new Date().toLocaleString()}.<br><br>
    Kindly use the given URL to provide an Access of permit application:
    <a href="https://permitappclientservice-cjabhxhnbybtc2cg.southcentralus-01.azurewebsites.net/">
      Open Permit Application
    </a>`).subscribe();
-   this.toastr.success('Your access request has been submitted successfully');
-    }  
+          this.toastr.success('Your access request has been submitted successfully');
+        }  
 
         
       }
