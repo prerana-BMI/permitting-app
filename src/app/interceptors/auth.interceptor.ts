@@ -41,11 +41,11 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       tap(event => {
         if (event instanceof HttpResponse) {
-          if (event.body.Message !== undefined && event.body.Message !== '' && event.body.Message !== null) {
-            if (event.body.Success === true) {
-              this.toastr.success(event.body.Message, 'Success');
+          if (event.body?.Message !== undefined && event.body?.Message !== '' && event.body?.Message !== null) {
+            if (event.body?.Success === true) {
+              this.toastr.success(event.body?.Message, 'Success');
             } else {
-              this.toastr.error(event.body.Message, 'Error');
+              this.toastr.error(event.body?.Message, 'Error');
             }
           }
         }

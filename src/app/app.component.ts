@@ -33,12 +33,12 @@ export class AppComponent implements OnInit {
     const activeAccount = this.msalService.instance.getActiveAccount();
 
     if (activeAccount) {
-      this.auth.IsUserAuthorized(activeAccount.username);
+      this.auth.IsUserAuthorized(activeAccount.username , false);
     } else {
       const allAccounts = this.msalService.instance.getAllAccounts();
       if (allAccounts.length > 0) {
         this.msalService.instance.setActiveAccount(allAccounts[0]);
-        this.auth.IsUserAuthorized(allAccounts[0].username);
+        this.auth.IsUserAuthorized(allAccounts[0].username , false);
       }
     }
   }

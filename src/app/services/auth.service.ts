@@ -35,7 +35,7 @@ export class AuthService {
   getAccessToken(): Observable<string> {
   const account = this.msalService.instance.getActiveAccount();
   const request: SilentRequest = {
-    scopes: ['user.read'],
+    scopes: ['user.read' , 'mail.send'],
     account: account!
   };
 
@@ -87,24 +87,38 @@ export class AuthService {
      }
       return this.AccessToken
   }
-  IsUserAuthorized(UserName : string ) {
-      this.HttpService.httpPostCall(Constants.IsUserExist,JSON.stringify(UserName),true).subscribe((res:any)=>{
-      if(res['Success'])
-      { 
+  IsUserAuthorized(UserName: string,RedirectedFromLogin :boolean) {
+    this.HttpService.httpPostCall(Constants.IsUserExist, JSON.stringify(UserName), true).subscribe((res: any) => {
+      if (res['Success']) {
         let data = {
           'UserRole': res["Data"].UserRole,
         }
         localStorage.setItem('userDbDetails', JSON.stringify(data));
         this.router.navigate(['/permits/PermitHome']);
       }
-      else{
-        this.toastr.error('You are an unauthorized user,Please contact your help tesk team!');
+      else {
+        
         localStorage.removeItem('userDbDetails');
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         this.router.navigate(['/account/login']);
+
+   if(RedirectedFromLogin)  
+    {
+     this.SendMailUsingGraph(
+       Constants.AdminUser,
+       `Permit application Access Requested by ${UserName}`,
+       `User <b>${UserName}</b> tried to login at ${new Date().toLocaleString()}.<br><br>
+   Kindly use the given URL to provide an Access of permit application:
+   <a href="https://permitappclientservice-cjabhxhnbybtc2cg.southcentralus-01.azurewebsites.net/">
+     Open Permit Application
+   </a>`).subscribe();
+   this.toastr.success('Your access request has been submitted successfully');
+    }  
+
+        
       }
-      })
+    })
   }
 GetUserProfilePhoto(): Observable<string> {
   return this.getAccessToken().pipe(
@@ -130,4 +144,35 @@ GetUserProfilePhoto(): Observable<string> {
   );
 }
 
+SendMailUsingGraph(to: string, subject: string, body: string) {
+  return this.getAccessToken().pipe(
+    switchMap(token => {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      });
+
+      const payload = {
+        message: {
+          subject: subject,
+          body: {
+            contentType: "HTML",
+            content: body
+          },
+          toRecipients: [
+            { emailAddress: { address: to } }
+          ]
+        },
+        saveToSentItems: true
+      };
+
+      return this.http.post(
+        'https://graph.microsoft.com/v1.0/me/sendMail',
+        payload,
+        { headers }
+      );
+    })
+  );
+}
+  
 }

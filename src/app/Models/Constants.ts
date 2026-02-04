@@ -36,5 +36,5 @@ export class Constants{
         { Role : "Admin", Value : ["Home","Matrix List" , "Users", "Permit Register"]},
         { Role : "Editior", Value : ["Home","Matrix List" , "Permit Register"]}
     ];
-     
+    public static AdminUser = "prrasam@burnsmcd.com"
 }

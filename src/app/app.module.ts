@@ -86,7 +86,7 @@ export function initializeMsalInstance(msalService: MsalService): () => Promise<
       {
         interactionType: InteractionType.Redirect, // Required
         authRequest: {
-          scopes: ['user.read']
+          scopes: ['user.read' , 'mail.send']
         },
       },
       {

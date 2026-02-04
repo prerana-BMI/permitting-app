@@ -40,7 +40,7 @@ Login() {
   console.log("Active account found:", activeAccount);
   this.LoderService.display(true);
   // this.authService.getAccessToken('');
-  this.authService.IsUserAuthorized(activeAccount.username);
+  this.authService.IsUserAuthorized(activeAccount.username , true);
   this.LoderService.display(false);
 }
 
