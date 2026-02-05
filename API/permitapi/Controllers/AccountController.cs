@@ -79,6 +79,7 @@ namespace permitapi.Controllers
             try
             {
                 var Result = _context.Users.Where(a => a.UserName.Equals(UserName)).FirstOrDefault();
+                var RsultTemp = Result;
                 if (Result == null && !string.IsNullOrEmpty(UserName))
                 {
                     var UserObj = new User();
@@ -90,16 +91,17 @@ namespace permitapi.Controllers
                     _context.Users.Add(UserObj);
                   
                 }
-                BaseObj.Data = _mapper.Map<EUsers>(Result);
+               
 
                 if (Result != null && Result.IsActive == false)
                 {
                     Result.LastLoginDate = DateTime.Now;
+                   
                     _context.Users.Update(Result);
                 }
                 _context.SaveChanges();
 
-                
+                BaseObj.Data = _mapper.Map<EUsers>(RsultTemp);
                 BaseObj.Success = Result != null && Result.IsActive == true ? true : false;
             }
             catch (Exception ex)
