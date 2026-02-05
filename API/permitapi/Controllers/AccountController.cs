@@ -86,10 +86,18 @@ namespace permitapi.Controllers
                     UserObj.UserRole = "User";
                     UserObj.IsActive = false;
                     UserObj.CreatedBy = 0;
+                    UserObj.LastLoginDate = DateTime.Now;
                     _context.Users.Add(UserObj);
-                    _context.SaveChanges();
+                  
                 }
-                
+
+                if (Result != null && Result.IsActive == false)
+                {
+                    Result.LastLoginDate = DateTime.Now;
+                    _context.Users.Update(Result);
+                }
+                _context.SaveChanges();
+
                 BaseObj.Data = _mapper.Map<EUsers>(Result);
                 BaseObj.Success = Result != null && Result.IsActive == true ? true : false;
             }

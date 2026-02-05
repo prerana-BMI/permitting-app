@@ -246,6 +246,12 @@ namespace Data.DbEntities
                 entity.Property(e => e.UserRole)
                     .HasMaxLength(20)
                     .HasColumnName("user_role");
+                
+                entity.Property(e => e.LastLoginDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("last_login_date")
+                    .HasDefaultValue(null);
+            
             });
 
             OnModelCreatingPartial(modelBuilder);
