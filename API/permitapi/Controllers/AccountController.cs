@@ -90,6 +90,7 @@ namespace permitapi.Controllers
                     _context.Users.Add(UserObj);
                   
                 }
+                BaseObj.Data = _mapper.Map<EUsers>(Result);
 
                 if (Result != null && Result.IsActive == false)
                 {
@@ -98,7 +99,7 @@ namespace permitapi.Controllers
                 }
                 _context.SaveChanges();
 
-                BaseObj.Data = _mapper.Map<EUsers>(Result);
+                
                 BaseObj.Success = Result != null && Result.IsActive == true ? true : false;
             }
             catch (Exception ex)
