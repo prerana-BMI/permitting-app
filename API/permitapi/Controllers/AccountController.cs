@@ -78,7 +78,7 @@ namespace permitapi.Controllers
 
             try
             {
-                var Result = _context.Users.Where(a => a.UserName.Equals(UserName)).AsNoTracking().FirstOrDefault();
+                var Result = _context.Users.Where(a => a.UserName.Equals(UserName)).FirstOrDefault();
                 if (Result == null && !string.IsNullOrEmpty(UserName))
                 {
                     var UserObj = new User();

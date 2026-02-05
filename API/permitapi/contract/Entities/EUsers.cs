@@ -10,5 +10,6 @@ public class EUsers : EPaginationReq
     public bool? IsActive { get; set; }
     public int? CreatedBy { get; set; }
     public DateTime? CreatedOn { get; set; }
+    public DateTime? LastLoginDate { get; set; }
     public int Id { get; set; }
 }
