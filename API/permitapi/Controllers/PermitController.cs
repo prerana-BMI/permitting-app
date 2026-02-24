@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace permitapi.Controllers
 {
@@ -22,23 +23,25 @@ namespace permitapi.Controllers
         private readonly permit_account_serviceContext _context;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
+        private readonly ILogger<PermitController> _logger;
 
-        public PermitController(permit_account_serviceContext context, IMapper mapper, ICurrentUserService currentUserService)
+        public PermitController(permit_account_serviceContext context, IMapper mapper, ICurrentUserService currentUserService , ILogger<PermitController> logger)
         {
             _context = context;
             _mapper = mapper;
             _currentUserService = currentUserService;
+            _logger = logger;
         }
         
         [HttpGet]
         [Route("GetAllMasterPermits")]
         public BaseReturn<List<EPermitMaster>> GetAllMasterPermits(EPermitMaster Request)
         {
+            _logger.LogInformation("GetAllMasterPermits started at {Time} by User {UserId} with request details {Request}",DateTime.UtcNow,_currentUserService?.User?.UserId , JsonSerializer.Serialize(Request));
             var BaseObj = new BaseReturn<List<EPermitMaster>>();
             List<EPermitMaster> Result = new List<EPermitMaster>();
             try
             {
-               
                 Result = _context.PermitMasters.Where(a =>
                                                 (a.Category.Contains(Request.Category) || string.IsNullOrEmpty(Request.Category)) &&
                                                 (a.PermitName.Contains(Request.PermitName) || string.IsNullOrEmpty(Request.PermitName)))
@@ -68,12 +71,13 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("GetAllMasterPermits with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
                 BaseObj.Message = ex.Message;
                 BaseObj.Success = false;
             }
             finally
             {
-
+                 _logger.LogInformation("GetAllMasterPermits ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId )  ;
             }
             return BaseObj;
         }
@@ -82,6 +86,7 @@ namespace permitapi.Controllers
         [Route("GetPermitByLocation")]
         public BaseReturn<List<EPermitMaster>> GetPermitByLocation(EPermitByLocation Request)
         {
+            _logger.LogInformation("GetPermitByLocation started at {Time} by User {UserId} with request details {Request}",DateTime.UtcNow,_currentUserService?.User?.UserId ,JsonSerializer.Serialize(Request));
             var BaseObj = new BaseReturn<List<EPermitMaster>>();
             List<EPermitMaster> Result = new List<EPermitMaster>();
             try
@@ -227,12 +232,13 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
+               _logger.LogError("GetPermitByLocation with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
                 BaseObj.Message = ex.Message;
                 BaseObj.Success = false;
             }
             finally
             {
-
+                 _logger.LogInformation("GetPermitByLocation ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId )  ;
             }
             return BaseObj;
         }
@@ -241,6 +247,7 @@ namespace permitapi.Controllers
         [Route("GetAllFederalPermits")]
         public BaseReturn<List<EPermitMaster>> GetAllFederalPermits(EPermitByLocation Request)
         {
+            _logger.LogInformation("GetAllFederalPermits started at {Time} by User {UserId} with request details {Request}",DateTime.UtcNow,_currentUserService?.User?.UserId , JsonSerializer.Serialize(Request));
             var BaseObj = new BaseReturn<List<EPermitMaster>>();
             List<EPermitMaster> Result = new List<EPermitMaster>();
             try
@@ -273,12 +280,13 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("GetAllFederalPermits with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
                 BaseObj.Message = ex.Message;
                 BaseObj.Success = false;
             }
             finally
             {
-
+                _logger.LogInformation("GetAllFederalPermits ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId )  ;
             }
             return BaseObj;
         }
@@ -287,6 +295,8 @@ namespace permitapi.Controllers
         [Route("GetPermitById")]
         public BaseReturn<EPermitMasterDetail> GetPermitById(int PermitId)
         {
+            var Request = new {PermitId };
+            _logger.LogInformation("GetPermitById started at {Time} by User {UserId} with request details {Request}",DateTime.UtcNow,_currentUserService?.User?.UserId , JsonSerializer.Serialize(Request));
             var BaseObj = new BaseReturn<EPermitMasterDetail>();
 
             try
@@ -325,12 +335,13 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("GetPermitById with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
                 BaseObj.Message = ex.Message;
                 BaseObj.Success = false;
             }
             finally
             {
-
+                 _logger.LogInformation("GetPermitById ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId )  ;
             }
             return BaseObj;
         }
@@ -339,10 +350,11 @@ namespace permitapi.Controllers
         [Route("SavePermits")]
         public BaseReturn<int> SavePermits([FromBody] EPermitMasterDetail Request)
         {
+            _logger.LogInformation("SavePermits started at {Time} by User {UserId} with request details {Request}",DateTime.UtcNow,_currentUserService?.User?.UserId , JsonSerializer.Serialize(Request));
             var BaseObj = new BaseReturn<int>();
-
             try
             {
+                
                 if (Request.Id > 0)
                 {
                     var permitObj = _context.PermitMasters.FirstOrDefault(a => a.Id == Request.Id);
@@ -412,12 +424,13 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("SavePermits with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
                 BaseObj.Message = ex.Message;
                 BaseObj.Success = false;
             }
             finally
             {
-
+            _logger.LogInformation("SavePermits ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId )  ;
             }
             return BaseObj;
         }
@@ -426,11 +439,11 @@ namespace permitapi.Controllers
         [Route("SavePermitMatrix")]
         public BaseReturn<int> SavePermitMatrix([FromBody] EPermitMatrix Request)
         {
+             _logger.LogInformation("SavePermitMatrix started at {Time} by User {UserId} with request details {Request}",DateTime.UtcNow,_currentUserService?.User?.UserId ,JsonSerializer.Serialize(Request));
             var BaseObj = new BaseReturn<int>();
 
             try
             {
-
                 if (Request.Id > 0)
                 {
                     var UpdatePermit = _context.PermitMatrices.Where(a => a.Id == Request.Id).FirstOrDefault();
@@ -462,12 +475,13 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("SavePermitMatrix with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
                 BaseObj.Message = ex.Message;
                 BaseObj.Success = false;
             }
             finally
             {
-
+                  _logger.LogInformation("SavePermitMatrix ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId )  ;
             }
             return BaseObj;
         }
@@ -476,10 +490,12 @@ namespace permitapi.Controllers
         [Route("GetAllMatrix")]
         public BaseReturn<List<EPermitMatrix>> GetAllMatrix(EPermitMatrix Request)
         {
+            _logger.LogInformation("GetAllMatrix started at {Time} by User {UserId} with request details {Request}", DateTime.UtcNow,_currentUserService?.User?.UserId , JsonSerializer.Serialize(Request));
             var BaseObj = new BaseReturn<List<EPermitMatrix>>();
 
             try
             {
+                
                 var Result = _context.PermitMatrices.Where(a => (a.MatrixName == Request.MatrixName || string.IsNullOrEmpty(Request.MatrixName)) &&
                                                        (a.ClientName == Request.ClientName || Request.ClientName == null) &&  a.Status== 1)
                                                        .Select(a => new EPermitMatrix()
@@ -506,12 +522,13 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("GetAllMatrix with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
                 BaseObj.Message = ex.Message;
                 BaseObj.Success = false;
             }
             finally
             {
-
+                 _logger.LogInformation("GetAllMatrix ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId )  ;
             }
             return BaseObj;
         }
@@ -524,6 +541,8 @@ namespace permitapi.Controllers
 
             try
             {
+                var Request = new {MatrixId};
+                _logger.LogInformation("GetMatrixDetailsById started at {Time} by User {UserId} with request details {Request}",DateTime.UtcNow,_currentUserService?.User?.UserId , JsonSerializer.Serialize(Request));
                 var Result = _context.PermitMatrices.Where(a => a.Id == MatrixId)
                        .Select(a => new EPermitMatrix()
                     {
@@ -591,8 +610,13 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
+                 _logger.LogError("GetMatrixDetailsById with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
                 BaseObj.Message = ex.Message;
                 BaseObj.Success = false;
+            }
+            finally
+            {
+                _logger.LogInformation("GetMatrixDetailsById ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId )  ;
             }
 
             return BaseObj;
@@ -602,10 +626,12 @@ namespace permitapi.Controllers
         [Route("ExportPermitToExcel")]
         public BaseReturn<List<EPermitMasterDetail>> ExportPermitsToExcel(EPermitByLocation Request)
         {
+            _logger.LogInformation("ExportPermitToExcel started at {Time} by User {UserId} with request details {Request}",DateTime.UtcNow,_currentUserService?.User?.UserId , JsonSerializer.Serialize(Request) );
             var BaseObj = new BaseReturn<List<EPermitMasterDetail>>();
             List<EPermitMasterDetail> Result = new List<EPermitMasterDetail>();
             try
             {
+               
                 if (Request.Level != "All")
                 {
                     Result = _context.PermitMasters.Where(a =>
@@ -683,12 +709,13 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
+                 _logger.LogError("ExportPermitToExcel with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
                 BaseObj.Message = ex.Message;
                 BaseObj.Success = false;
             }
             finally
             {
-
+                _logger.LogInformation("ExportPermitToExcel ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId );
             }
             return BaseObj;
         }
@@ -698,10 +725,13 @@ namespace permitapi.Controllers
         [Route("DeleteMatrixDetailsById")]
         public BaseReturn<bool> DeleteMatrixDetailsById(int MatrixId)
         {
+            var Request = new {MatrixId};
+            _logger.LogInformation("DeleteMatrixDetailsById started at {Time} by User {UserId} with request details {Request}",DateTime.UtcNow,_currentUserService?.User?.UserId , JsonSerializer.Serialize(Request));
             var BaseObj = new BaseReturn<bool>();
 
             try
             {
+               
                 var Result = _context.PermitMatrices.Where(a => a.Id == MatrixId).FirstOrDefault();
                 Result.Status = 2;
                 _context.PermitMatrices.Update(Result);
@@ -719,8 +749,13 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
+                 _logger.LogError("DeleteMatrixDetailsById with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
                 BaseObj.Message = ex.Message;
                 BaseObj.Success = false;
+            }
+            finally
+            {
+                 _logger.LogInformation("DeleteMatrixDetailsById ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId );
             }
 
             return BaseObj;
@@ -729,7 +764,8 @@ namespace permitapi.Controllers
         [Route("DownloadExcel")]
         public IActionResult DownloadExcel()
         {
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            _logger.LogInformation("DownloadExcel started at {Time} by User {UserId}",DateTime.UtcNow,_currentUserService?.User?.UserId);
+             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             using var package = new ExcelPackage();
             var mainSheet = package.Workbook.Worksheets.Add("Permit");
@@ -742,10 +778,12 @@ namespace permitapi.Controllers
         "Agency Review Time Min", "Agency Review Time Max",
         "Type Of Project", "Additional Basic Fees",
         "Description", "Threshold",
-        "Regulatory Agency",         // O (15)
-        "Regulatory Agency ID"       // P (16) hidden
-    };
-
+        "Regulatory Agency",         
+        "Regulatory Agency ID"      
+        };
+        try
+        {
+           
             for (int i = 0; i < headers.Length; i++)
                 mainSheet.Cells[1, i + 1].Value = headers[i];
 
@@ -845,7 +883,17 @@ namespace permitapi.Controllers
             // Auto-fit
             mainSheet.Cells.AutoFitColumns();
 
-            return File(
+           
+            }
+            catch(Exception ex)
+            {
+                 _logger.LogError("DownloadExcel with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
+            }
+            finally
+            {
+                 _logger.LogInformation("DownloadExcel ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId );
+            }
+             return File(
                 package.GetAsByteArray(),
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 "PermitBulkUpload.xlsx"
@@ -856,8 +904,11 @@ namespace permitapi.Controllers
         [HttpPost("ImportExcelFile")]
         public BaseReturn<bool> ReadExcel(IFormFile file)
         {
+            _logger.LogInformation("ImportExcelFile started at {Time} by User {UserId}",DateTime.UtcNow,_currentUserService?.User?.UserId);
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var BaseObj = new BaseReturn<bool>();
+            try
+            {
             if (file == null || file.Length == 0)
             {
                 BaseObj.Success = false;
@@ -947,8 +998,17 @@ namespace permitapi.Controllers
             BaseObj.Success = true;
             BaseObj.Data = true;
             BaseObj.Message = "Permits uploaded successfully";
+            
+            }
+            catch(Exception ex)
+            {
+                 _logger.LogError("ImportExcelFile with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
+            }
+            finally
+            {
+                _logger.LogInformation("ImportExcelFile ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId ); 
+            }
             return BaseObj;
-
         }
 
         private int GetLastUsedRow(ExcelWorksheet ws)

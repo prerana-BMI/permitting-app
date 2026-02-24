@@ -9,9 +9,19 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using contract;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
+builder.Services.AddControllers();
 
 // Add services to the container.
 
@@ -78,6 +88,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
     builder.Services.AddAuthorization();
     var app = builder.Build();
+    app.UseSerilogRequestLogging(); 
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())

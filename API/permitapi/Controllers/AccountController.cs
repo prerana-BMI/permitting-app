@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using contract;
@@ -18,14 +19,16 @@ namespace permitapi.Controllers
 
    public class AccountController : ControllerBase
     {
+        private readonly ILogger<AccountController> _logger;
         private readonly permit_account_serviceContext _context;
         private readonly ICurrentUserService _currentUserService;
         private readonly IMapper _mapper;
-        public AccountController(permit_account_serviceContext context, IMapper mapper, ICurrentUserService currentUserService)
+        public AccountController(permit_account_serviceContext context, IMapper mapper, ICurrentUserService currentUserService , ILogger<AccountController> logger)
         {
             _context = context;
             _currentUserService = currentUserService;
             _mapper = mapper;
+           _logger =  logger ;
         }
 
         [HttpGet]
@@ -36,6 +39,7 @@ namespace permitapi.Controllers
             List<EUsers> Result = new List<EUsers>();
             try
             {
+               _logger.LogInformation("GetALLUsers started at {Time} by User {UserId} with request details {Request}",DateTime.UtcNow,_currentUserService?.User?.UserId ,  JsonSerializer.Serialize(Request));
 
                 Result = _context.Users.Where(a => (string.IsNullOrEmpty(Request.UserName) || a.UserName.Contains(Request.UserName)) &&
                                             (string.IsNullOrEmpty(Request.UserRole) || a.UserRole.Contains(Request.UserRole)))
@@ -60,12 +64,13 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("GetALLUsers with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
                 BaseObj.Message = ex.Message;
                 BaseObj.Success = false;
             }
             finally
             {
-
+                     _logger.LogInformation("GetALLUsers ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId )  ;
             }
             return BaseObj;
         }
@@ -74,6 +79,9 @@ namespace permitapi.Controllers
         [Route("IsUserExist")]
         public BaseReturn<EUsers> IsUserExisit( [FromBody] string UserName)
         {
+            var Request = new {UserName};
+            _logger.LogInformation("IsUserExisit started at {Time} by User {UserId} with rquest details {Request}",DateTime.UtcNow,_currentUserService?.User?.UserId ,  JsonSerializer.Serialize(Request));
+
             var BaseObj = new BaseReturn<EUsers>();
 
             try
@@ -105,12 +113,12 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
-               
+                _logger.LogError("IsUserExist with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
                 BaseObj.Success = false;
             }
             finally
             {
-
+                _logger.LogInformation("IsUserExist ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId )  ;
             }
             return BaseObj;
         }
@@ -119,6 +127,8 @@ namespace permitapi.Controllers
         [Route("GetUserById")]
         public BaseReturn<EUsers> GetUserById(int Id)
         {
+            var Request = new {Id};
+            _logger.LogInformation("GetUserById started at {Time} by User {UserId} with rquest details {Request}",DateTime.UtcNow,_currentUserService?.User?.UserId ,  JsonSerializer.Serialize(Request));
             var BaseObj = new BaseReturn<EUsers>();
 
             try
@@ -137,12 +147,13 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("IsUserExist with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
                 BaseObj.Message = ex.Message;
                 BaseObj.Success = false;
             }
             finally
             {
-
+                 _logger.LogInformation("IsUserExist ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId )  ;
             }
             return BaseObj;
         }
@@ -151,6 +162,7 @@ namespace permitapi.Controllers
         [Route("SaveUser")]
         public BaseReturn<int> SaveUser(EUsers Request)
         {
+             _logger.LogInformation("GetUserById started at {Time} by User {UserId} with rquest details {Request}",DateTime.UtcNow,_currentUserService?.User?.UserId ,  JsonSerializer.Serialize(Request));
             var BaseObj = new BaseReturn<int>();
 
             try
@@ -184,12 +196,13 @@ namespace permitapi.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("IsUserExist with  exception  at {Time} by  User {UserId} with {Error} ", DateTime.UtcNow,_currentUserService?.User?.UserId ,  ex.InnerException?.Message)  ;
                 BaseObj.Message = ex.Message;
                 BaseObj.Success = false;
             }
             finally
             {
-
+                _logger.LogInformation("IsUserExist ended  at {Time} by  User {UserId}", DateTime.UtcNow , _currentUserService?.User?.UserId )  ;
             }
             return BaseObj;
         }
