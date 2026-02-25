@@ -104,7 +104,7 @@ export class AuthService {
         this.router.navigate(['/account/login']);
         const createdOn = new Date(res['Data']?.LastLoginDate);
         const diffMs = (new Date().getTime() - createdOn.getTime()) / (1000 * 60 * 60 * 24);
-        if (RedirectedFromLogin && diffMs >= 7) {
+        if (RedirectedFromLogin && (diffMs >= 7 || res['Data'] == null )) {
           this.SendMailUsingGraph(
             Constants.AdminUser,
             `Permit application Access Requested by ${UserName}`,
