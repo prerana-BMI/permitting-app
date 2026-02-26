@@ -89,6 +89,7 @@ export class AuthService {
   }
   IsUserAuthorized(UserName: string,RedirectedFromLogin :boolean) {
     if(RedirectedFromLogin)
+    {
     this.HttpService.httpPostCall(Constants.IsUserExist, JSON.stringify(UserName), true).subscribe((res: any) => {
       if (res['Success']) {
         let data = {
@@ -114,13 +115,15 @@ export class AuthService {
    <a href="https://permitappclientservice-cjabhxhnbybtc2cg.southcentralus-01.azurewebsites.net/">
      Open Permit Application
    </a>`).subscribe();
-          this.toastr.success('Your access request has been submitted successfully');
+          this.toastr.success(res['Data'] != null ? 'Your access request has been already submitted ' :
+             'Your access request has been submitted successfully');
         }  
 
         
       }
     })
   }
+}
 GetUserProfilePhoto(): Observable<string> {
   return this.getAccessToken().pipe(
     switchMap(token => {
