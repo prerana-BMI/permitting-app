@@ -88,8 +88,7 @@ export class AuthService {
       return this.AccessToken
   }
   IsUserAuthorized(UserName: string,RedirectedFromLogin :boolean) {
-    if(RedirectedFromLogin)
-    {
+   
     this.HttpService.httpPostCall(Constants.IsUserExist, JSON.stringify(UserName), true).subscribe((res: any) => {
       if (res['Success']) {
         let data = {
@@ -122,7 +121,7 @@ export class AuthService {
         
       }
     })
-  }
+  
 }
 GetUserProfilePhoto(): Observable<string> {
   return this.getAccessToken().pipe(
