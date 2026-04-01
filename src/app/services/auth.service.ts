@@ -105,7 +105,7 @@ export class AuthService {
         this.router.navigate(['/account/login']);
         const createdOn = new Date(res['Data']?.LastLoginDate);
         const diffMs = (new Date().getTime() - createdOn.getTime()) / (1000 * 60 * 60 * 24);
-        if (RedirectedFromLogin && (diffMs >= 7 || res['Data'] == null )) {
+        if (RedirectedFromLogin) {
           this.SendMailUsingGraph(
             Constants.AdminUser,
             `Permit application Access Requested by ${UserName}`,
@@ -114,10 +114,9 @@ export class AuthService {
    <a href="https://permitappclientservice-cjabhxhnbybtc2cg.southcentralus-01.azurewebsites.net/">
      Open Permit Application
    </a>`).subscribe();
-          this.toastr.success(res['Data'] != null ? 'Your access request has been already submitted ' :
-             'Your access request has been submitted successfully');
+          
         }  
-
+        this.toastr.success('Your access request has been submitted successfully');
         
       }
     })
